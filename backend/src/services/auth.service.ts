@@ -1,0 +1,131 @@
+import { z } from "zod";
+import {
+  findUserByEmail,
+  createUser,
+  findReferralCode,
+  createReferralCode,
+  incrementReferralUsage,
+} from "../repositories/user.repository.js";
+import { hashPassword, comparePassword } from "../utils/hash.js";
+import { signToken } from "../utils/jwt.js";
+import { generateReferralCode } from "../utils/slug.js";
+import prisma from "../lib/prisma.js";
+
+export const registerSchema = z.object({
+  email: z.string().email("Email tidak valid"),
+  name: z.string().min(2, "Nama minimal 2 karakter"),
+  password: z.string().min(8, "Password minimal 8 karakter"),
+  role: z.enum(["CUSTOMER", "ORGANIZER"]).default("CUSTOMER"),
+  referralCode: z.string().optional(),
+});
+
+export const loginSchema = z.object({
+  email: z.string().email("Email tidak valid"),
+  password: z.string().min(1, "Password wajib diisi"),
+});
+
+export type RegisterInput = z.infer<typeof registerSchema>;
+export type LoginInput = z.infer<typeof loginSchema>;
+
+export const registerService = async (input: RegisterInput) => {
+  // Check email already exists
+  const existing = await findUserByEmail(input.email);
+  if (existing) throw new Error("Email sudah terdaftar");
+
+  // Validate referral code if provided
+  let referredById: string | undefined;
+  let referralCodeRecord: Awaited<ReturnType<typeof findReferralCode>> = null;
+
+  if (input.referralCode) {
+    referralCodeRecord = await findReferralCode(input.referralCode);
+    if (!referralCodeRecord) throw new Error("Referral code tidak valid");
+    referredById = referralCodeRecord.ownerId;
+  }
+
+  const passwordHash = await hashPassword(input.password);
+
+  // Create user
+  const user = await createUser({
+    email: input.email,
+    name: input.name,
+    passwordHash,
+    role: input.role,
+    ...(referredById && { referredById }),
+  });
+
+  // Auto-create referral code for new user
+  let newRefCode = generateReferralCode();
+  // Ensure unique
+  let attempts = 0;
+  while (attempts < 5) {
+    try {
+      await createReferralCode(user.id, newRefCode);
+      break;
+    } catch {
+      newRefCode = generateReferralCode();
+      attempts++;
+    }
+  }
+
+  // If referral used: grant 10,000 points to referral owner (FIFO)
+  if (referralCodeRecord && referredById) {
+    const threeMonthsLater = new Date();
+    threeMonthsLater.setMonth(threeMonthsLater.getMonth() + 3);
+
+    await prisma.point.create({
+      data: {
+        userId: referredById,
+        amount: 10000,
+        status: "ACTIVE",
+        source: `Referral dari ${input.email}`,
+        expiredAt: threeMonthsLater,
+      },
+    });
+
+    // Increment referral usage count
+    await incrementReferralUsage(referralCodeRecord.id);
+  }
+
+  const token = signToken({
+    userId: user.id,
+    email: user.email,
+    role: user.role,
+  });
+
+  return {
+    token,
+    user: {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      avatarUrl: user.avatarUrl,
+    },
+  };
+};
+
+export const loginService = async (input: LoginInput) => {
+  const user = await findUserByEmail(input.email);
+  if (!user) throw new Error("Email atau password salah");
+
+  const valid = await comparePassword(input.password, user.passwordHash);
+  if (!valid) throw new Error("Email atau password salah");
+
+  const token = signToken({
+    userId: user.id,
+    email: user.email,
+    role: user.role,
+  });
+
+  return {
+    token,
+    user: {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      avatarUrl: user.avatarUrl,
+      referralCode: user.referralCode?.code,
+    },
+  };
+};

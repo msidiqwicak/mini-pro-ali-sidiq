@@ -1,0 +1,325 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+//////////////////////////////////////////////////////
+// ENUMS
+//////////////////////////////////////////////////////
+
+enum Role {
+    CUSTOMER
+    ORGANIZER
+}
+
+enum EventStatus {
+    DRAFT
+    PUBLISHED
+    CANCELLED
+    COMPLETED
+}
+
+enum TransactionStatus {
+    PENDING
+    PAID
+    CANCELLED
+    REFUNDED
+}
+
+enum PromotionType {
+    REFERRAL_VOUCHER
+    DATE_BASED_DISCOUNT
+}
+
+enum PointStatus {
+    ACTIVE
+    USED
+    EXPIRED
+}
+
+//////////////////////////////////////////////////////
+// USERS
+//////////////////////////////////////////////////////
+
+model User {
+    id           String  @id @default(cuid())
+    email        String  @unique
+    name         String
+    passwordHash String
+    role         Role    @default(CUSTOMER)
+    avatarUrl    String?
+
+    referredById String?
+    referredBy   User?   @relation("UserReferrals", fields: [referredById], references: [id])
+    referrals    User[]  @relation("UserReferrals")
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    referralCode    ReferralCode?
+    points          Point[]
+    transactions    Transaction[]
+    reviews         Review[]
+    organizedEvents Event[]       @relation("OrganizerEvents")
+    redemptions     Redemption[]
+
+    @@map("users")
+}
+
+//////////////////////////////////////////////////////
+// REFERRAL CODES
+//////////////////////////////////////////////////////
+
+model ReferralCode {
+    id        String @id @default(cuid())
+    code      String @unique
+    ownerId   String @unique
+    usedCount Int    @default(0)
+
+    createdAt DateTime @default(now())
+
+    owner User @relation(fields: [ownerId], references: [id])
+
+    @@map("referral_codes")
+}
+
+//////////////////////////////////////////////////////
+// POINTS
+//////////////////////////////////////////////////////
+
+model Point {
+    id     String      @id @default(cuid())
+    userId String
+    amount Int
+    status PointStatus @default(ACTIVE)
+
+    source    String
+    expiredAt DateTime
+    createdAt DateTime @default(now())
+
+    user        User         @relation(fields: [userId], references: [id])
+    redemptions Redemption[]
+
+    @@index([userId])
+    @@map("points")
+}
+
+//////////////////////////////////////////////////////
+// REDEMPTIONS
+//////////////////////////////////////////////////////
+
+model Redemption {
+    id String @id @default(cuid())
+
+    userId        String
+    pointId       String
+    transactionId String
+
+    amountUsed Int
+    createdAt  DateTime @default(now())
+
+    user        User        @relation(fields: [userId], references: [id])
+    point       Point       @relation(fields: [pointId], references: [id])
+    transaction Transaction @relation(fields: [transactionId], references: [id])
+
+    @@index([userId])
+    @@map("redemptions")
+}
+
+//////////////////////////////////////////////////////
+// CATEGORIES
+//////////////////////////////////////////////////////
+
+model Category {
+    id   String @id @default(cuid())
+    name String @unique
+    slug String @unique
+
+    events Event[]
+
+    @@map("categories")
+}
+
+//////////////////////////////////////////////////////
+// EVENTS
+//////////////////////////////////////////////////////
+
+model Event {
+    id          String @id @default(cuid())
+    organizerId String
+    categoryId  String
+
+    name        String
+    slug        String @unique
+    description String @db.Text
+
+    location String
+    city     String
+
+    imageUrl String?
+
+    startDate DateTime
+    endDate   DateTime
+
+    isFree Boolean     @default(false)
+    status EventStatus @default(DRAFT)
+
+    totalSeats Int
+    soldSeats  Int @default(0)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    organizer User     @relation("OrganizerEvents", fields: [organizerId], references: [id])
+    category  Category @relation(fields: [categoryId], references: [id])
+
+    ticketTypes  TicketType[]
+    transactions Transaction[]
+    reviews      Review[]
+    promotions   Promotion[]
+
+    @@index([organizerId])
+    @@index([categoryId])
+    @@map("events")
+}
+
+//////////////////////////////////////////////////////
+// TICKET TYPES
+//////////////////////////////////////////////////////
+
+model TicketType {
+    id      String @id @default(cuid())
+    eventId String
+
+    name        String
+    description String?
+
+    price Int
+    quota Int
+    sold  Int @default(0)
+
+    createdAt DateTime @default(now())
+
+    event   Event    @relation(fields: [eventId], references: [id])
+    tickets Ticket[]
+
+    @@index([eventId])
+    @@map("ticket_types")
+}
+
+//////////////////////////////////////////////////////
+// TICKETS
+//////////////////////////////////////////////////////
+
+model Ticket {
+    id String @id @default(cuid())
+
+    transactionId String
+    ticketTypeId  String
+    userId        String
+
+    qrCode String  @unique
+    isUsed Boolean @default(false)
+
+    createdAt DateTime @default(now())
+
+    transaction Transaction @relation(fields: [transactionId], references: [id])
+    ticketType  TicketType  @relation(fields: [ticketTypeId], references: [id])
+
+    @@index([transactionId])
+    @@index([ticketTypeId])
+    @@map("tickets")
+}
+
+//////////////////////////////////////////////////////
+// TRANSACTIONS
+//////////////////////////////////////////////////////
+
+model Transaction {
+    id String @id @default(cuid())
+
+    userId      String
+    eventId     String
+    promotionId String?
+
+    baseAmount     Int
+    discountAmount Int @default(0)
+    pointsUsed     Int @default(0)
+
+    finalAmount Int
+
+    status TransactionStatus @default(PENDING)
+
+    paymentMethod String?
+    paidAt        DateTime?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    user      User       @relation(fields: [userId], references: [id])
+    event     Event      @relation(fields: [eventId], references: [id])
+    promotion Promotion? @relation(fields: [promotionId], references: [id])
+
+    tickets     Ticket[]
+    redemptions Redemption[]
+
+    @@index([userId])
+    @@index([eventId])
+    @@map("transactions")
+}
+
+//////////////////////////////////////////////////////
+// PROMOTIONS
+//////////////////////////////////////////////////////
+
+model Promotion {
+    id String @id @default(cuid())
+
+    eventId String
+
+    code String?       @unique
+    type PromotionType
+
+    discountPercent Int?
+    discountAmount  Int?
+
+    maxUsage  Int
+    usedCount Int @default(0)
+
+    startDate DateTime
+    endDate   DateTime
+
+    createdAt DateTime @default(now())
+
+    event        Event         @relation(fields: [eventId], references: [id])
+    transactions Transaction[]
+
+    @@index([eventId])
+    @@map("promotions")
+}
+
+//////////////////////////////////////////////////////
+// REVIEWS
+//////////////////////////////////////////////////////
+
+model Review {
+    id String @id @default(cuid())
+
+    userId  String
+    eventId String
+
+    rating  Int
+    comment String @db.Text
+
+    createdAt DateTime @default(now())
+
+    user  User  @relation(fields: [userId], references: [id])
+    event Event @relation(fields: [eventId], references: [id])
+
+    @@unique([userId, eventId])
+    @@index([eventId])
+    @@map("reviews")
+}
