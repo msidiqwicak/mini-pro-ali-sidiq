@@ -873,6 +873,298 @@ Endpoint: `GET /api/dashboard?type=event-attendees&eventId=xxx`
 
 ---
 
+## 🤝 Dikerjakan Bersama-sama (Shared / Collaborative Work)
+
+> ⚠️ **PENTING:** Bagian ini menjelaskan komponen-komponen yang **HARUS dikerjakan bersama** oleh kedua tim, karena saling bergantung satu sama lain. Koordinasi yang buruk di bagian ini akan menyebabkan **conflict** saat merge dan **bug** yang sulit dilacak.
+
+---
+
+### 1. Database Schema (`schema.prisma`) — 🔴 PRIORITAS TERTINGGI
+
+**Kenapa harus bersama?**
+> Semua tabel di database saling terhubung. Misalnya, tabel `transactions` (Feature 1) membutuhkan foreign key ke tabel `users` (Feature 2), dan tabel `points` (Feature 2) digunakan dalam logika transaksi (Feature 1). Jika satu tim mengubah schema tanpa koordinasi, Prisma migrate akan gagal.
+
+| File | Lokasi |
+|------|--------|
+| `schema.prisma` | `backend/prisma/schema.prisma` |
+| `seed.ts` | `backend/prisma/seed.ts` |
+
+**Yang harus disepakati bersama:**
+
+| Komponen | Dibutuhkan oleh | Detail |
+|----------|-----------------|--------|
+| Tabel `users` | Kedua tim | Feature 2 membuat tabel ini, Feature 1 membutuhkannya untuk relasi di `events`, `transactions`, `reviews` |
+| Tabel `points` | Kedua tim | Feature 2 membuat point saat referral, Feature 1 menggunakan point saat transaksi |
+| Tabel `promotions` | Kedua tim | Feature 1 membuat voucher promo event, Feature 2 membuat coupon referral — **keduanya pakai tabel yang sama** |
+| Tabel `transactions` | Kedua tim | Feature 1 membuat transaksi, Feature 2 menampilkan dan mengelolanya di dashboard |
+| Enum `PromotionType` | Kedua tim | `DATE_BASED_DISCOUNT` (Feature 1) dan `REFERRAL_VOUCHER` (Feature 2) |
+| Seeder data | Kedua tim | Data dummy untuk testing harus mencakup users, events, transaksi, dan referral |
+
+**Rekomendasi:**
+- Buat schema **di awal project** bersama-sama sebelum mulai coding.
+- Tentukan satu orang sebagai **"schema owner"** yang bertanggung jawab menjalankan `prisma migrate`.
+- Setiap perubahan schema harus dikomunikasikan ke tim lain **sebelum di-commit**.
+
+---
+
+### 2. Prisma Client & Konfigurasi Database
+
+| File | Lokasi | Fungsi |
+|------|--------|--------|
+| `prisma.ts` | `backend/src/lib/prisma.ts` | Singleton instance Prisma Client |
+| `prisma.config.ts` | `backend/prisma.config.ts` | Konfigurasi Prisma |
+| `.env` | `backend/.env` | Environment variables (DATABASE_URL, JWT_SECRET, dll) |
+
+**Kenapa harus bersama?**
+> Kedua tim menggunakan Prisma Client yang sama untuk mengakses database. Jika ada perubahan di konfigurasi koneksi atau environment variables, kedua tim harus tahu.
+
+---
+
+### 3. TypeScript Type Definitions (Frontend)
+
+| File | Lokasi |
+|------|--------|
+| `index.ts` | `frontend/src/types/index.ts` |
+
+**Kenapa harus bersama?**
+> File ini mendefinisikan **semua interface TypeScript** yang dipakai di seluruh frontend. Kedua tim menambah/memodifikasi type di sini.
+
+| Interface | Digunakan oleh |
+|-----------|----------------|
+| `User` | Feature 2 (auth), Feature 1 (organizer info di event) |
+| `Event`, `TicketType`, `Category` | Feature 1 (event display & creation) |
+| `Transaction`, `Ticket` | Feature 1 (pembelian), Feature 2 (dashboard) |
+| `Promotion` | Feature 1 (voucher promo), Feature 2 (coupon referral) |
+| `Point` | Feature 2 (referral reward), Feature 1 (penggunaan point) |
+| `Review` | Feature 1 (review event) |
+| `PaginatedResponse`, `ApiResponse` | Kedua tim (format response API) |
+
+**Rekomendasi:**
+- Definisikan **semua types di awal** berdasarkan schema Prisma.
+- Gunakan naming convention yang konsisten.
+
+---
+
+### 4. API Base Configuration (Frontend)
+
+| File | Lokasi | Fungsi |
+|------|--------|--------|
+| `api.ts` | `frontend/src/services/api.ts` | Axios instance dengan base URL dan interceptor token |
+
+**Kenapa harus bersama?**
+> Semua API call dari kedua tim menggunakan Axios instance yang sama. Jika satu tim mengubah base URL, interceptor, atau error handling, tim lain harus tahu.
+
+**Yang disepakati:**
+- Base URL API (contoh: `http://localhost:3000/api`)
+- Format header Authorization (`Bearer <token>`)
+- Format response dari backend (selalu `{ success, message, data }`)
+
+---
+
+### 5. Utility Response Format (Backend)
+
+| File | Lokasi | Fungsi |
+|------|--------|--------|
+| `response.ts` | `backend/src/utils/response.ts` | Helper `successResponse()` dan `errorResponse()` |
+
+**Kenapa harus bersama?**
+> Semua controller dari kedua tim menggunakan format response yang sama. Konsistensi ini penting agar frontend bisa mem-parse response dengan cara yang seragam.
+
+---
+
+### 6. Routing — Frontend (`App.tsx`)
+
+| File | Lokasi |
+|------|--------|
+| `App.tsx` | `frontend/src/App.tsx` |
+
+**Kenapa harus bersama?**
+> File ini mendefinisikan **semua route** aplikasi. Kedua tim menambahkan route di sini:
+
+| Route | Ditambahkan oleh |
+|-------|-----------------|
+| `/` (Home), `/events/:slug` | Feature 1 |
+| `/my-tickets`, `/transactions` | Feature 1 |
+| `/login`, `/register` | Feature 2 |
+| `/dashboard/*` (semua sub-route) | Feature 2 |
+
+**⚠️ Potensi Conflict:** Jika kedua tim mengedit `App.tsx` secara bersamaan tanpa koordinasi → **merge conflict** dijamin terjadi.
+
+**Rekomendasi:**
+- Definisikan **skeleton route** di awal bersama-sama.
+- Setelah itu, masing-masing tim hanya mengisi konten halaman masing-masing.
+
+---
+
+### 7. Routing — Backend (`routes/index.ts`)
+
+| File | Lokasi |
+|------|--------|
+| `index.ts` | `backend/src/routes/index.ts` |
+
+**Kenapa harus bersama?**
+> File ini mendaftarkan semua router ke Express app:
+
+```typescript
+router.use("/auth", authRoutes);          // Feature 2
+router.use("/events", eventRoutes);       // Feature 1
+router.use("/transactions", transactionRoutes); // Feature 1 + 2
+router.use("/reviews", reviewRoutes);     // Feature 1
+router.use("/dashboard", dashboardRoutes); // Feature 2
+```
+
+---
+
+### 8. Shared UI Components
+
+| File | Lokasi | Fungsi |
+|------|--------|--------|
+| `UIComponents.tsx` | `frontend/src/components/UIComponents.tsx` | Komponen reusable: Button, Card, Modal, Input, dll |
+| `Navbar.tsx` | `frontend/src/components/Navbar.tsx` | Navigasi — berubah berdasarkan login state (Feature 2) dan menampilkan link ke event/tiket (Feature 1) |
+| `Footer.tsx` | `frontend/src/components/Footer.tsx` | Footer — dipakai di semua halaman |
+
+**Kenapa harus bersama?**
+
+> **Navbar** adalah contoh nyata ketergantungan kedua tim:
+> - **Feature 2** bertanggung jawab atas logika login/logout, tampilan nama user, dan menu berdasarkan role.
+> - **Feature 1** menambahkan link ke halaman event, tiket, dan transaksi.
+>
+> Jika masing-masing tim mengedit Navbar sendiri-sendiri → conflict.
+
+> **UIComponents** dipakai bersama. Jika Feature 1 membuat tombol baru dan Feature 2 juga membuat tombol baru tapi beda style → UI tidak konsisten.
+
+**Rekomendasi:**
+- Buat **design system dasar** di awal (warna, ukuran font, border radius, dll).
+- Sepakati komponen UIComponents **sebelum** mulai coding halaman.
+
+---
+
+### 9. Global Styles (`index.css`)
+
+| File | Lokasi |
+|------|--------|
+| `index.css` | `frontend/src/index.css` |
+
+**Kenapa harus bersama?**
+> CSS global mempengaruhi tampilan seluruh aplikasi. Jika satu tim mengubah variabel warna atau spacing, semua halaman terpengaruh.
+
+**Yang harus disepakati:**
+- Color palette (warna utama, warna aksen, warna background)
+- Typography (font family, ukuran heading)
+- Spacing system (gap, padding, margin)
+- Breakpoint untuk responsiveness
+
+---
+
+### 10. Entry Points & Config
+
+| File | Lokasi | Fungsi |
+|------|--------|--------|
+| `main.tsx` | `frontend/src/main.tsx` | Entry point frontend (memasang `AuthProvider`) |
+| `app.ts` | `backend/src/app.ts` | Express app setup (CORS, JSON parser, route mounting) |
+| `server.ts` | `backend/src/server.ts` | Server startup |
+| `package.json` | Frontend & Backend | Dependencies — kedua tim bisa menambah package |
+| `tsconfig.json` | Frontend & Backend | TypeScript config |
+
+**Kenapa harus bersama?**
+> Jika masing-masing tim menambah dependency di `package.json` secara bersamaan → merge conflict. `main.tsx` membutuhkan `AuthProvider` dari Feature 2 yang membungkus seluruh app termasuk halaman Feature 1.
+
+---
+
+### 11. Helper / Utility Functions
+
+| File | Lokasi | Dipakai oleh |
+|------|--------|--------------|
+| `helpers.ts` | `frontend/src/utils/helpers.ts` | Kedua tim (format tanggal, format harga IDR, dll) |
+| `response.ts` | `backend/src/utils/response.ts` | Kedua tim (format API response) |
+| `slug.ts` | `backend/src/utils/slug.ts` | Feature 1 (slug event) + Feature 2 (referral code) |
+
+**Perhatian khusus untuk `slug.ts`:**
+> File ini berisi `generateSlug()` (dipakai Feature 1 untuk slug event), `generateReferralCode()` (dipakai Feature 2 untuk referral), dan `generateQRCode()` (dipakai Feature 1 untuk QR tiket). Kedua tim berkontribusi di file ini.
+
+---
+
+### 12. Unit Testing Setup
+
+| Komponen | Detail |
+|----------|--------|
+| Testing framework | Harus disepakati bersama (Jest atau Vitest) |
+| Test config | `jest.config.ts` atau `vitest.config.ts` — satu untuk semua |
+| Test database | Database testing terpisah dari development |
+| Mock setup | Cara mock Prisma, JWT, dll harus konsisten |
+
+**Kenapa harus bersama?**
+> Jika Feature 1 menggunakan Jest tapi Feature 2 menggunakan Vitest → dua framework testing dalam satu project = kacau.
+
+---
+
+### 13. Deployment & Environment
+
+| Komponen | Detail |
+|----------|--------|
+| `.env` file | Kedua tim harus punya env variable yang sama |
+| Database migrations | Harus dijalankan berurutan, tidak boleh concurrent |
+| Git branching strategy | Harus disepakati agar merge berjalan lancar |
+
+---
+
+### 📊 Ringkasan Visual — Peta Ketergantungan
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                  🤝 DIKERJAKAN BERSAMA                  │
+│                                                         │
+│  📋 schema.prisma    📋 seed.ts       📋 .env           │
+│  📋 types/index.ts   📋 api.ts        📋 response.ts    │
+│  📋 App.tsx          📋 routes/index   📋 index.css      │
+│  📋 Navbar.tsx       📋 Footer.tsx     📋 UIComponents   │
+│  📋 main.tsx         📋 app.ts         📋 slug.ts        │
+│  📋 helpers.ts       📋 package.json   📋 tsconfig       │
+│  📋 Testing setup    📋 Git strategy   📋 prisma.ts      │
+│                                                         │
+├─────────────────────┬───────────────────────────────────┤
+│                     │                                   │
+│  🚀 FEATURE 1       │         🔐 FEATURE 2              │
+│  Sistem Event &     │         Sistem User &             │
+│  Transaksi          │         Dashboard                 │
+│                     │                                   │
+│  • HomePage         │  • LoginPage                      │
+│  • EventDetailPage  │  • RegisterPage                   │
+│  • EventCard        │  • AuthContext                    │
+│  • TicketSelector   │  • DashboardLayout                │
+│  • EventForm        │  • DashboardOverview              │
+│  • ReviewList       │  • DashboardTransactions          │
+│  • MyTicketsPage    │  • DashboardAnalytics             │
+│  • TransactionHist  │  • ManageEvents                   │
+│                     │  • CreateEvent / EditEvent        │
+│  • event.service    │                                   │
+│  • event.repository │  • auth.service                   │
+│  • event.controller │  • auth.controller                │
+│  • transaction.*    │  • dashboard.*                    │
+│  • review.*         │  • user.repository                │
+│  • point.service    │  • auth.middleware                 │
+│                     │  • role.middleware                 │
+│                     │  • jwt.ts / hash.ts               │
+└─────────────────────┴───────────────────────────────────┘
+```
+
+---
+
+### 💡 Tips Kolaborasi agar Tidak Bentrok
+
+| No | Tips | Penjelasan |
+|----|------|------------|
+| 1 | **Schema first** | Buat `schema.prisma` dan `types/index.ts` bersama-sama di hari pertama. |
+| 2 | **Branching strategy** | Gunakan branch terpisah per feature: `feature/1-events`, `feature/2-auth`. Merge ke `develop` secara berkala. |
+| 3 | **Komunikasi perubahan shared file** | Sebelum mengubah file bersama (Navbar, App.tsx, dll), informasikan ke tim lain via chat/meeting. |
+| 4 | **Daily sync** | Lakukan sync singkat (15 menit) setiap hari untuk update progress dan potensi conflict. |
+| 5 | **Pull sebelum push** | Selalu `git pull` sebelum mulai kerja dan sebelum push. |
+| 6 | **Jangan edit file yang sama** | Jika harus edit file yang sama, bagi per section/function dan merge manual. |
+| 7 | **Seed data bersama** | Buat seed data yang lengkap dan konsisten untuk testing kedua fitur. |
+| 8 | **Sepakati format** | Format response API, format tanggal, format harga — harus konsisten sejak awal. |
+
+---
+
 # 🏗️ Struktur Folder Project
 
 ```
