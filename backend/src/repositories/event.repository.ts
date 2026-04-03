@@ -156,3 +156,18 @@ export const findAllCities = async () => {
 export const findAllCategories = async () => {
   return prisma.category.findMany({ orderBy: { name: "asc" } });
 };
+
+export const createPromotions = async (
+  promotions: Array<{
+    eventId: string;
+    code?: string;
+    type: "DATE_BASED_DISCOUNT" | "REFERRAL_VOUCHER";
+    discountPercent?: number;
+    discountAmount?: number;
+    maxUsage: number;
+    startDate: Date;
+    endDate: Date;
+  }>
+) => {
+  return prisma.promotion.createMany({ data: promotions });
+};

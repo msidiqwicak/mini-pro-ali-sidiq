@@ -103,6 +103,16 @@ export interface Point {
   createdAt: string;
 }
 
+export interface Coupon {
+  id: string;
+  userId: string;
+  code: string;
+  discountPercent: number;
+  isUsed: boolean;
+  expiredAt: string;
+  createdAt: string;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   meta: {

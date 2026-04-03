@@ -19,6 +19,6 @@ export const errorResponse = (
     success: false,
     message,
     data: null,
-    ...(errors && { errors }),
+    ...(errors ? { errors } : {}),
   });
 };

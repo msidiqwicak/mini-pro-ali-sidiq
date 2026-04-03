@@ -61,7 +61,8 @@ export const ModelName = {
   Ticket: 'Ticket',
   Transaction: 'Transaction',
   Promotion: 'Promotion',
-  Review: 'Review'
+  Review: 'Review',
+  Coupon: 'Coupon'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -236,6 +237,19 @@ export const ReviewScalarFieldEnum = {
 } as const
 
 export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
+export const CouponScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  code: 'code',
+  discountPercent: 'discountPercent',
+  isUsed: 'isUsed',
+  expiredAt: 'expiredAt',
+  createdAt: 'createdAt'
+} as const
+
+export type CouponScalarFieldEnum = (typeof CouponScalarFieldEnum)[keyof typeof CouponScalarFieldEnum]
 
 
 export const SortOrder = {

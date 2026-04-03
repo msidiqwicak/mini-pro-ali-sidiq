@@ -76,13 +76,22 @@ const Navbar = () => {
                   </div>
 
                   {user?.role === "ORGANIZER" ? (
-                    <Link
-                      to="/dashboard"
-                      onClick={() => setDropOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-white transition-colors"
-                    >
-                      <LayoutDashboard size={15} /> Dashboard
-                    </Link>
+                    <>
+                      <Link
+                        to="/dashboard"
+                        onClick={() => setDropOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-white transition-colors"
+                      >
+                        <LayoutDashboard size={15} /> Dashboard
+                      </Link>
+                      <Link
+                        to="/profile"
+                        onClick={() => setDropOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-white transition-colors"
+                      >
+                        <User size={15} /> Profil Saya
+                      </Link>
+                    </>
                   ) : (
                     <>
                       <Link
@@ -98,6 +107,13 @@ const Navbar = () => {
                         className="flex items-center gap-3 px-4 py-3 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-white transition-colors"
                       >
                         <User size={15} /> Transaksi
+                      </Link>
+                      <Link
+                        to="/profile"
+                        onClick={() => setDropOpen(false)}
+                        className="flex items-center gap-3 px-4 py-3 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)] hover:text-white transition-colors"
+                      >
+                        <User size={15} /> Profil Saya
                       </Link>
                     </>
                   )}
@@ -137,11 +153,15 @@ const Navbar = () => {
           ) : (
             <>
               {user?.role === "ORGANIZER" ? (
-                <Link to="/dashboard" onClick={() => setMenuOpen(false)} className="block text-sm text-[var(--text-secondary)] hover:text-white py-2">Dashboard</Link>
+                <>
+                  <Link to="/dashboard" onClick={() => setMenuOpen(false)} className="block text-sm text-[var(--text-secondary)] hover:text-white py-2">Dashboard</Link>
+                  <Link to="/profile" onClick={() => setMenuOpen(false)} className="block text-sm text-[var(--text-secondary)] hover:text-white py-2">Profil Saya</Link>
+                </>
               ) : (
                 <>
                   <Link to="/my-tickets" onClick={() => setMenuOpen(false)} className="block text-sm text-[var(--text-secondary)] hover:text-white py-2">Tiket Saya</Link>
                   <Link to="/transactions" onClick={() => setMenuOpen(false)} className="block text-sm text-[var(--text-secondary)] hover:text-white py-2">Transaksi</Link>
+                  <Link to="/profile" onClick={() => setMenuOpen(false)} className="block text-sm text-[var(--text-secondary)] hover:text-white py-2">Profil Saya</Link>
                 </>
               )}
               <button onClick={() => { setMenuOpen(false); logout(); }} className="block w-full text-left text-sm text-red-400 py-2">Keluar</button>

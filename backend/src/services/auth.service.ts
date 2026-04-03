@@ -5,6 +5,7 @@ import {
   findReferralCode,
   createReferralCode,
   incrementReferralUsage,
+  createCoupon,
 } from "../repositories/user.repository.js";
 import { hashPassword, comparePassword } from "../utils/hash.js";
 import { signToken } from "../utils/jwt.js";
@@ -82,6 +83,12 @@ export const registerService = async (input: RegisterInput) => {
       },
     });
 
+    // Create discount coupon for the NEW registrant (10% off, valid 3 months)
+    const couponExpiry = new Date();
+    couponExpiry.setMonth(couponExpiry.getMonth() + 3);
+    const couponCode = `REF-${generateReferralCode()}`;
+    await createCoupon(user.id, couponCode, 10, couponExpiry);
+
     // Increment referral usage count
     await incrementReferralUsage(referralCodeRecord.id);
   }
@@ -92,6 +99,15 @@ export const registerService = async (input: RegisterInput) => {
     role: user.role,
   });
 
+  // Fetch the referral code we just created for this user
+  let myReferralCode: string | undefined;
+  try {
+    const rc = await prisma.referralCode.findUnique({ where: { ownerId: user.id } });
+    myReferralCode = rc?.code;
+  } catch {
+    // non-critical
+  }
+
   return {
     token,
     user: {
@@ -100,6 +116,7 @@ export const registerService = async (input: RegisterInput) => {
       name: user.name,
       role: user.role,
       avatarUrl: user.avatarUrl,
+      referralCode: myReferralCode,
     },
   };
 };
