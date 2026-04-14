@@ -2,7 +2,6 @@
 
 Platform fullstack untuk menemukan dan mengelola event musik di Indonesia. Dibangun sebagai project bootcamp dengan arsitektur clean dan production-ready MVP.
 
-> Terinspirasi dari [PK Entertainment](https://www.pk-ent.com) — tampilan gelap, berani, dan berfokus pada musik.
 
 ---
 
