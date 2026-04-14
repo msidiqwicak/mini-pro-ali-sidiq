@@ -8,6 +8,7 @@ import {
   updateEvent,
   deleteEvent,
   createTicketTypes,
+  createPromotions,
   findAllCities,
   findAllCategories,
 } from "../repositories/event.repository.js";
@@ -35,6 +36,17 @@ export const createEventSchema = z.object({
       })
     )
     .min(1, "Minimal 1 tipe tiket"),
+  promotions: z
+    .array(
+      z.object({
+        code: z.string().min(3, "Kode promo minimal 3 karakter").toUpperCase(),
+        discountPercent: z.number().int().min(1, "Diskon minimal 1%").max(100, "Diskon maksimal 100%"),
+        maxUsage: z.number().int().min(1, "Batas penggunaan minimal 1"),
+        startDate: z.string().min(1, "Tanggal mulai promo wajib diisi").refine((v) => !isNaN(Date.parse(v)), "Format tanggal invalid"),
+        endDate: z.string().min(1, "Tanggal akhir promo wajib diisi").refine((v) => !isNaN(Date.parse(v)), "Format tanggal invalid"),
+      })
+    )
+    .optional(),
 });
 
 export type CreateEventInput = z.infer<typeof createEventSchema>;
@@ -82,7 +94,7 @@ export const createEventService = async (
   input: CreateEventInput
 ) => {
   const slug = generateSlug(input.name);
-  const { ticketTypes, ...eventData } = input;
+  const { ticketTypes, promotions, ...eventData } = input;
 
   const event = await createEvent({
     organizerId,
@@ -96,6 +108,20 @@ export const createEventService = async (
   if (ticketTypes.length > 0) {
     await createTicketTypes(
       ticketTypes.map((tt) => ({ ...tt, eventId: event.id }))
+    );
+  }
+
+  if (promotions && promotions.length > 0) {
+    await createPromotions(
+      promotions.map((p) => ({
+        eventId: event.id,
+        code: p.code,
+        type: "DATE_BASED_DISCOUNT",
+        discountPercent: p.discountPercent,
+        maxUsage: p.maxUsage,
+        startDate: new Date(p.startDate),
+        endDate: new Date(p.endDate),
+      }))
     );
   }
 

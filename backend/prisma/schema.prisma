@@ -65,6 +65,7 @@ model User {
     reviews         Review[]
     organizedEvents Event[]       @relation("OrganizerEvents")
     redemptions     Redemption[]
+    coupons         Coupon[]
 
     @@map("users")
 }
@@ -322,4 +323,23 @@ model Review {
     @@unique([userId, eventId])
     @@index([eventId])
     @@map("reviews")
+}
+
+//////////////////////////////////////////////////////
+// COUPONS
+//////////////////////////////////////////////////////
+
+model Coupon {
+    id              String   @id @default(cuid())
+    userId          String
+    code            String   @unique
+    discountPercent Int      @default(10)
+    isUsed          Boolean  @default(false)
+    expiredAt       DateTime
+    createdAt       DateTime @default(now())
+
+    user User @relation(fields: [userId], references: [id])
+
+    @@index([userId])
+    @@map("coupons")
 }

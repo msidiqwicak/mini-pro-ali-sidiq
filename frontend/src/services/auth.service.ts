@@ -1,5 +1,5 @@
 import api from "./api";
-import type { ApiResponse, User } from "../types";
+import type { ApiResponse, User, Point, Coupon } from "../types";
 
 interface AuthResponse {
   token: string;
@@ -27,4 +27,32 @@ export const authService = {
     const res = await api.get<ApiResponse<User>>("/auth/me");
     return res.data;
   },
+
+  updateProfile: async (data: { name?: string; avatarUrl?: string }) => {
+    const res = await api.patch<ApiResponse<User>>("/auth/profile", data);
+    return res.data;
+  },
+
+  changePassword: async (data: {
+    currentPassword: string;
+    newPassword: string;
+  }) => {
+    const res = await api.patch<ApiResponse<{ message: string }>>("/auth/password", data);
+    return res.data;
+  },
+
+  getPoints: async () => {
+    const res = await api.get<ApiResponse<{ points: Point[]; total: number }>>(
+      "/auth/points"
+    );
+    return res.data;
+  },
+
+  getCoupons: async () => {
+    const res = await api.get<ApiResponse<{ coupons: Coupon[] }>>(
+      "/auth/coupons"
+    );
+    return res.data;
+  },
 };
+

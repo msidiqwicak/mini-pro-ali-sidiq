@@ -56,14 +56,23 @@ export const createTransactionService = async (
         where: {
           code: input.promotionCode,
           eventId: input.eventId,
-          startDate: { lte: new Date() },
-          endDate: { gte: new Date() },
         },
       });
 
-      if (!promo) throw new Error("Kode promo tidak valid atau sudah kadaluarsa");
-      if (promo.usedCount >= promo.maxUsage)
+      if (!promo) {
+        throw new Error("Kode promo tidak valid");
+      }
+
+      const now = new Date();
+      if (now < promo.startDate) {
+        throw new Error("Kode promo ini belum aktif");
+      }
+      if (now > promo.endDate) {
+        throw new Error("Kode promo sudah kadaluarsa");
+      }
+      if (promo.usedCount >= promo.maxUsage) {
         throw new Error("Kode promo sudah habis digunakan");
+      }
 
       // Calculate discount
       if (promo.discountPercent) {

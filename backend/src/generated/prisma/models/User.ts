@@ -222,6 +222,7 @@ export type UserWhereInput = {
   reviews?: Prisma.ReviewListRelationFilter
   organizedEvents?: Prisma.EventListRelationFilter
   redemptions?: Prisma.RedemptionListRelationFilter
+  coupons?: Prisma.CouponListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -242,6 +243,7 @@ export type UserOrderByWithRelationInput = {
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
   organizedEvents?: Prisma.EventOrderByRelationAggregateInput
   redemptions?: Prisma.RedemptionOrderByRelationAggregateInput
+  coupons?: Prisma.CouponOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -265,6 +267,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   reviews?: Prisma.ReviewListRelationFilter
   organizedEvents?: Prisma.EventListRelationFilter
   redemptions?: Prisma.RedemptionListRelationFilter
+  coupons?: Prisma.CouponListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -314,6 +317,7 @@ export type UserCreateInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventCreateNestedManyWithoutOrganizerInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -333,6 +337,7 @@ export type UserUncheckedCreateInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOrganizerInput
   redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -352,6 +357,7 @@ export type UserUpdateInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUpdateManyWithoutOrganizerNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -371,6 +377,7 @@ export type UserUncheckedUpdateInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
   redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -622,6 +629,20 @@ export type UserUpdateOneRequiredWithoutReviewsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReviewsInput, Prisma.UserUpdateWithoutReviewsInput>, Prisma.UserUncheckedUpdateWithoutReviewsInput>
 }
 
+export type UserCreateNestedOneWithoutCouponsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCouponsInput, Prisma.UserUncheckedCreateWithoutCouponsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCouponsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCouponsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCouponsInput, Prisma.UserUncheckedCreateWithoutCouponsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCouponsInput
+  upsert?: Prisma.UserUpsertWithoutCouponsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCouponsInput, Prisma.UserUpdateWithoutCouponsInput>, Prisma.UserUncheckedUpdateWithoutCouponsInput>
+}
+
 export type UserCreateWithoutReferralsInput = {
   id?: string
   email: string
@@ -638,6 +659,7 @@ export type UserCreateWithoutReferralsInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventCreateNestedManyWithoutOrganizerInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReferralsInput = {
@@ -656,6 +678,7 @@ export type UserUncheckedCreateWithoutReferralsInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOrganizerInput
   redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReferralsInput = {
@@ -679,6 +702,7 @@ export type UserCreateWithoutReferredByInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventCreateNestedManyWithoutOrganizerInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReferredByInput = {
@@ -697,6 +721,7 @@ export type UserUncheckedCreateWithoutReferredByInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOrganizerInput
   redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReferredByInput = {
@@ -736,6 +761,7 @@ export type UserUpdateWithoutReferralsInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUpdateManyWithoutOrganizerNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReferralsInput = {
@@ -754,6 +780,7 @@ export type UserUncheckedUpdateWithoutReferralsInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
   redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithWhereUniqueWithoutReferredByInput = {
@@ -803,6 +830,7 @@ export type UserCreateWithoutReferralCodeInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventCreateNestedManyWithoutOrganizerInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReferralCodeInput = {
@@ -821,6 +849,7 @@ export type UserUncheckedCreateWithoutReferralCodeInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOrganizerInput
   redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReferralCodeInput = {
@@ -855,6 +884,7 @@ export type UserUpdateWithoutReferralCodeInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUpdateManyWithoutOrganizerNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReferralCodeInput = {
@@ -873,6 +903,7 @@ export type UserUncheckedUpdateWithoutReferralCodeInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
   redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPointsInput = {
@@ -891,6 +922,7 @@ export type UserCreateWithoutPointsInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventCreateNestedManyWithoutOrganizerInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPointsInput = {
@@ -909,6 +941,7 @@ export type UserUncheckedCreateWithoutPointsInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOrganizerInput
   redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPointsInput = {
@@ -943,6 +976,7 @@ export type UserUpdateWithoutPointsInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUpdateManyWithoutOrganizerNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPointsInput = {
@@ -961,6 +995,7 @@ export type UserUncheckedUpdateWithoutPointsInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
   redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRedemptionsInput = {
@@ -979,6 +1014,7 @@ export type UserCreateWithoutRedemptionsInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventCreateNestedManyWithoutOrganizerInput
+  coupons?: Prisma.CouponCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRedemptionsInput = {
@@ -997,6 +1033,7 @@ export type UserUncheckedCreateWithoutRedemptionsInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOrganizerInput
+  coupons?: Prisma.CouponUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRedemptionsInput = {
@@ -1031,6 +1068,7 @@ export type UserUpdateWithoutRedemptionsInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUpdateManyWithoutOrganizerNestedInput
+  coupons?: Prisma.CouponUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRedemptionsInput = {
@@ -1049,6 +1087,7 @@ export type UserUncheckedUpdateWithoutRedemptionsInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
+  coupons?: Prisma.CouponUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOrganizedEventsInput = {
@@ -1067,6 +1106,7 @@ export type UserCreateWithoutOrganizedEventsInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrganizedEventsInput = {
@@ -1085,6 +1125,7 @@ export type UserUncheckedCreateWithoutOrganizedEventsInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrganizedEventsInput = {
@@ -1119,6 +1160,7 @@ export type UserUpdateWithoutOrganizedEventsInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrganizedEventsInput = {
@@ -1137,6 +1179,7 @@ export type UserUncheckedUpdateWithoutOrganizedEventsInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTransactionsInput = {
@@ -1155,6 +1198,7 @@ export type UserCreateWithoutTransactionsInput = {
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventCreateNestedManyWithoutOrganizerInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -1173,6 +1217,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOrganizerInput
   redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -1207,6 +1252,7 @@ export type UserUpdateWithoutTransactionsInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUpdateManyWithoutOrganizerNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -1225,6 +1271,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
   redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutReviewsInput = {
@@ -1243,6 +1290,7 @@ export type UserCreateWithoutReviewsInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventCreateNestedManyWithoutOrganizerInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReviewsInput = {
@@ -1261,6 +1309,7 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
   organizedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOrganizerInput
   redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+  coupons?: Prisma.CouponUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReviewsInput = {
@@ -1295,6 +1344,7 @@ export type UserUpdateWithoutReviewsInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUpdateManyWithoutOrganizerNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -1311,6 +1361,99 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   referralCode?: Prisma.ReferralCodeUncheckedUpdateOneWithoutOwnerNestedInput
   points?: Prisma.PointUncheckedUpdateManyWithoutUserNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
+  redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCouponsInput = {
+  id?: string
+  email: string
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  avatarUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
+  referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
+  referralCode?: Prisma.ReferralCodeCreateNestedOneWithoutOwnerInput
+  points?: Prisma.PointCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  organizedEvents?: Prisma.EventCreateNestedManyWithoutOrganizerInput
+  redemptions?: Prisma.RedemptionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCouponsInput = {
+  id?: string
+  email: string
+  name: string
+  passwordHash: string
+  role?: $Enums.Role
+  avatarUrl?: string | null
+  referredById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
+  referralCode?: Prisma.ReferralCodeUncheckedCreateNestedOneWithoutOwnerInput
+  points?: Prisma.PointUncheckedCreateNestedManyWithoutUserInput
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  organizedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOrganizerInput
+  redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCouponsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCouponsInput, Prisma.UserUncheckedCreateWithoutCouponsInput>
+}
+
+export type UserUpsertWithoutCouponsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCouponsInput, Prisma.UserUncheckedUpdateWithoutCouponsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCouponsInput, Prisma.UserUncheckedCreateWithoutCouponsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCouponsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCouponsInput, Prisma.UserUncheckedUpdateWithoutCouponsInput>
+}
+
+export type UserUpdateWithoutCouponsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
+  referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
+  referralCode?: Prisma.ReferralCodeUpdateOneWithoutOwnerNestedInput
+  points?: Prisma.PointUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  organizedEvents?: Prisma.EventUpdateManyWithoutOrganizerNestedInput
+  redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCouponsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
+  referralCode?: Prisma.ReferralCodeUncheckedUpdateOneWithoutOwnerNestedInput
+  points?: Prisma.PointUncheckedUpdateManyWithoutUserNestedInput
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
   redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -1342,6 +1485,7 @@ export type UserUpdateWithoutReferredByInput = {
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUpdateManyWithoutOrganizerNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReferredByInput = {
@@ -1360,6 +1504,7 @@ export type UserUncheckedUpdateWithoutReferredByInput = {
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
   redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutUserNestedInput
+  coupons?: Prisma.CouponUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutReferredByInput = {
@@ -1385,6 +1530,7 @@ export type UserCountOutputType = {
   reviews: number
   organizedEvents: number
   redemptions: number
+  coupons: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1394,6 +1540,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   reviews?: boolean | UserCountOutputTypeCountReviewsArgs
   organizedEvents?: boolean | UserCountOutputTypeCountOrganizedEventsArgs
   redemptions?: boolean | UserCountOutputTypeCountRedemptionsArgs
+  coupons?: boolean | UserCountOutputTypeCountCouponsArgs
 }
 
 /**
@@ -1448,6 +1595,13 @@ export type UserCountOutputTypeCountRedemptionsArgs<ExtArgs extends runtime.Type
   where?: Prisma.RedemptionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCouponsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CouponWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1467,6 +1621,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
   organizedEvents?: boolean | Prisma.User$organizedEventsArgs<ExtArgs>
   redemptions?: boolean | Prisma.User$redemptionsArgs<ExtArgs>
+  coupons?: boolean | Prisma.User$couponsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1518,6 +1673,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
   organizedEvents?: boolean | Prisma.User$organizedEventsArgs<ExtArgs>
   redemptions?: boolean | Prisma.User$redemptionsArgs<ExtArgs>
+  coupons?: boolean | Prisma.User$couponsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1538,6 +1694,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
     organizedEvents: Prisma.$EventPayload<ExtArgs>[]
     redemptions: Prisma.$RedemptionPayload<ExtArgs>[]
+    coupons: Prisma.$CouponPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1951,6 +2108,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   reviews<T extends Prisma.User$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   organizedEvents<T extends Prisma.User$organizedEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$organizedEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   redemptions<T extends Prisma.User$redemptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$redemptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RedemptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  coupons<T extends Prisma.User$couponsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$couponsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CouponPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2569,6 +2727,30 @@ export type User$redemptionsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.RedemptionScalarFieldEnum | Prisma.RedemptionScalarFieldEnum[]
+}
+
+/**
+ * User.coupons
+ */
+export type User$couponsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Coupon
+   */
+  select?: Prisma.CouponSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Coupon
+   */
+  omit?: Prisma.CouponOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CouponInclude<ExtArgs> | null
+  where?: Prisma.CouponWhereInput
+  orderBy?: Prisma.CouponOrderByWithRelationInput | Prisma.CouponOrderByWithRelationInput[]
+  cursor?: Prisma.CouponWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CouponScalarFieldEnum | Prisma.CouponScalarFieldEnum[]
 }
 
 /**

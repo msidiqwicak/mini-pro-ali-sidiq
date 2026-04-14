@@ -72,3 +72,8 @@ export type Promotion = Prisma.PromotionModel
  * 
  */
 export type Review = Prisma.ReviewModel
+/**
+ * Model Coupon
+ * 
+ */
+export type Coupon = Prisma.CouponModel

@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MyTicketsPage from "./pages/MyTicketsPage";
 import TransactionHistoryPage from "./pages/TransactionHistoryPage";
+import ProfilePage from "./pages/ProfilePage";
 
 // Dashboard
 import DashboardLayout from "./pages/dashboard/DashboardLayout";
@@ -64,6 +65,11 @@ const App = () => {
         } />
         <Route path="/transactions" element={
           <ProtectedRoute role="CUSTOMER"><TransactionHistoryPage /></ProtectedRoute>
+        } />
+
+        {/* ── Profile (any authenticated user) ── */}
+        <Route path="/profile" element={
+          <ProtectedRoute><ProfilePage /></ProtectedRoute>
         } />
 
         {/* ── Organizer Dashboard ── */}

@@ -14,6 +14,7 @@ interface AuthContextValue {
   isLoading: boolean;
   login: (token: string, user: User) => void;
   logout: () => void;
+  updateUser: (user: User) => void;
   isAuthenticated: boolean;
   isOrganizer: boolean;
   isCustomer: boolean;
@@ -56,6 +57,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     window.location.href = "/";
   }, []);
 
+  const updateUser = useCallback((updatedUser: User) => {
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+    setUser(updatedUser);
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
@@ -64,6 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isLoading,
         login,
         logout,
+        updateUser,
         isAuthenticated: !!token && !!user,
         isOrganizer: user?.role === "ORGANIZER",
         isCustomer: user?.role === "CUSTOMER",

@@ -24,6 +24,13 @@ const schema = z.object({
     price: z.coerce.number().int().min(0),
     quota: z.coerce.number().int().positive("Kuota harus positif"),
   })).min(1, "Minimal 1 tipe tiket"),
+  promotions: z.array(z.object({
+    code: z.string().min(3, "Kode promo minimal 3 karakter").toUpperCase(),
+    discountPercent: z.coerce.number().int().min(1, "Minimal 1%").max(100, "Maksimal 100%"),
+    maxUsage: z.coerce.number().int().min(1, "Minimal 1"),
+    startDate: z.string().min(1, "Wajib diisi"),
+    endDate: z.string().min(1, "Wajib diisi"),
+  })).optional(),
 });
 
 export type EventFormData = z.infer<typeof schema>;
@@ -68,6 +75,7 @@ const EventForm = ({
   });
 
   const { fields, append, remove } = useFieldArray({ control, name: "ticketTypes" });
+  const { fields: promoFields, append: appendPromo, remove: removePromo } = useFieldArray({ control, name: "promotions" });
   const isFree = watch("isFree");
 
   const Field = ({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) => (
@@ -247,6 +255,100 @@ const EventForm = ({
           </div>
         </div>
       )}
+
+      {/* Promotions / Voucher Discount */}
+      <div className="rounded-xl bg-[var(--bg-card)] border border-[var(--border)] p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold text-white text-sm uppercase tracking-wider">Voucher Diskon</h3>
+            <p className="text-xs text-[var(--text-muted)] mt-1">Voucher diskon khusus untuk event ini (opsional)</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => appendPromo({ code: "", discountPercent: 10, maxUsage: 100, startDate: "", endDate: "" })}
+            className="flex items-center gap-1.5 text-xs text-[var(--accent-red)] hover:opacity-80"
+          >
+            <Plus size={13} /> Tambah Voucher
+          </button>
+        </div>
+
+        {errors.promotions?.root && (
+          <p className="text-xs text-red-400">{errors.promotions.root.message}</p>
+        )}
+
+        <div className="space-y-4">
+          {promoFields.map((field, idx) => (
+            <div
+              key={field.id}
+              className="relative p-4 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border)]"
+            >
+              <button
+                type="button"
+                onClick={() => removePromo(idx)}
+                className="absolute top-3 right-3 w-6 h-6 flex items-center justify-center rounded text-[var(--text-muted)] hover:text-red-400 hover:bg-red-500/10 transition-colors z-10"
+              >
+                <Trash2 size={12} />
+              </button>
+
+              <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
+                <div className="sm:col-span-2">
+                  <label className="block text-xs text-[var(--text-muted)] mb-1">Kode Voucher *</label>
+                  <input
+                    {...register(`promotions.${idx}.code`)}
+                    placeholder="Contoh: SUMMER2026"
+                    className="input-field text-sm uppercase"
+                  />
+                  {errors.promotions?.[idx]?.code && (
+                    <p className="mt-1 text-xs text-red-400">{errors.promotions[idx]?.code?.message}</p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-xs text-[var(--text-muted)] mb-1">Diskon (%) *</label>
+                  <input
+                    {...register(`promotions.${idx}.discountPercent`)}
+                    type="number"
+                    min={1}
+                    max={100}
+                    className="input-field text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-[var(--text-muted)] mb-1">Kuota Pakai *</label>
+                  <input
+                    {...register(`promotions.${idx}.maxUsage`)}
+                    type="number"
+                    min={1}
+                    className="input-field text-sm"
+                  />
+                </div>
+                <div className="sm:col-span-1" />
+
+                <div className="sm:col-span-2">
+                  <label className="block text-xs text-[var(--text-muted)] mb-1">Mulai Berlaku *</label>
+                  <input
+                    {...register(`promotions.${idx}.startDate`)}
+                    type="datetime-local"
+                    className="input-field text-sm"
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="block text-xs text-[var(--text-muted)] mb-1">Selesai Berlaku *</label>
+                  <input
+                    {...register(`promotions.${idx}.endDate`)}
+                    type="datetime-local"
+                    className="input-field text-sm"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+          {promoFields.length === 0 && (
+            <div className="text-center py-6 border border-dashed border-[var(--border)] rounded-xl text-sm text-[var(--text-muted)]">
+              Belum ada voucher diskon. Klik "Tambah Voucher" untuk membuat.
+            </div>
+          )}
+        </div>
+      </div>
 
       <button
         type="submit"
