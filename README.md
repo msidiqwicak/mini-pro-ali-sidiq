@@ -125,6 +125,10 @@ npm install
 # - cors: Izinkan request dari frontend
 # - dotenv: Baca file .env
 # - zod: Validasi input di server
+# - redis: Akses layer caching
+# - nodemailer: Kirim email notifikasi
+# - qrcode: Generate QR code image
+# - winston: Standardized logging
 
 # Copy .env dan isi dengan kredensial Supabase kamu
 cp .env.example .env
@@ -137,6 +141,9 @@ npm run db:push
 
 # Isi data awal (seed)
 npm run db:seed
+
+# Jalankan Redis (wajib pakai Docker)
+docker run -d --name soundwave-redis -p 6379:6379 redis/redis-stack:latest
 
 # Jalankan server development
 npm run dev
@@ -183,8 +190,20 @@ npm run dev
 ```env
 DATABASE_URL="postgresql://postgres.[ref]:[pass]@aws-0-[region].pooler.supabase.com:6543/postgres?pgbouncer=true"
 DIRECT_URL="postgresql://postgres.[ref]:[pass]@aws-0-[region].pooler.supabase.com:5432/postgres"
+
+# JWT Config
 JWT_SECRET="buat-string-random-panjang-di-sini"
 FRONTEND_URL="http://localhost:5173"
+
+# Redis Config (Default Local Docker)
+REDIS_URL="redis://localhost:6379"
+
+# SMTP Email Config (contoh pakai Mailtrap / Gmail App Password)
+SMTP_HOST="smtp.gmail.com"
+SMTP_PORT="587"
+SMTP_USER="nama_user@gmail.com"
+SMTP_PASS="password_aplikasi"
+SMTP_FROM="reply@soundwave.com"
 ```
 
 ### Perintah Prisma yang Sering Dipakai
@@ -424,6 +443,10 @@ Setelah `npm run db:seed`, tersedia:
 | `cors` | Izinkan cross-origin request dari frontend |
 | `dotenv` | Load variabel dari file `.env` |
 | `zod` | Validasi & parsing input request (schema-first) |
+| `redis` | Klien cache data performa tinggi |
+| `nodemailer` | Pengirim transport email SMTP (E-Tickets, Welcome Email) |
+| `qrcode` | Pembuat barcode gambar QR untuk tiket digital |
+| `winston` | Advanced structured file/console logging |
 | `tsx` | Jalankan TypeScript langsung (dev mode) |
 | `typescript` | Tipe statis untuk catch bug lebih awal |
 

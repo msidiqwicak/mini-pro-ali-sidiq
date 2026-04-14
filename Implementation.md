@@ -2,10 +2,10 @@
 
 ## Goal
 Implement the missing features so these scenarios can be tested end-to-end:
-1. **Referral Rewards** – Referrer gets 10,000 pts (✅ backend exists), new registrant gets a **discount coupon** (❌ missing)
+1. **Referral Rewards** – Referrer gets 10,000 pts (✅ backend DONE), new registrant gets a **discount coupon** (✅ backend DONE, missing UI)
 2. **Points Expiration** – 3-month expiry (✅ in DB), but **no UI** to see points balance/expiry
-3. **Coupon Expiration** – Discount coupon valid 3 months (❌ not implemented at all)
-4. **Profile Page** – Entirely missing: edit name, avatar, change password, display referral code, points, coupons
+3. **Coupon Expiration** – Discount coupon valid 3 months (✅ backend DONE, missing UI)
+4. **Profile Page** – Missing in UI: edit name, avatar, change password, display referral code, points, coupons (✅ backend APIs are DONE)
 
 ---
 
@@ -23,40 +23,27 @@ Implement the missing features so these scenarios can be tested end-to-end:
 
 ### Backend
 
-#### [MODIFY] prisma/schema.prisma
-Add new `Coupon` model and relation on `User`:
-```prisma
-model Coupon {
-  id              String   @id @default(cuid())
-  userId          String
-  code            String   @unique
-  discountPercent Int      @default(10)
-  isUsed          Boolean  @default(false)
-  expiredAt       DateTime
-  createdAt       DateTime @default(now())
-  user            User     @relation(fields: [userId], references: [id])
-  @@map("coupons")
-}
-```
+#### [DONE] prisma/schema.prisma
+Added new `Coupon` model and relation on `User`.
 
-#### [MODIFY] src/repositories/user.repository.ts
-Add helpers: `updateUserById`, `updatePasswordById`, `findCouponsByUser`, `createCoupon`
+#### [DONE] src/repositories/user.repository.ts
+Added helpers: `updateUserById`, `updatePasswordById`, `findCouponsByUser`, `createCoupon`
 
-#### [NEW] src/services/profile.service.ts
+#### [DONE] src/services/profile.service.ts
 Services: `updateProfileService`, `changePasswordService`, `getPointsService`, `getCouponsService`
 
-#### [NEW] src/controllers/profile.controller.ts
+#### [DONE] src/controllers/profile.controller.ts
 Controllers: `updateProfile`, `changePassword`, `getPoints`, `getCoupons`
 
-#### [MODIFY] src/routes/auth.routes.ts
-Add authenticated routes:
+#### [DONE] src/routes/auth.routes.ts
+Added authenticated routes:
 - `PATCH /auth/profile` → updateProfile
 - `PATCH /auth/password` → changePassword
 - `GET /auth/points` → getPoints
 - `GET /auth/coupons` → getCoupons
 
-#### [MODIFY] src/services/auth.service.ts
-In `registerService`, after creating referral points for the referrer, also create a `Coupon` for the **new registrant** with 10% discount valid 3 months.
+#### [DONE] src/services/auth.service.ts
+In `registerService`, after creating referral points for the referrer, also created a `Coupon` for the **new registrant** with 10% discount valid 3 months.
 
 ---
 
