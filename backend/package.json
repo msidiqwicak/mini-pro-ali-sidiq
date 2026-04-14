@@ -1,23 +1,37 @@
 {
   "scripts": {
     "build": "tsc",
-  "dev": "tsx --watch src/server.ts",
-  "start": "npm run build && node dist/server.js",
-  "db:generate": "prisma generate --config prisma.config.ts",
-  "db:migrate": "prisma migrate dev --config prisma.config.ts",
-  "db:push": "prisma db push --config prisma.config.ts",
-  "db:seed": "tsx prisma/seed.ts",
-  "db:studio": "prisma studio --config prisma.config.ts"
+    "dev": "tsx --watch src/server.ts",
+    "start": "npm run build && node dist/server.js",
+    "db:generate": "prisma generate --config prisma.config.ts",
+    "db:migrate": "prisma migrate dev --config prisma.config.ts",
+    "db:push": "prisma db push --config prisma.config.ts",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio --config prisma.config.ts"
   },
   "type": "module",
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.4.2",
-    "express": "^5.2.1"
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^6.10.1",
+    "qrcode": "^1.5.4",
+    "redis": "^5.11.0",
+    "winston": "^3.19.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.4.0",
+    "@types/nodemailer": "^6.4.23",
+    "@types/qrcode": "^1.5.6",
     "prisma": "^7.4.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"

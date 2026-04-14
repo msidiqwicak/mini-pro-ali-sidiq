@@ -9,6 +9,7 @@ import {
 import { hashPassword, comparePassword } from "../utils/hash.js";
 import { signToken } from "../utils/jwt.js";
 import { generateReferralCode } from "../utils/slug.js";
+import { sendWelcomeEmail } from "../utils/mail.js";
 import prisma from "../lib/prisma.js";
 
 export const registerSchema = z.object({
@@ -84,6 +85,14 @@ export const registerService = async (input: RegisterInput) => {
 
     // Increment referral usage count
     await incrementReferralUsage(referralCodeRecord.id);
+  }
+
+  // 🆕 Send welcome email
+  try {
+    await sendWelcomeEmail(user.email, user.name, newRefCode);
+  } catch (error) {
+    console.warn("Email gagal dikirim, user tetap terdaftar:", error);
+    // Jangan throw error, email bukan critical path
   }
 
   const token = signToken({

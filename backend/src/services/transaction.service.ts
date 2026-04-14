@@ -7,6 +7,7 @@ import {
 } from "../repositories/transaction.repository.js";
 import { calculatePointsRedemption } from "./point.service.js";
 import { generateQRCode } from "../utils/slug.js";
+import { sendTicketEmail, sendPaymentConfirmation } from "../utils/mail.js";
 
 export const createTransactionSchema = z.object({
   eventId: z.string().min(1, "Event ID wajib diisi"),
@@ -196,6 +197,11 @@ export const payTransactionService = async (
 ) => {
   const transaction = await prisma.transaction.findUnique({
     where: { id: transactionId },
+    include: {
+      user: true,
+      event: true,
+      tickets: { include: { ticketType: true } },
+    },
   });
 
   if (!transaction) throw new Error("Transaksi tidak ditemukan");
@@ -203,7 +209,8 @@ export const payTransactionService = async (
   if (transaction.status !== "PENDING")
     throw new Error("Status transaksi tidak valid");
 
-  return prisma.transaction.update({
+  // Mark as paid
+  const updatedTransaction = await prisma.transaction.update({
     where: { id: transactionId },
     data: {
       status: "PAID",
@@ -211,4 +218,46 @@ export const payTransactionService = async (
       paymentMethod: "BANK_TRANSFER",
     },
   });
+
+  // 🆕 Send confirmation emails asynchronously (don't block response)
+  try {
+    // Generate QR code untuk ticket
+    const firstTicket = transaction.tickets[0];
+
+    if (!firstTicket) {
+      console.warn(`⚠️ No tickets found for transaction ${transactionId}`);
+    } else {
+      const qrCodeDataUrl = `data:image/png;base64,${firstTicket.qrCode}`;
+
+      // Send ticket email
+      await sendTicketEmail(
+        transaction.user.email,
+        transaction.user.name,
+        transaction.event.name,
+        firstTicket.qrCode,
+        qrCodeDataUrl,
+        transaction.tickets.length,
+        updatedTransaction.finalAmount
+      );
+
+      // Send payment confirmation
+      await sendPaymentConfirmation(
+        transaction.user.email,
+        transaction.user.name,
+        updatedTransaction.finalAmount,
+        transactionId,
+        transaction.event.name
+      );
+
+      console.log(`✅ Confirmation emails sent for transaction ${transactionId}`);
+    }
+  } catch (emailError) {
+    // Log email error tapi jangan throw (pembayaran sudah sukses di database)
+    console.warn(
+      `⚠️ Email gagal dikirim untuk transaksi ${transactionId}:`,
+      emailError
+    );
+  }
+
+  return updatedTransaction;
 };
