@@ -2,13 +2,17 @@ import { getRedisClient } from "../lib/redis.js";
 import logger from "./logger.js";
 
 /**
- * Cache Manager - Handle all redis caching operations
+ * Cache Manager - Handle all Upstash Redis caching operations
+ *
+ * Perbedaan utama @upstash/redis vs redis package:
+ * - Auto JSON serialize/deserialize (tidak perlu JSON.parse/stringify manual)
+ * - set(key, value, { ex: ttl }) bukan setEx(key, ttl, value)
+ * - del(...keys) spread bukan del([keys])
+ * - mget(...keys) spread bukan mGet([keys])
  */
 
 export interface CacheOptions {
   ttl?: number; // Time to live in seconds
-  nx?: boolean; // Only set if not exists
-  ex?: boolean; // Only set if exists
 }
 
 /**
@@ -17,13 +21,8 @@ export interface CacheOptions {
 export async function getCache<T = unknown>(key: string): Promise<T | null> {
   try {
     const client = getRedisClient();
-    const value = await client.get(key);
-
-    if (!value) {
-      return null;
-    }
-
-    return JSON.parse(value) as T;
+    const value = await client.get<T>(key);
+    return value ?? null;
   } catch (error) {
     logger.error(`Error getting cache key "${key}":`, error);
     return null;
@@ -40,12 +39,11 @@ export async function setCache<T = unknown>(
 ): Promise<boolean> {
   try {
     const client = getRedisClient();
-    const serialized = JSON.stringify(value);
 
     if (options?.ttl) {
-      await client.setEx(key, options.ttl, serialized);
+      await client.set(key, value, { ex: options.ttl });
     } else {
-      await client.set(key, serialized);
+      await client.set(key, value);
     }
 
     return true;
@@ -63,11 +61,10 @@ export async function deleteCache(key: string | string[]): Promise<number> {
     const client = getRedisClient();
     const keys = Array.isArray(key) ? key : [key];
 
-    if (keys.length === 0) {
-      return 0;
-    }
+    if (keys.length === 0) return 0;
 
-    return await client.del(keys);
+    // Upstash: del(...keys) dengan spread
+    return await client.del(...keys);
   } catch (error) {
     logger.error(`Error deleting cache:`, error);
     return 0;
@@ -75,18 +72,17 @@ export async function deleteCache(key: string | string[]): Promise<number> {
 }
 
 /**
- * Clear all cache with pattern
+ * Clear all cache keys matching a pattern
+ * Menggunakan KEYS — aman untuk development; untuk production skala besar gunakan SCAN
  */
 export async function clearCachePattern(pattern: string): Promise<number> {
   try {
     const client = getRedisClient();
     const keys = await client.keys(pattern);
 
-    if (keys.length === 0) {
-      return 0;
-    }
+    if (keys.length === 0) return 0;
 
-    return await client.del(keys);
+    return await client.del(...keys);
   } catch (error) {
     logger.error(`Error clearing cache pattern "${pattern}":`, error);
     return 0;
@@ -99,8 +95,8 @@ export async function clearCachePattern(pattern: string): Promise<number> {
 export async function cacheExists(key: string): Promise<boolean> {
   try {
     const client = getRedisClient();
-    const exists = await client.exists(key);
-    return exists === 1;
+    const count = await client.exists(key);
+    return count === 1;
   } catch (error) {
     logger.error(`Error checking cache existence for key "${key}":`, error);
     return false;
@@ -108,7 +104,7 @@ export async function cacheExists(key: string): Promise<boolean> {
 }
 
 /**
- * Get cache TTL (time to live)
+ * Get cache TTL (time to live in seconds)
  */
 export async function getCacheTTL(key: string): Promise<number> {
   try {
@@ -123,10 +119,13 @@ export async function getCacheTTL(key: string): Promise<number> {
 /**
  * Increment counter in cache
  */
-export async function incrementCache(key: string, amount: number = 1): Promise<number> {
+export async function incrementCache(
+  key: string,
+  amount: number = 1
+): Promise<number> {
   try {
     const client = getRedisClient();
-    return await client.incrBy(key, amount);
+    return await client.incrby(key, amount);
   } catch (error) {
     logger.error(`Error incrementing cache key "${key}":`, error);
     return 0;
@@ -135,6 +134,8 @@ export async function incrementCache(key: string, amount: number = 1): Promise<n
 
 /**
  * Get or set cache (memoization pattern)
+ * - Cek cache dulu
+ * - Kalau miss, jalankan fetcher → simpan hasilnya ke cache
  */
 export async function getOrSetCache<T = unknown>(
   key: string,
@@ -149,7 +150,7 @@ export async function getOrSetCache<T = unknown>(
       return cached;
     }
 
-    // Cache miss - fetch data
+    // Cache miss — fetch data from source
     logger.debug(`Cache miss for key "${key}" - fetching data`);
     const data = await fetcher();
 
@@ -166,24 +167,18 @@ export async function getOrSetCache<T = unknown>(
 /**
  * Batch get multiple cache keys
  */
-export async function getBatchCache<T = unknown>(keys: string[]): Promise<(T | null)[]> {
+export async function getBatchCache<T = unknown>(
+  keys: string[]
+): Promise<(T | null)[]> {
   try {
     const client = getRedisClient();
 
-    if (keys.length === 0) {
-      return [];
-    }
+    if (keys.length === 0) return [];
 
-    const values = await client.mGet(keys);
+    // Upstash: mget(...keys) dengan spread
+    const values = await client.mget<T[]>(...keys);
 
-    return values.map((value) => {
-      if (!value) return null;
-      try {
-        return JSON.parse(value) as T;
-      } catch {
-        return null;
-      }
-    });
+    return values.map((value) => value ?? null);
   } catch (error) {
     logger.error("Error batch getting cache:", error);
     return keys.map(() => null);

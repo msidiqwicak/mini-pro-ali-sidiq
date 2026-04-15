@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import {
   registerService,
   loginService,
+  logoutService,
   registerSchema,
   loginSchema,
 } from "../services/auth.service.js";
@@ -56,5 +57,21 @@ export const getMe = async (req: AuthRequest, res: Response): Promise<void> => {
     });
   } catch {
     errorResponse(res, "Gagal mendapatkan data user");
+  }
+};
+
+export const logout = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.split(" ")[1];
+    if (!token) {
+      errorResponse(res, "Token tidak ditemukan", 400);
+      return;
+    }
+    await logoutService(token);
+    successResponse(res, null, "Logout berhasil");
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Logout gagal";
+    errorResponse(res, msg);
   }
 };
