@@ -8,6 +8,8 @@ import {
 import { calculatePointsRedemption } from "./point.service.js";
 import { generateQRCode } from "../utils/slug.js";
 import { sendTicketEmail, sendPaymentConfirmation } from "../utils/mail.js";
+import { deleteCache } from "../utils/cacheManager.js";
+import { REDIS_KEYS } from "../utils/redisKeys.js";
 
 export const createTransactionSchema = z.object({
   eventId: z.string().min(1, "Event ID wajib diisi"),
@@ -26,7 +28,7 @@ export const createTransactionService = async (
   userId: string,
   input: CreateTransactionInput
 ) => {
-  return prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx) => {
     // ─── STEP 1: Validate ticket type & seat availability ────────
     const ticketType = await tx.ticketType.findUnique({
       where: { id: input.ticketTypeId },
@@ -191,6 +193,22 @@ export const createTransactionService = async (
 
     return transaction;
   });
+
+  // Invalidate cache event setelah tiket terjual (soldSeats berubah)
+  // Dijalankan di luar prisma.$transaction agar tidak block commit
+  const eventSlug = await prisma.event
+    .findUnique({ where: { id: input.eventId }, select: { slug: true } })
+    .then((e) => e?.slug);
+
+  if (eventSlug) {
+    await Promise.all([
+      deleteCache(REDIS_KEYS.CACHE_EVENT_BY_SLUG(eventSlug)),
+      // clearCachePattern tidak dipakai di sini karena list events
+      // di-refresh oleh event.service saat ada mutasi struktural
+    ]);
+  }
+
+  return result;
 };
 
 export const getMyTransactionsService = async (userId: string) => {

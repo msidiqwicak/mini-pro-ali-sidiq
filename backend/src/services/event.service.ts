@@ -13,6 +13,12 @@ import {
   findAllCategories,
 } from "../repositories/event.repository.js";
 import { generateSlug } from "../utils/slug.js";
+import {
+  getOrSetCache,
+  deleteCache,
+  clearCachePattern,
+} from "../utils/cacheManager.js";
+import { REDIS_KEYS, REDIS_TTL } from "../utils/redisKeys.js";
 
 export const createEventSchema = z.object({
   categoryId: z.string().min(1, "Kategori wajib dipilih"),
@@ -64,27 +70,43 @@ export const getEventsService = async (params: {
   const page = Math.max(1, params.page ?? 1);
   const limit = Math.min(20, Math.max(1, params.limit ?? 9));
 
-  const { events, total } = await findAllEvents({
-    search: params.search,
-    city: params.city,
-    categoryId: params.categoryId,
-    page,
-    limit,
-  });
+  // Buat cache key unik berdasarkan semua filter & pagination
+  const filterKey = JSON.stringify({ search: params.search, city: params.city, categoryId: params.categoryId, page, limit });
+  const cacheKey = REDIS_KEYS.CACHE_EVENTS(filterKey);
 
-  return {
-    data: events,
-    meta: {
-      total,
-      page,
-      limit,
-      totalPages: Math.ceil(total / limit),
+  return getOrSetCache(
+    cacheKey,
+    async () => {
+      const { events, total } = await findAllEvents({
+        search: params.search,
+        city: params.city,
+        categoryId: params.categoryId,
+        page,
+        limit,
+      });
+      return {
+        data: events,
+        meta: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      };
     },
-  };
+    REDIS_TTL.MEDIUM // 5 menit
+  );
 };
 
 export const getEventBySlugService = async (slug: string) => {
-  const event = await findEventBySlug(slug);
+  const cacheKey = REDIS_KEYS.CACHE_EVENT_BY_SLUG(slug);
+
+  const event = await getOrSetCache(
+    cacheKey,
+    () => findEventBySlug(slug),
+    REDIS_TTL.MEDIUM // 5 menit
+  );
+
   if (!event) throw new Error("Event tidak ditemukan");
   return event;
 };
@@ -125,6 +147,9 @@ export const createEventService = async (
     );
   }
 
+  // Invalidate semua cache list events agar data baru langsung muncul
+  await clearCachePattern("cache:events*");
+
   return findEventById(event.id);
 };
 
@@ -139,11 +164,19 @@ export const updateEventService = async (
     throw new Error("Tidak memiliki akses untuk mengubah event ini");
 
   const { startDate, endDate, ...rest } = input;
-  return updateEvent(id, {
+  const updated = await updateEvent(id, {
     ...rest,
     ...(startDate && { startDate: new Date(startDate) }),
     ...(endDate && { endDate: new Date(endDate) }),
   });
+
+  // Invalidate cache event ini + semua cache list events
+  await Promise.all([
+    deleteCache(REDIS_KEYS.CACHE_EVENT_BY_SLUG(event.slug)),
+    clearCachePattern("cache:events*"),
+  ]);
+
+  return updated;
 };
 
 export const deleteEventService = async (id: string, organizerId: string) => {
@@ -154,12 +187,31 @@ export const deleteEventService = async (id: string, organizerId: string) => {
   if (event.transactions.length > 0)
     throw new Error("Event yang sudah memiliki transaksi tidak dapat dihapus");
 
-  return deleteEvent(id);
+  const result = await deleteEvent(id);
+
+  // Invalidate cache event ini + semua cache list events
+  await Promise.all([
+    deleteCache(REDIS_KEYS.CACHE_EVENT_BY_SLUG(event.slug)),
+    clearCachePattern("cache:events*"),
+  ]);
+
+  return result;
 };
 
 export const getOrganizerEventsService = async (organizerId: string) => {
   return findEventsByOrganizer(organizerId);
 };
 
-export const getCitiesService = async () => findAllCities();
-export const getCategoriesService = async () => findAllCategories();
+export const getCitiesService = async () =>
+  getOrSetCache(
+    REDIS_KEYS.CACHE_CITIES,
+    () => findAllCities(),
+    REDIS_TTL.LONG // 1 jam — data kota jarang berubah
+  );
+
+export const getCategoriesService = async () =>
+  getOrSetCache(
+    REDIS_KEYS.CACHE_CATEGORIES,
+    () => findAllCategories(),
+    REDIS_TTL.LONG // 1 jam — data kategori jarang berubah
+  );

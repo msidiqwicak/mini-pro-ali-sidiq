@@ -13,8 +13,8 @@ async function main() {
     await prisma.$connect();
     logger.info("✅ Database terhubung");
 
-    // 🆕 Initialize dan test Redis connection
-    await initializeRedis();
+    // 🆕 Initialize dan test Upstash Redis connection
+    initializeRedis();
     await testRedisConnection();
 
     // Test email connection
@@ -26,7 +26,7 @@ async function main() {
       logger.info(`🌍 Environment: ${config.nodeEnv}`);
       logger.info(`📡 Frontend allowed: ${config.frontendUrl}`);
       logger.info(`📧 Email from: ${config.smtp.from}`);
-      logger.info(`🔴 Redis: ${config.redis.url}`);
+      logger.info(`🔴 Upstash Redis: ${config.redis.url}`);
     });
 
     // Handle error saat listen

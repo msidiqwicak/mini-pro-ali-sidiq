@@ -8,10 +8,13 @@ import {
   createCoupon,
 } from "../repositories/user.repository.js";
 import { hashPassword, comparePassword } from "../utils/hash.js";
-import { signToken } from "../utils/jwt.js";
+import { signToken, verifyToken } from "../utils/jwt.js";
 import { generateReferralCode } from "../utils/slug.js";
 import { sendWelcomeEmail } from "../utils/mail.js";
 import prisma from "../lib/prisma.js";
+import { createHash } from "crypto";
+import { setCache } from "../utils/cacheManager.js";
+import { REDIS_KEYS } from "../utils/redisKeys.js";
 
 export const registerSchema = z.object({
   email: z.string().email("Email tidak valid"),
@@ -154,4 +157,29 @@ export const loginService = async (input: LoginInput) => {
       referralCode: user.referralCode?.code,
     },
   };
+};
+
+/**
+ * Logout — masukkan token ke Redis blacklist
+ * Token akan otomatis kadaluarsa di Redis sesuai waktu expired JWT-nya
+ */
+export const logoutService = async (token: string): Promise<void> => {
+  // Buat hash SHA-256 dari token agar tidak menyimpan token mentah di Redis
+  const tokenHash = createHash("sha256").update(token).digest("hex");
+  const cacheKey = REDIS_KEYS.TOKEN_BLACKLIST(tokenHash);
+
+  // Hitung sisa TTL dari JWT
+  let ttlSeconds = 3600; // default 1 jam jika gagal decode
+  try {
+    const decoded = verifyToken(token) as { exp?: number };
+    if (decoded.exp) {
+      const remainingSeconds = decoded.exp - Math.floor(Date.now() / 1000);
+      if (remainingSeconds > 0) ttlSeconds = remainingSeconds;
+    }
+  } catch {
+    // Token sudah expired, tidak perlu di-blacklist lagi
+    return;
+  }
+
+  await setCache(cacheKey, true, { ttl: ttlSeconds });
 };

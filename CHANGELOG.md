@@ -2,7 +2,73 @@
 
 Dokumen ini mencatat seluruh perubahan, perbaikan bug, dan penambahan fitur yang dilakukan pada proyek Soundwave Music Platform.
 
-## [2026-04-14] - Pembaruan Saat Ini
+## [2026-04-15] - Migrasi Redis ke Upstash (Cloud Redis untuk Vercel)
+
+### ☁️ Migrasi dari `redis` (TCP) ke `@upstash/redis` (HTTP/REST)
+
+Mentor merekomendasikan penggunaan **Upstash Redis** saat deploy ke Vercel karena Vercel berjalan di lingkungan _serverless_ yang tidak mendukung koneksi TCP persisten. Package `redis` v5 menggunakan TCP yang hanya bekerja di server konvensional (lokal/VPS). Upstash menggunakan REST API (HTTP) sehingga kompatibel dengan Vercel, Netlify, AWS Lambda, dan platform serverless lainnya.
+
+#### File yang Diubah:
+
+- **`lib/redis.ts`** — Ditulis ulang sepenuhnya menggunakan `@upstash/redis`. Tidak ada `client.connect()` karena Upstash bersifat stateless HTTP. Fungsi `initializeRedis()` kini sinkron (tidak perlu `await`).
+- **`utils/cacheManager.ts`** — Disesuaikan dengan API `@upstash/redis`:
+  - `setEx(key, ttl, value)` → `set(key, value, { ex: ttl })`
+  - `del([...keys])` → `del(...keys)` (spread syntax)
+  - `mGet([...keys])` → `mget(...keys)` (spread + lowercase)
+  - JSON serialisasi/deserialisasi **tidak perlu lagi** karena `@upstash/redis` menanganinya otomatis
+- **`config/env.ts`** — Variabel `redis.url` diganti menjadi `redis.url` (UPSTASH_REDIS_REST_URL) dan `redis.token` (UPSTASH_REDIS_REST_TOKEN)
+- **`server.ts`** — `await initializeRedis()` diubah menjadi `initializeRedis()` (sinkron)
+- **`.env`** — `REDIS_URL` diganti dengan `UPSTASH_REDIS_REST_URL` dan `UPSTASH_REDIS_REST_TOKEN`
+
+#### Keuntungan Upstash vs Redis Lokal:
+
+| Aspek | `redis` (TCP) | `@upstash/redis` (HTTP) |
+|-------|---------------|-------------------------|
+| Vercel/Serverless | ❌ Tidak didukung | ✅ Didukung |
+| Lokal | ✅ | ✅ |
+| Persistent connection | Ya (TCP) | Tidak (stateless HTTP) |
+| Setup | Butuh Docker/WSL | Cukup URL + Token |
+| Free tier | - | ✅ 10.000 request/hari |
+
+
+
+### 🔴 Redis Kini Aktif Digunakan
+
+Redis sebelumnya sudah diinisialisasi (`lib/redis.ts`, `utils/cacheManager.ts`, `utils/redisKeys.ts`) namun belum terhubung ke satupun service. Pada update ini, Redis diaktifkan secara penuh di tiga area:
+
+---
+
+#### 1. 🗄️ Event Caching (`services/event.service.ts`)
+
+Redis digunakan sebagai **read-through cache** untuk mengurangi query berulang ke database PostgreSQL.
+
+- **`getEventsService`** — Hasil pencarian/filter event di-cache selama **5 menit** menggunakan key unik per kombinasi filter (`search`, `city`, `categoryId`, `page`, `limit`). Request kedua dengan filter yang sama langsung dikembalikan dari Redis tanpa menyentuh database.
+- **`getEventBySlugService`** — Detail event per slug di-cache selama **5 menit**. Sangat berguna untuk halaman detail event yang sering dibuka berulang.
+- **`getCitiesService`** — Daftar kota di-cache selama **1 jam** karena data ini sangat jarang berubah.
+- **`getCategoriesService`** — Daftar kategori di-cache selama **1 jam** karena data ini sangat jarang berubah.
+- **Cache Invalidation** — Setiap kali event dibuat (`createEventService`), diperbarui (`updateEventService`), atau dihapus (`deleteEventService`), cache yang terkait otomatis dihapus dari Redis agar data lama tidak muncul ke user.
+
+---
+
+#### 2. 🚫 Token Blacklist untuk Logout (`services/auth.service.ts`, `middlewares/auth.middleware.ts`, `controllers/auth.controller.ts`, `routes/auth.routes.ts`)
+
+Sebelumnya, tidak ada endpoint logout dan token JWT tetap valid hingga expired meskipun user sudah "logout" di frontend. Dengan implementasi ini, logout benar-benar memblokir token lama.
+
+- **`logoutService`** (baru di `auth.service.ts`) — Menerima token JWT, membuat hash SHA-256 dari token tersebut, lalu menyimpan hash ke Redis dengan TTL yang sama persis dengan sisa waktu expired JWT. Token mentah tidak disimpan untuk alasan keamanan.
+- **`authMiddleware`** (diperbarui di `auth.middleware.ts`) — Setiap request yang menggunakan token kini melalui pengecekan blacklist ke Redis. Jika hash token ditemukan di blacklist, request ditolak dengan status `401 Unauthorized`.
+- **`logout` controller** (baru di `auth.controller.ts`) — Controller yang membaca token dari Authorization header dan memanggil `logoutService`.
+- **Route `POST /api/auth/logout`** (baru di `auth.routes.ts`) — Endpoint logout yang dilindungi `authMiddleware` (harus login dulu untuk logout).
+
+---
+
+#### 3. 🔄 Cache Invalidation setelah Pembelian Tiket (`services/transaction.service.ts`)
+
+Ketika tiket berhasil dibeli, `soldSeats` pada event berubah. Cache event lama yang masih menyimpan data jumlah kursi yang belum terkurangi harus segera dihapus.
+
+- **`createTransactionService`** — Setelah `prisma.$transaction` berhasil commit, script mengambil slug event lalu menghapus cache event tersebut dari Redis. Proses ini berjalan **di luar** blok transaksi Prisma agar tidak memblokir operasi database.
+- Variabel `return prisma.$transaction(...)` diubah menjadi `const result = await prisma.$transaction(...)` untuk memungkinkan eksekusi kode setelah transaksi selesai.
+
+
 
 - **Backend Audit & TypeScript Check**: Melakukan pengecekan menyeluruh pada backend project. Konfirmasi `tsc --noEmit` **lulus tanpa error**. Memverifikasi kelengkapan implementasi atomic transaction (11-step `prisma.$transaction`), JWT auth middleware, referral logic, dan email notification system.
 - **Pembaruan CHANGELOG.md**: Menambahkan entri yang sebelumnya belum tercatat sejak 2026-04-09 hingga fitur-fitur infrastruktur yang sudah ada di kode namun belum terdokumentasi.

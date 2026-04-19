@@ -1,52 +1,33 @@
-import { createClient, type RedisClientType } from "redis";
+import { Redis } from "@upstash/redis";
 import logger from "../utils/logger.js";
 
-let client: RedisClientType | null = null;
+let client: Redis | null = null;
 
 /**
- * Initialize Redis client
+ * Initialize Upstash Redis client (HTTP-based, works on Vercel/serverless)
  */
-export async function initializeRedis(): Promise<RedisClientType> {
-  if (client) {
-    return client;
+export function initializeRedis(): Redis {
+  if (client) return client;
+
+  const url = process.env["UPSTASH_REDIS_REST_URL"];
+  const token = process.env["UPSTASH_REDIS_REST_TOKEN"];
+
+  if (!url || !token) {
+    throw new Error(
+      "UPSTASH_REDIS_REST_URL dan UPSTASH_REDIS_REST_TOKEN harus diisi di .env"
+    );
   }
 
-  const redisUrl = process.env.REDIS_URL || "redis://localhost:6379";
+  client = new Redis({ url, token });
+  logger.info("✅ Upstash Redis client initialized");
 
-  client = createClient({
-    url: redisUrl,
-    socket: {
-      reconnectStrategy: (retries) => {
-        if (retries > 10) {
-          logger.error("Redis reconnection attempts exceeded");
-          return new Error("Redis max retries exceeded");
-        }
-        return retries * 100;
-      },
-    },
-  });
-
-  // Event listeners
-  client.on("error", (err) => logger.error("Redis Client Error:", err));
-  client.on("connect", () => logger.info("✅ Redis client connected"));
-  client.on("ready", () => logger.info("✅ Redis client ready"));
-  client.on("reconnecting", () => logger.warn("⚠️ Redis client reconnecting..."));
-  client.on("end", () => logger.warn("⚠️ Redis client disconnected"));
-
-  try {
-    await client.connect();
-    logger.info("✅ Redis connection established");
-    return client;
-  } catch (error) {
-    logger.error("❌ Failed to connect to Redis:", error);
-    throw error;
-  }
+  return client;
 }
 
 /**
  * Get Redis client instance (must be initialized first)
  */
-export function getRedisClient(): RedisClientType {
+export function getRedisClient(): Redis {
   if (!client) {
     throw new Error("Redis client not initialized. Call initializeRedis() first.");
   }
@@ -54,28 +35,25 @@ export function getRedisClient(): RedisClientType {
 }
 
 /**
- * Test Redis connection
+ * Test Upstash Redis connection via PING
  */
 export async function testRedisConnection(): Promise<void> {
   try {
-    const redisClient = getRedisClient();
-    await redisClient.ping();
-    logger.info("✅ Redis ping successful");
+    const redis = getRedisClient();
+    await redis.ping();
+    logger.info("✅ Upstash Redis ping successful");
   } catch (error) {
-    logger.error("❌ Redis connection test failed:", error);
+    logger.error("❌ Upstash Redis connection test failed:", error);
     throw error;
   }
 }
 
 /**
- * Disconnect Redis client
+ * Clear client (Upstash is HTTP-based, no persistent connection to close)
  */
 export async function disconnectRedis(): Promise<void> {
-  if (client) {
-    await client.disconnect();
-    client = null;
-    logger.info("Redis client disconnected");
-  }
+  client = null;
+  logger.info("Upstash Redis client cleared");
 }
 
 export default getRedisClient;
