@@ -2,6 +2,29 @@
 
 Dokumen ini mencatat seluruh perubahan, perbaikan bug, dan penambahan fitur yang dilakukan pada proyek Soundwave Music Platform.
 
+## [2026-04-19] - Audit, Bug Fix & Docker Overhaul
+
+### 🔧 Bug & Conflict Fixes
+
+- **Resolve Git Merge Conflict (`backend/.env`)**: Menyelesaikan conflict markers (`<<<<<<< Updated upstream` / `>>>>>>> Stashed changes`) yang membuat `.env` invalid. Konflik diselesaikan dengan mempertahankan konfigurasi **Upstash Redis** dan menghapus baris `REDIS_URL=redis://redis:6379`.
+- **Fix Docker CORS Error (Frontend tidak tampil data)**: Data event tidak muncul di `http://localhost:3000` karena Vite build di Docker tidak membawa variabel `VITE_API_URL`, sehingga Axios fallback ke `http://localhost:5000` (hardcoded) dan menghasilkan CORS error. Fix: menambahkan `ARG VITE_API_URL=/api` + `ENV VITE_API_URL=$VITE_API_URL` di tahap `frontend-build` Dockerfile.
+- **Fix Vite Dev Proxy (`vite.config.ts`)**: `VITE_API_URL=/api` tidak berfungsi di lokal karena tidak ada proxy Vite. Tambah konfigurasi `server.proxy` yang meneruskan semua request `/api/*` ke `http://localhost:5000`.
+- **Bersihkan Log Files**: Menghapus isi lama `combined.log` dan `error.log` yang mengandung git conflict markers dan ratusan baris error Redis lama.
+
+### 🐳 Docker Compose Overhaul
+
+- **Hapus Service `redis` dari `docker-compose.yml`**: Redis lokal tidak lagi dibutuhkan karena sudah migrasi ke Upstash Cloud (HTTP-based). Service `redis`, volume `redis-data`, dan dependency `api→redis` dihapus dari `docker-compose.yml`.
+- **Rebuild Docker Dari Awal**: Menghapus seluruh Docker containers, images, volumes, dan networks (`docker system prune -af --volumes`), lalu rebuild ulang dengan `docker compose up -d --build`. Semua 3 service (`postgres`, `api`, `web`) berhasil dibangun dan berjalan.
+
+### ✅ Verifikasi
+
+- `tsc --noEmit` → **0 TypeScript error** setelah `@upstash/redis` terinstall
+- `http://localhost:5000/api/events` → **HTTP 200 OK**
+- `http://localhost:3000/api/events` → **HTTP 200 OK** (via Nginx proxy)
+- Backend log menunjukkan: `✅ Upstash Redis ping successful`, `✅ Database terhubung`
+
+---
+
 ## [2026-04-15] - Migrasi Redis ke Upstash (Cloud Redis untuk Vercel)
 
 ### ☁️ Migrasi dari `redis` (TCP) ke `@upstash/redis` (HTTP/REST)
@@ -22,15 +45,13 @@ Mentor merekomendasikan penggunaan **Upstash Redis** saat deploy ke Vercel karen
 
 #### Keuntungan Upstash vs Redis Lokal:
 
-| Aspek | `redis` (TCP) | `@upstash/redis` (HTTP) |
-|-------|---------------|-------------------------|
-| Vercel/Serverless | ❌ Tidak didukung | ✅ Didukung |
-| Lokal | ✅ | ✅ |
-| Persistent connection | Ya (TCP) | Tidak (stateless HTTP) |
-| Setup | Butuh Docker/WSL | Cukup URL + Token |
-| Free tier | - | ✅ 10.000 request/hari |
-
-
+| Aspek                 | `redis` (TCP)     | `@upstash/redis` (HTTP) |
+| --------------------- | ----------------- | ----------------------- |
+| Vercel/Serverless     | ❌ Tidak didukung | ✅ Didukung             |
+| Lokal                 | ✅                | ✅                      |
+| Persistent connection | Ya (TCP)          | Tidak (stateless HTTP)  |
+| Setup                 | Butuh Docker/WSL  | Cukup URL + Token       |
+| Free tier             | -                 | ✅ 10.000 request/hari  |
 
 ### 🔴 Redis Kini Aktif Digunakan
 
@@ -67,8 +88,6 @@ Ketika tiket berhasil dibeli, `soldSeats` pada event berubah. Cache event lama y
 
 - **`createTransactionService`** — Setelah `prisma.$transaction` berhasil commit, script mengambil slug event lalu menghapus cache event tersebut dari Redis. Proses ini berjalan **di luar** blok transaksi Prisma agar tidak memblokir operasi database.
 - Variabel `return prisma.$transaction(...)` diubah menjadi `const result = await prisma.$transaction(...)` untuk memungkinkan eksekusi kode setelah transaksi selesai.
-
-
 
 - **Backend Audit & TypeScript Check**: Melakukan pengecekan menyeluruh pada backend project. Konfirmasi `tsc --noEmit` **lulus tanpa error**. Memverifikasi kelengkapan implementasi atomic transaction (11-step `prisma.$transaction`), JWT auth middleware, referral logic, dan email notification system.
 - **Pembaruan CHANGELOG.md**: Menambahkan entri yang sebelumnya belum tercatat sejak 2026-04-09 hingga fitur-fitur infrastruktur yang sudah ada di kode namun belum terdokumentasi.

@@ -1,135 +1,24 @@
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-14 17:23:43"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:23:43"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:23:43"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:23:43"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:23:43"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:23:43"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:23:43"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:23:43"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:23:44"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:23:44"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:23:44"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:23:44"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:23:45"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:23:45"}
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-14 17:42:44"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:42:44"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:42:45"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:42:45"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:42:45"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:42:45"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:42:45"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:42:45"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:42:45"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:42:45"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:42:46"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:42:46"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:42:46"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:42:46"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:42:47"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:42:47"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:42:47"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:42:47"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:42:48"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:42:48"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:42:49"}
-{"code":"ECONNREFUSED","level":"error","message":"Redis Client Error:","service":"event-platform-api","stack":"AggregateError [ECONNREFUSED]: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)","timestamp":"2026-04-14 17:42:49"}
-{"level":"warn","message":"⚠️ Redis client reconnecting...","service":"event-platform-api","timestamp":"2026-04-14 17:42:50"}
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-14 17:52:20"}
-{"level":"info","message":"✅ Redis client connected","service":"event-platform-api","timestamp":"2026-04-14 17:52:20"}
-{"level":"info","message":"✅ Redis client ready","service":"event-platform-api","timestamp":"2026-04-14 17:52:20"}
-{"level":"info","message":"✅ Redis connection established","service":"event-platform-api","timestamp":"2026-04-14 17:52:20"}
-{"level":"info","message":"✅ Redis ping successful","service":"event-platform-api","timestamp":"2026-04-14 17:52:20"}
-{"level":"info","message":"🎵 SoundWave API running on http://localhost:5000","service":"event-platform-api","timestamp":"2026-04-14 17:52:22"}
-{"level":"info","message":"🌍 Environment: development","service":"event-platform-api","timestamp":"2026-04-14 17:52:22"}
-{"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-14 17:52:22"}
-{"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-14 17:52:22"}
-{"level":"info","message":"🔴 Redis: redis://localhost:6379","service":"event-platform-api","timestamp":"2026-04-14 17:52:22"}
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-15 09:27:37"}
-{"level":"info","message":"✅ Redis client connected","service":"event-platform-api","timestamp":"2026-04-15 09:27:37"}
-{"level":"info","message":"✅ Redis client ready","service":"event-platform-api","timestamp":"2026-04-15 09:27:37"}
-{"level":"info","message":"✅ Redis connection established","service":"event-platform-api","timestamp":"2026-04-15 09:27:37"}
-{"level":"info","message":"✅ Redis ping successful","service":"event-platform-api","timestamp":"2026-04-15 09:27:37"}
-{"level":"info","message":"🎵 SoundWave API running on http://localhost:5000","service":"event-platform-api","timestamp":"2026-04-15 09:27:39"}
-{"level":"info","message":"🌍 Environment: development","service":"event-platform-api","timestamp":"2026-04-15 09:27:39"}
-{"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-15 09:27:39"}
-{"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-15 09:27:39"}
-{"level":"info","message":"🔴 Redis: redis://localhost:6379","service":"event-platform-api","timestamp":"2026-04-15 09:27:39"}
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-15 13:26:16"}
-{"level":"info","message":"✅ Redis client connected","service":"event-platform-api","timestamp":"2026-04-15 13:26:16"}
-{"level":"info","message":"✅ Redis client ready","service":"event-platform-api","timestamp":"2026-04-15 13:26:16"}
-{"level":"info","message":"✅ Redis connection established","service":"event-platform-api","timestamp":"2026-04-15 13:26:16"}
-{"level":"info","message":"✅ Redis ping successful","service":"event-platform-api","timestamp":"2026-04-15 13:26:16"}
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-15 13:26:17"}
-{"level":"info","message":"✅ Redis client connected","service":"event-platform-api","timestamp":"2026-04-15 13:26:17"}
-{"level":"info","message":"✅ Redis client ready","service":"event-platform-api","timestamp":"2026-04-15 13:26:17"}
-{"level":"info","message":"✅ Redis connection established","service":"event-platform-api","timestamp":"2026-04-15 13:26:17"}
-{"level":"info","message":"✅ Redis ping successful","service":"event-platform-api","timestamp":"2026-04-15 13:26:17"}
-{"level":"info","message":"🎵 SoundWave API running on http://localhost:5000","service":"event-platform-api","timestamp":"2026-04-15 13:26:19"}
-{"level":"info","message":"🌍 Environment: development","service":"event-platform-api","timestamp":"2026-04-15 13:26:19"}
-{"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-15 13:26:19"}
-{"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-15 13:26:19"}
-{"level":"info","message":"🔴 Redis: redis://localhost:6379","service":"event-platform-api","timestamp":"2026-04-15 13:26:19"}
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-15 14:01:29"}
-{"level":"info","message":"✅ Redis client connected","service":"event-platform-api","timestamp":"2026-04-15 14:01:29"}
-{"level":"info","message":"✅ Redis client ready","service":"event-platform-api","timestamp":"2026-04-15 14:01:29"}
-{"level":"info","message":"✅ Redis connection established","service":"event-platform-api","timestamp":"2026-04-15 14:01:29"}
-{"level":"info","message":"✅ Redis ping successful","service":"event-platform-api","timestamp":"2026-04-15 14:01:29"}
-{"level":"info","message":"🎵 SoundWave API running on http://localhost:5000","service":"event-platform-api","timestamp":"2026-04-15 14:01:31"}
-{"level":"info","message":"🌍 Environment: development","service":"event-platform-api","timestamp":"2026-04-15 14:01:31"}
-{"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-15 14:01:31"}
-{"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-15 14:01:31"}
-{"level":"info","message":"🔴 Redis: redis://localhost:6379","service":"event-platform-api","timestamp":"2026-04-15 14:01:31"}
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-15 14:02:58"}
-{"level":"info","message":"✅ Redis client connected","service":"event-platform-api","timestamp":"2026-04-15 14:02:58"}
-{"level":"info","message":"✅ Redis client ready","service":"event-platform-api","timestamp":"2026-04-15 14:02:58"}
-{"level":"info","message":"✅ Redis connection established","service":"event-platform-api","timestamp":"2026-04-15 14:02:58"}
-{"level":"info","message":"✅ Redis ping successful","service":"event-platform-api","timestamp":"2026-04-15 14:02:58"}
-{"level":"info","message":"🎵 SoundWave API running on http://localhost:5000","service":"event-platform-api","timestamp":"2026-04-15 14:03:00"}
-{"level":"info","message":"🌍 Environment: development","service":"event-platform-api","timestamp":"2026-04-15 14:03:00"}
-{"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-15 14:03:00"}
-{"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-15 14:03:00"}
-{"level":"info","message":"🔴 Redis: redis://localhost:6379","service":"event-platform-api","timestamp":"2026-04-15 14:03:00"}
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-15 16:25:23"}
-{"level":"info","message":"✅ Redis client connected","service":"event-platform-api","timestamp":"2026-04-15 16:25:23"}
-{"level":"info","message":"✅ Redis client ready","service":"event-platform-api","timestamp":"2026-04-15 16:25:23"}
-{"level":"info","message":"✅ Redis connection established","service":"event-platform-api","timestamp":"2026-04-15 16:25:23"}
-{"level":"info","message":"✅ Redis ping successful","service":"event-platform-api","timestamp":"2026-04-15 16:25:23"}
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-15 16:25:25"}
-{"level":"info","message":"✅ Redis client connected","service":"event-platform-api","timestamp":"2026-04-15 16:25:25"}
-{"level":"info","message":"✅ Redis client ready","service":"event-platform-api","timestamp":"2026-04-15 16:25:25"}
-{"level":"info","message":"✅ Redis connection established","service":"event-platform-api","timestamp":"2026-04-15 16:25:25"}
-{"level":"info","message":"✅ Redis ping successful","service":"event-platform-api","timestamp":"2026-04-15 16:25:25"}
-{"level":"info","message":"🎵 SoundWave API running on http://localhost:5000","service":"event-platform-api","timestamp":"2026-04-15 16:25:27"}
-{"level":"info","message":"🌍 Environment: development","service":"event-platform-api","timestamp":"2026-04-15 16:25:27"}
-{"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-15 16:25:27"}
-{"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-15 16:25:27"}
-{"level":"info","message":"🔴 Redis: redis://localhost:6379","service":"event-platform-api","timestamp":"2026-04-15 16:25:27"}
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-15 21:48:28"}
-{"level":"info","message":"✅ Upstash Redis client initialized","service":"event-platform-api","timestamp":"2026-04-15 21:48:28"}
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-15 21:48:29"}
-{"level":"info","message":"✅ Upstash Redis client initialized","service":"event-platform-api","timestamp":"2026-04-15 21:48:29"}
-{"level":"info","message":"✅ Upstash Redis ping successful","service":"event-platform-api","timestamp":"2026-04-15 21:48:29"}
-{"level":"info","message":"🎵 SoundWave API running on http://localhost:5000","service":"event-platform-api","timestamp":"2026-04-15 21:48:31"}
-{"level":"info","message":"🌍 Environment: development","service":"event-platform-api","timestamp":"2026-04-15 21:48:31"}
-{"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-15 21:48:31"}
-{"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-15 21:48:31"}
-{"level":"info","message":"🔴 Upstash Redis: https://elegant-marmot-69459.upstash.io","service":"event-platform-api","timestamp":"2026-04-15 21:48:31"}
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-15 21:49:12"}
-{"level":"info","message":"✅ Upstash Redis client initialized","service":"event-platform-api","timestamp":"2026-04-15 21:49:12"}
-{"level":"info","message":"✅ Upstash Redis ping successful","service":"event-platform-api","timestamp":"2026-04-15 21:49:12"}
-{"level":"info","message":"🎵 SoundWave API running on http://localhost:5000","service":"event-platform-api","timestamp":"2026-04-15 21:49:13"}
-{"level":"info","message":"🌍 Environment: development","service":"event-platform-api","timestamp":"2026-04-15 21:49:13"}
-{"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-15 21:49:13"}
-{"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-15 21:49:13"}
-{"level":"info","message":"🔴 Upstash Redis: https://elegant-marmot-69459.upstash.io","service":"event-platform-api","timestamp":"2026-04-15 21:49:13"}
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-15 23:14:16"}
-{"level":"info","message":"✅ Upstash Redis client initialized","service":"event-platform-api","timestamp":"2026-04-15 23:14:16"}
-{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-15 23:14:17"}
-{"level":"info","message":"✅ Upstash Redis client initialized","service":"event-platform-api","timestamp":"2026-04-15 23:14:17"}
-{"level":"info","message":"✅ Upstash Redis ping successful","service":"event-platform-api","timestamp":"2026-04-15 23:14:17"}
-{"level":"info","message":"🎵 SoundWave API running on http://localhost:5000","service":"event-platform-api","timestamp":"2026-04-15 23:14:19"}
-{"level":"info","message":"🌍 Environment: development","service":"event-platform-api","timestamp":"2026-04-15 23:14:19"}
-{"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-15 23:14:19"}
-{"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-15 23:14:19"}
-{"level":"info","message":"🔴 Upstash Redis: https://elegant-marmot-69459.upstash.io","service":"event-platform-api","timestamp":"2026-04-15 23:14:19"}
+{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-19 09:06:22"}
+{"level":"info","message":"✅ Upstash Redis client initialized","service":"event-platform-api","timestamp":"2026-04-19 09:06:22"}
+{"level":"info","message":"✅ Upstash Redis ping successful","service":"event-platform-api","timestamp":"2026-04-19 09:06:23"}
+{"level":"info","message":"🎵 SoundWave API running on http://localhost:5000","service":"event-platform-api","timestamp":"2026-04-19 09:06:25"}
+{"level":"info","message":"🌍 Environment: development","service":"event-platform-api","timestamp":"2026-04-19 09:06:25"}
+{"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-19 09:06:25"}
+{"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-19 09:06:25"}
+{"level":"info","message":"🔴 Upstash Redis: https://elegant-marmot-69459.upstash.io","service":"event-platform-api","timestamp":"2026-04-19 09:06:25"}
+{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-19 09:07:28"}
+{"level":"info","message":"✅ Upstash Redis client initialized","service":"event-platform-api","timestamp":"2026-04-19 09:07:28"}
+{"level":"info","message":"✅ Upstash Redis ping successful","service":"event-platform-api","timestamp":"2026-04-19 09:07:28"}
+{"level":"info","message":"🎵 SoundWave API running on http://localhost:5000","service":"event-platform-api","timestamp":"2026-04-19 09:07:30"}
+{"level":"info","message":"🌍 Environment: development","service":"event-platform-api","timestamp":"2026-04-19 09:07:30"}
+{"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-19 09:07:30"}
+{"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-19 09:07:30"}
+{"level":"info","message":"🔴 Upstash Redis: https://elegant-marmot-69459.upstash.io","service":"event-platform-api","timestamp":"2026-04-19 09:07:30"}
+{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-19 09:13:23"}
+{"level":"info","message":"✅ Upstash Redis client initialized","service":"event-platform-api","timestamp":"2026-04-19 09:13:23"}
+{"level":"info","message":"✅ Upstash Redis ping successful","service":"event-platform-api","timestamp":"2026-04-19 09:13:23"}
+{"level":"info","message":"🎵 SoundWave API running on http://localhost:5000","service":"event-platform-api","timestamp":"2026-04-19 09:13:24"}
+{"level":"info","message":"🌍 Environment: development","service":"event-platform-api","timestamp":"2026-04-19 09:13:24"}
+{"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-19 09:13:24"}
+{"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-19 09:13:24"}
+{"level":"info","message":"🔴 Upstash Redis: https://elegant-marmot-69459.upstash.io","service":"event-platform-api","timestamp":"2026-04-19 09:13:24"}

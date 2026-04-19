@@ -23,11 +23,24 @@ kegunaan package yang di install:
 
 Berdasarkan arsitektur terbaru, backend kini membutuhkan layer caching, notifikasi email, dan sistem QR:
 
-### 1. Redis Caching via Docker
-Untuk menjalankan server secara optimal, wajib menjalankan container Redis:
-`docker run -d --name soundwave-redis -p 6379:6379 redis/redis-stack:latest`
+### 1. Redis Caching via Upstash Cloud (tidak perlu Docker container)
+Redis kini menggunakan **Upstash** (HTTP REST-based), bukan container lokal. Daftarkan di [upstash.com](https://upstash.com) dan isi di `backend/.env`:
+```
+UPSTASH_REDIS_REST_URL="https://your-instance.upstash.io"
+UPSTASH_REDIS_REST_TOKEN="your-token"
+```
 
-### 2. Dependency Tambahan Backend
+### 2. Vite Dev Server Proxy (wajib untuk dev lokal)
+Tambahkan proxy di `frontend/vite.config.ts` agar request `/api/*` diteruskan ke backend:
+```typescript
+server: {
+  proxy: {
+    '/api': { target: 'http://localhost:5000', changeOrigin: true }
+  }
+}
+```
+
+### 3. Dependency Tambahan Backend
 `npm install redis nodemailer qrcode winston`
 
 kegunaan package tambahan dari sisi backend:

@@ -1,0 +1,58 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build outputs
+dist
+build
+.next
+out
+
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Testing
+coverage
+.nyc_output
+*.test.js
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*.code-workspace
+
+# Logs
+logs
+*.log
+
+# Documentation
+README.md
+CHANGELOG.md
+SETUP.md
+Explanation.md
+Implementation.md
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.travis.yml
+
+# Misc
+node_modules/.bin
+.cache
+.parcel-cache
+dist-ssr

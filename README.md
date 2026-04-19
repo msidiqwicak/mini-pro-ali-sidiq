@@ -142,9 +142,6 @@ npm run db:push
 # Isi data awal (seed)
 npm run db:seed
 
-# Jalankan Redis (wajib pakai Docker)
-docker run -d --name soundwave-redis -p 6379:6379 redis/redis-stack:latest
-
 # Jalankan server development
 npm run dev
 # Server berjalan di http://localhost:5000
@@ -195,10 +192,11 @@ DIRECT_URL="postgresql://postgres.[ref]:[pass]@aws-0-[region].pooler.supabase.co
 JWT_SECRET="buat-string-random-panjang-di-sini"
 FRONTEND_URL="http://localhost:5173"
 
-# Redis Config (Default Local Docker)
-REDIS_URL="redis://localhost:6379"
+# Upstash Redis Config (Cloud Redis — tidak perlu container lokal)
+UPSTASH_REDIS_REST_URL="https://your-upstash-instance.upstash.io"
+UPSTASH_REDIS_REST_TOKEN="your-upstash-token"
 
-# SMTP Email Config (contoh pakai Mailtrap / Gmail App Password)
+# SMTP Email Config (contoh pakai Gmail App Password)
 SMTP_HOST="smtp.gmail.com"
 SMTP_PORT="587"
 SMTP_USER="nama_user@gmail.com"
@@ -482,6 +480,25 @@ Pastikan kamu sudah run `npm run db:push` dan `npm run db:generate`
 
 ### CORS Error di Frontend
 Pastikan `FRONTEND_URL` di `backend/.env` sesuai dengan URL frontend kamu (default: `http://localhost:5173`)
+
+### Data event tidak muncul di `localhost:5173` (dev lokal)
+Pastikan `vite.config.ts` memiliki konfigurasi proxy:
+```typescript
+server: {
+  proxy: {
+    '/api': { target: 'http://localhost:5000', changeOrigin: true }
+  }
+}
+```
+Tanpa ini, request ke `/api` akan gagal karena tidak ada proxy dari Vite ke backend.
+
+### Data event tidak muncul di `localhost:3000` (Docker)
+Pastikan `Dockerfile` tahap `frontend-build` memiliki:
+```dockerfile
+ARG VITE_API_URL=/api
+ENV VITE_API_URL=$VITE_API_URL
+```
+Tanpa ini, Vite build menggunakan fallback `http://localhost:5000` yang menyebabkan CORS error di browser.
 
 ### Chart tidak muncul di Analytics
 Pastikan ada data transaksi PAID terlebih dahulu. Coba jalankan beberapa transaksi via seed atau manual.
