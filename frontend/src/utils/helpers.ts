@@ -65,12 +65,12 @@ export const getStatusLabel = (status: string): string => {
     DRAFT: "Draft",
     CANCELLED: "Dibatalkan",
     COMPLETED: "Selesai",
-    PAID: "Lunas",
-    PENDING: "Menunggu Pembayaran",
-    WAITING_PAYMENT: "Menunggu Konfirmasi",
+    PAID: "Selesai",              // requirement: "done"
+    PENDING: "Menunggu Pembayaran",      // requirement: "waiting for payment"
+    WAITING_PAYMENT: "Menunggu Konfirmasi Admin", // requirement: "waiting for admin confirmation"
     REFUNDED: "Dikembalikan",
     EXPIRED: "Kadaluarsa",
-    REJECTED: "Ditolak Organizer",
+    REJECTED: "Ditolak",
   };
   return map[status] ?? status;
 };

@@ -15,11 +15,15 @@ import ProfilePage from "./pages/ProfilePage";
 import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import DashboardOverview from "./pages/dashboard/DashboardOverview";
 import ManageEvents from "./pages/dashboard/ManageEvents";
+import ManagePromotions from "./pages/dashboard/ManagePromotions";
+import ManageAttendance from "./pages/dashboard/ManageAttendance";
 import CreateEvent from "./pages/dashboard/CreateEvent";
 import EditEvent from "./pages/dashboard/EditEvent";
 import DashboardTransactions from "./pages/dashboard/DashboardTransactions";
 import DashboardAnalytics from "./pages/dashboard/DashboardAnalytics";
 import OrganizerProfilePage from "./pages/OrganizerProfilePage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 // ─── Protected Route ──────────────────────────────────────────────
 const ProtectedRoute = ({
@@ -60,6 +64,12 @@ const App = () => {
         <Route path="/register" element={
           <GuestRoute><RegisterPage /></GuestRoute>
         } />
+        <Route path="/forgot-password" element={
+          <GuestRoute><ForgotPasswordPage /></GuestRoute>
+        } />
+        <Route path="/reset-password" element={
+          <GuestRoute><ResetPasswordPage /></GuestRoute>
+        } />
 
         {/* ── Customer only ── */}
         <Route path="/my-tickets" element={
@@ -84,6 +94,8 @@ const App = () => {
           <Route path="events/:id/edit" element={<EditEvent />} />
           <Route path="transactions" element={<DashboardTransactions />} />
           <Route path="analytics" element={<DashboardAnalytics />} />
+          <Route path="promotions" element={<ManagePromotions />} />
+          <Route path="attendance" element={<ManageAttendance />} />
         </Route>
 
         {/* ── Fallback ── */}

@@ -13,6 +13,10 @@ import {
   getCategoriesService,
   createEventSchema,
   updateEventSchema,
+  getEventPromotionsService,
+  createPromotionService,
+  createPromotionSchema,
+  deletePromotionService,
 } from "../services/event.service.js";
 
 // Helper — pastikan param selalu string
@@ -207,4 +211,40 @@ export const getOrganizerPublicProfile = async (req: Request, res: Response): Pr
     const msg = err instanceof Error ? err.message : "Gagal mengambil profil organizer";
     errorResponse(res, msg);
   }
-};
+};
+
+// ─── Promotion Controllers ────────────────────────────────────────────
+
+export const getEventPromotions = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const promos = await getEventPromotionsService(param(req.params.eventId), req.user!.userId);
+    successResponse(res, promos);
+  } catch (err) {
+    errorResponse(res, err instanceof Error ? err.message : "Gagal mengambil promosi");
+  }
+};
+
+export const createPromotion = async (req: AuthRequest, res: Response): Promise<void> => {
+  const parsed = createPromotionSchema.safeParse(req.body);
+  if (!parsed.success) {
+    errorResponse(res, "Validasi gagal", 422, parsed.error.flatten().fieldErrors);
+    return;
+  }
+  try {
+    const promo = await createPromotionService(param(req.params.eventId), req.user!.userId, parsed.data);
+    successResponse(res, promo, "Promosi berhasil dibuat", 201);
+  } catch (err) {
+    errorResponse(res, err instanceof Error ? err.message : "Gagal membuat promosi", 400);
+  }
+};
+
+export const deletePromotion = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    await deletePromotionService(param(req.params.promoId), param(req.params.eventId), req.user!.userId);
+    successResponse(res, null, "Promosi berhasil dihapus");
+  } catch (err) {
+    errorResponse(res, err instanceof Error ? err.message : "Gagal menghapus promosi", 400);
+  }
+};
+
+

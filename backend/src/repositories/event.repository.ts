@@ -23,24 +23,37 @@ export const findAllEvents = async (params: {
     ...(categoryId && { categoryId }),
   };
 
-  const [events, total] = await Promise.all([
-    prisma.event.findMany({
-      where,
-      skip,
-      take: limit,
-      orderBy: { startDate: "asc" },
-      include: {
-        organizer: { select: { id: true, name: true, avatarUrl: true } },
-        category: true,
-        ticketTypes: true,
-        _count: { select: { reviews: true } },
-      },
-    }),
-    prisma.event.count({ where }),
-  ]);
+  // Fetch all matching events (no orderBy — we sort manually below)
+  const allEvents = await prisma.event.findMany({
+    where,
+    include: {
+      organizer: { select: { id: true, name: true, avatarUrl: true } },
+      category: true,
+      ticketTypes: true,
+      _count: { select: { reviews: true } },
+    },
+  });
+
+  const now = new Date();
+
+  // Split into upcoming (endDate >= now) and expired (endDate < now)
+  const upcoming = allEvents
+    .filter((e) => new Date(e.endDate) >= now)
+    .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
+
+  const expired = allEvents
+    .filter((e) => new Date(e.endDate) < now)
+    .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
+
+  // Merge: upcoming first (closest date first), expired last (most recent first)
+  const sorted = [...upcoming, ...expired];
+
+  const total = sorted.length;
+  const events = sorted.slice(skip, skip + limit);
 
   return { events, total };
 };
+
 
 export const findEventBySlug = async (slug: string) => {
   return prisma.event.findUnique({

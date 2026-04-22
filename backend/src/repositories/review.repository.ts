@@ -17,28 +17,39 @@ export const findReviewByUserAndEvent = async (
   return prisma.review.findUnique({ where: { userId_eventId: { userId, eventId } } });
 };
 
-export const hasUserPurchasedEvent = async (
+export const hasUserAttendedEvent = async (
   userId: string,
   eventId: string
 ): Promise<boolean> => {
-  const tx = await prisma.transaction.findFirst({
-    where: { userId, eventId, status: "PAID" },
+  // User must have a PAID transaction AND at least one ticket with isUsed=true
+  const ticket = await prisma.ticket.findFirst({
+    where: {
+      userId,
+      isUsed: true,
+      transaction: { eventId, status: "PAID" },
+    },
   });
-  return !!tx;
+  return !!ticket;
 };
 
 export const canReviewEvent = async (
   userId: string,
   eventId: string
 ): Promise<{ canReview: boolean; reason: string }> => {
-  const [event, hasPurchased, hasReviewed] = await Promise.all([
+  const [event, hasAttended, hasReviewed] = await Promise.all([
     prisma.event.findUnique({ where: { id: eventId }, select: { endDate: true } }),
-    prisma.transaction.findFirst({ where: { userId, eventId, status: "PAID" } }),
+    prisma.ticket.findFirst({
+      where: {
+        userId,
+        isUsed: true,
+        transaction: { eventId, status: "PAID" },
+      },
+    }),
     prisma.review.findUnique({ where: { userId_eventId: { userId, eventId } } }),
   ]);
 
   if (!event) return { canReview: false, reason: "Event tidak ditemukan" };
-  if (!hasPurchased) return { canReview: false, reason: "Anda belum membeli tiket event ini" };
+  if (!hasAttended) return { canReview: false, reason: "Anda hanya bisa mereview setelah menghadiri event" };
   if (new Date(event.endDate) > new Date()) return { canReview: false, reason: "Event belum selesai" };
   if (hasReviewed) return { canReview: false, reason: "Anda sudah memberikan ulasan" };
 

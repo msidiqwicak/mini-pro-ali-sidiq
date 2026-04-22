@@ -19,6 +19,8 @@ import {
   clearCachePattern,
 } from "../utils/cacheManager.js";
 import { REDIS_KEYS, REDIS_TTL } from "../utils/redisKeys.js";
+import prisma from "../lib/prisma.js";
+
 
 export const createEventSchema = z.object({
   categoryId: z.string().min(1, "Kategori wajib dipilih"),
@@ -218,3 +220,68 @@ export const getCategoriesService = async () =>
     () => findAllCategories(),
     REDIS_TTL.LONG // 1 jam — data kategori jarang berubah
   );
+
+export const createPromotionSchema = z.object({
+  code: z.string().min(3, "Kode minimal 3 karakter").max(20, "Kode maksimal 20 karakter"),
+  type: z.enum(["REFERRAL_VOUCHER", "DATE_BASED_DISCOUNT"]),
+  discountPercent: z.number().int().min(1).max(100).optional(),
+  discountAmount: z.number().int().min(1000).optional(),
+  maxUsage: z.number().int().min(1, "Minimal 1 penggunaan"),
+  startDate: z.string().min(1, "Tanggal mulai wajib diisi"),
+  endDate: z.string().min(1, "Tanggal selesai wajib diisi"),
+}).refine((d) => new Date(d.startDate) < new Date(d.endDate), {
+  message: "Tanggal mulai harus sebelum tanggal selesai",
+  path: ["endDate"],
+});
+
+export type CreatePromotionInput = z.infer<typeof createPromotionSchema>;
+
+export const getEventPromotionsService = async (eventId: string, organizerId: string) => {
+  const event = await findEventById(eventId);
+  if (!event) throw new Error("Event tidak ditemukan");
+  if (event.organizer.id !== organizerId) throw new Error("Tidak memiliki akses ke event ini");
+  return prisma.promotion.findMany({
+    where: { eventId },
+    orderBy: { createdAt: "desc" },
+  });
+};
+
+export const createPromotionService = async (
+  eventId: string,
+  organizerId: string,
+  input: CreatePromotionInput
+) => {
+  const event = await findEventById(eventId);
+  if (!event) throw new Error("Event tidak ditemukan");
+  if (event.organizer.id !== organizerId) throw new Error("Tidak memiliki akses ke event ini");
+
+  return prisma.promotion.create({
+    data: {
+      eventId,
+      code: input.code.toUpperCase(),
+      type: input.type,
+      discountPercent: input.discountPercent,
+      discountAmount: input.discountAmount,
+      maxUsage: input.maxUsage,
+      startDate: new Date(input.startDate),
+      endDate: new Date(input.endDate),
+    },
+  });
+};
+
+export const deletePromotionService = async (
+  promoId: string,
+  eventId: string,
+  organizerId: string
+) => {
+  const promo = await prisma.promotion.findUnique({
+    where: { id: promoId },
+    include: { event: { select: { organizer: { select: { id: true } } } } },
+  });
+  if (!promo || promo.eventId !== eventId) throw new Error("Promosi tidak ditemukan");
+  if (promo.event.organizer.id !== organizerId) throw new Error("Tidak memiliki akses");
+  if (promo.usedCount > 0) throw new Error("Promosi yang sudah digunakan tidak dapat dihapus");
+
+  return prisma.promotion.delete({ where: { id: promoId } });
+};
+

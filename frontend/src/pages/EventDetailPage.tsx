@@ -168,6 +168,7 @@ const EventDetailPage = () => {
 
   const available = getAvailableSeats(event.totalSeats, event.soldSeats);
   const soldPct = getSeatPercentage(event.totalSeats, event.soldSeats);
+  const eventEnded = new Date(event.endDate) < new Date();
 
   return (
     <div className="min-h-screen bg-(--bg-primary)">
@@ -210,7 +211,8 @@ const EventDetailPage = () => {
             <div className="flex flex-wrap gap-2 mb-4">
               <span className="badge badge-red">{event.category.name}</span>
               {event.isFree && <span className="badge badge-green">GRATIS</span>}
-              {soldPct >= 90 && <span className="badge badge-gold">HAMPIR HABIS</span>}
+              {eventEnded && <span className="badge badge-gray">EVENT SELESAI</span>}
+              {!eventEnded && soldPct >= 90 && <span className="badge badge-gold">HAMPIR HABIS</span>}
             </div>
 
             <h1 className="font-display text-3xl sm:text-5xl text-white mb-6 leading-tight">
@@ -283,8 +285,8 @@ const EventDetailPage = () => {
               </p>
             </div>
 
-            {/* Active Promotions */}
-            {event.promotions && event.promotions.length > 0 && (
+            {/* Active Promotions — hide for ended events */}
+            {!eventEnded && event.promotions && event.promotions.length > 0 && (
               <div className="mb-10">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="section-line" />
@@ -309,7 +311,7 @@ const EventDetailPage = () => {
 
             {/* Reviews */}
             <div className="mb-10">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-4" id="review-section">
                 <div className="flex items-center gap-3">
                   <div className="section-line" />
                   <h2 className="font-semibold text-white text-lg">
@@ -377,38 +379,67 @@ const EventDetailPage = () => {
             </div>
           </div>
 
-          {/* Right — buy tickets */}
+          {/* Right — buy tickets OR ended banner */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 rounded-xl bg-(--bg-card) border border-(--border) p-6">
-              <h3 className="font-semibold text-white text-lg mb-2">Pilih Tiket</h3>
-              <p className="text-xs text-(--text-muted) mb-5">
-                Mulai dari{" "}
-                <span className="text-(--accent-red) font-bold">
-                  {event.isFree
-                    ? "GRATIS"
-                    : formatCurrency(Math.min(...event.ticketTypes.map((t) => t.price)))}
-                </span>
-              </p>
-
-              {buyError && (
-                <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-sm text-red-400">
-                  {buyError}
+              {eventEnded ? (
+                // ── Expired: show info, no purchase
+                <div className="text-center py-4">
+                  <div className="text-4xl mb-3">🎤</div>
+                  <h3 className="font-semibold text-white text-lg mb-2">Event Telah Berakhir</h3>
+                  <p className="text-sm text-(--text-muted) mb-4">
+                    Event ini sudah selesai dan tidak dapat dibeli lagi.
+                  </p>
+                  {/* Show review prompt if eligible */}
+                  {isAuthenticated && isCustomer && canReview?.canReview && (
+                    <button
+                      onClick={() => {
+                        document.getElementById("review-section")?.scrollIntoView({ behavior: "smooth" });
+                        setShowReviewForm(true);
+                      }}
+                      className="btn-primary w-full"
+                    >
+                      ⭐ Tulis Review
+                    </button>
+                  )}
+                  {isAuthenticated && isCustomer && canReview !== null && !canReview.canReview && canReview.reason && (
+                    <p className="text-xs text-(--text-muted) italic mt-2">{canReview.reason}</p>
+                  )}
                 </div>
-              )}
+              ) : (
+                // ── Active: normal purchase flow
+                <>
+                  <h3 className="font-semibold text-white text-lg mb-2">Pilih Tiket</h3>
+                  <p className="text-xs text-(--text-muted) mb-5">
+                    Mulai dari{" "}
+                    <span className="text-(--accent-red) font-bold">
+                      {event.isFree
+                        ? "GRATIS"
+                        : formatCurrency(Math.min(...event.ticketTypes.map((t) => t.price)))}
+                    </span>
+                  </p>
 
-              <TicketSelector
-                ticketTypes={event.ticketTypes}
-                promotionCode={promoCode}
-                onPromotionChange={setPromoCode}
-                pointsAvailable={pointsAvailable}
-                pointsToUse={pointsToUse}
-                onPointsChange={setPointsToUse}
-                selected={selected}
-                onSelect={(id, qty) => setSelected({ ticketTypeId: id, quantity: qty })}
-                isLoading={buyLoading}
-                onSubmit={() => setShowConfirm(true)}
-                isAuthenticated={isAuthenticated && isCustomer}
-              />
+                  {buyError && (
+                    <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-sm text-red-400">
+                      {buyError}
+                    </div>
+                  )}
+
+                  <TicketSelector
+                    ticketTypes={event.ticketTypes}
+                    promotionCode={promoCode}
+                    onPromotionChange={setPromoCode}
+                    pointsAvailable={pointsAvailable}
+                    pointsToUse={pointsToUse}
+                    onPointsChange={setPointsToUse}
+                    selected={selected}
+                    onSelect={(id, qty) => setSelected({ ticketTypeId: id, quantity: qty })}
+                    isLoading={buyLoading}
+                    onSubmit={() => setShowConfirm(true)}
+                    isAuthenticated={isAuthenticated && isCustomer}
+                  />
+                </>
+              )}
             </div>
           </div>
         </div>

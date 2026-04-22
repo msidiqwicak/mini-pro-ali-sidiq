@@ -3,6 +3,7 @@ import { Check, X, FileImage, Loader2 } from "lucide-react";
 import { eventService } from "../../services/event.service";
 import { transactionService } from "../../services/transaction.service";
 import { formatDateTime, formatCurrency, getStatusColor, getStatusLabel, getAxiosError } from "../../utils/helpers";
+import { ModalConfirm } from "../../components/UIComponents";
 import type { Event } from "../../types";
 
 interface TxRow {
@@ -23,8 +24,9 @@ const DashboardTransactions = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [fetchingEvents, setFetchingEvents] = useState(true);
   
-  const [actionLoading, setActionLoading] = useState<string | null>(null); // transaction id that is processing
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [confirmAction, setConfirmAction] = useState<{ txId: string; action: "approve" | "reject" } | null>(null);
 
   useEffect(() => {
     eventService.getOrganizerEvents()
@@ -58,6 +60,7 @@ const DashboardTransactions = () => {
   }, [selectedEventId]);
 
   const handleAction = async (txId: string, action: "approve" | "reject") => {
+    setConfirmAction(null);
     setActionLoading(txId);
     setError("");
     try {
@@ -66,7 +69,7 @@ const DashboardTransactions = () => {
       } else {
         await transactionService.rejectTransaction(txId);
       }
-      loadTransactions(); // refresh
+      loadTransactions();
     } catch (err) {
       setError(getAxiosError(err));
     } finally {
@@ -176,7 +179,7 @@ const DashboardTransactions = () => {
                           
                           <div className="flex items-center gap-2 mt-1">
                             <button
-                              onClick={() => handleAction(tx.id, "approve")}
+                              onClick={() => setConfirmAction({ txId: tx.id, action: "approve" })}
                               disabled={actionLoading === tx.id}
                               title="Setujui Pembayaran"
                               className="w-7 h-7 flex items-center justify-center rounded bg-green-500/20 text-green-400 hover:bg-green-500/30 transition-colors disabled:opacity-50"
@@ -184,7 +187,7 @@ const DashboardTransactions = () => {
                               {actionLoading === tx.id ? <Loader2 size={13} className="animate-spin" /> : <Check size={14} />}
                             </button>
                             <button
-                              onClick={() => handleAction(tx.id, "reject")}
+                              onClick={() => setConfirmAction({ txId: tx.id, action: "reject" })}
                               disabled={actionLoading === tx.id}
                               title="Tolak Pembayaran"
                               className="w-7 h-7 flex items-center justify-center rounded bg-red-500/20 text-red-400 hover:bg-red-500/30 transition-colors disabled:opacity-50"
@@ -217,6 +220,24 @@ const DashboardTransactions = () => {
           </div>
         )}
       </div>
+      {/* Confirm Modal */}
+      <ModalConfirm
+        isOpen={!!confirmAction}
+        title={confirmAction?.action === "approve" ? "Setujui Pembayaran?" : "Tolak Pembayaran?"}
+        message={
+          confirmAction?.action === "approve"
+            ? "Pembayaran akan dikonfirmasi dan tiket akan dikirim ke customer via email."
+            : "Pembayaran akan ditolak. Poin, voucher, dan kursi akan dikembalikan ke customer. Email notifikasi akan dikirim."
+        }
+        onCancel={() => setConfirmAction(null)}
+        onConfirm={() => confirmAction && handleAction(confirmAction.txId, confirmAction.action)}
+        confirmLabel={confirmAction?.action === "approve" ? "Ya, Setujui" : "Ya, Tolak"}
+        confirmClass={
+          confirmAction?.action === "approve"
+            ? "bg-green-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-green-500 transition-colors"
+            : "bg-red-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-500 transition-colors"
+        }
+      />
     </div>
   );
 };

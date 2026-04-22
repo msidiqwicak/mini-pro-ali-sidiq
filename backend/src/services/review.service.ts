@@ -3,7 +3,7 @@ import prisma from "../lib/prisma.js";
 import {
   findReviewsByEvent,
   findReviewByUserAndEvent,
-  hasUserPurchasedEvent,
+  hasUserAttendedEvent,
   canReviewEvent,
   createReview,
 } from "../repositories/review.repository.js";
@@ -35,10 +35,10 @@ export const createReviewService = async (
   userId: string,
   input: CreateReviewInput
 ) => {
-  // Check if user purchased this event
-  const purchased = await hasUserPurchasedEvent(userId, input.eventId);
-  if (!purchased)
-    throw new Error("Anda hanya bisa mereview event yang sudah dibeli");
+  // Check if user attended (has ticket with isUsed=true)
+  const attended = await hasUserAttendedEvent(userId, input.eventId);
+  if (!attended)
+    throw new Error("Anda hanya bisa mereview event yang sudah Anda hadiri");
 
   // Check if event has already ended
   const event = await prisma.event.findUnique({

@@ -10,11 +10,13 @@ import {
 import { hashPassword, comparePassword } from "../utils/hash.js";
 import { signToken, verifyToken } from "../utils/jwt.js";
 import { generateReferralCode } from "../utils/slug.js";
-import { sendWelcomeEmail } from "../utils/mail.js";
+import { sendWelcomeEmail, sendResetPasswordEmail } from "../utils/mail.js";
 import prisma from "../lib/prisma.js";
-import { createHash } from "crypto";
-import { setCache } from "../utils/cacheManager.js";
-import { REDIS_KEYS } from "../utils/redisKeys.js";
+import { createHash, randomBytes } from "crypto";
+import { setCache, getCache, deleteCache, incrementCache, getCacheTTL } from "../utils/cacheManager.js";
+import { REDIS_KEYS, REDIS_TTL } from "../utils/redisKeys.js";
+import { config } from "../config/env.js";
+
 
 export const registerSchema = z.object({
   email: z.string().email("Email tidak valid"),
@@ -134,11 +136,48 @@ export const registerService = async (input: RegisterInput) => {
 };
 
 export const loginService = async (input: LoginInput) => {
+  const attemptKey = `login_attempts:${input.email.toLowerCase()}`;
+  const lockKey = `login_locked:${input.email.toLowerCase()}`;
+
+  // Check if locked out
+  const isLocked = await getCache<string>(lockKey);
+  if (isLocked) {
+    const secondsLeft = await getCacheTTL(lockKey);
+    const minsLeft = Math.ceil(Math.max(secondsLeft, 0) / 60);
+    throw new Error(
+      `Terlalu banyak percobaan gagal. Coba lagi dalam ${minsLeft} menit.`
+    );
+  }
+
   const user = await findUserByEmail(input.email);
   if (!user) throw new Error("Email atau password salah");
 
   const valid = await comparePassword(input.password, user.passwordHash);
-  if (!valid) throw new Error("Email atau password salah");
+  if (!valid) {
+    // Atomic increment, expire counter after 10 min idle
+    const newAttempts = await incrementCache(attemptKey, 1);
+    if (newAttempts === 1) {
+      // Set TTL on first failure
+      await setCache(attemptKey, String(newAttempts), { ttl: 10 * 60 });
+    }
+
+    if (newAttempts >= 3) {
+      const lockSeconds = 5 * 60;
+      await setCache(lockKey, "locked", { ttl: lockSeconds });
+      await deleteCache(attemptKey);
+      throw new Error(
+        "Terlalu banyak percobaan gagal. Akun dikunci sementara selama 5 menit."
+      );
+    }
+
+    const remaining = 3 - newAttempts;
+    throw new Error(
+      `Email atau password salah. Sisa percobaan: ${remaining}x sebelum akun dikunci.`
+    );
+  }
+
+  // Login success — clear rate limit keys
+  await deleteCache([attemptKey, lockKey]);
 
   const token = signToken({
     userId: user.id,
@@ -183,3 +222,48 @@ export const logoutService = async (token: string): Promise<void> => {
 
   await setCache(cacheKey, true, { ttl: ttlSeconds });
 };
+
+/**
+ * Forgot Password — generate token, store in Redis, send email
+ */
+export const forgotPasswordService = async (email: string): Promise<void> => {
+  const user = await findUserByEmail(email);
+  // Do not reveal whether email exists for security; just silently succeed
+  if (!user) return;
+
+  // Generate a secure random token
+  const rawToken = randomBytes(32).toString("hex");
+  const redisKey = REDIS_KEYS.RESET_TOKEN(rawToken);
+
+  // Store userId under the token key with 15-min TTL
+  await setCache(redisKey, user.id, { ttl: REDIS_TTL.RESET_TOKEN });
+
+  // Build reset link
+  const resetLink = `${config.frontendUrl}/reset-password?token=${rawToken}`;
+
+  await sendResetPasswordEmail(user.email, user.name, resetLink);
+};
+
+/**
+ * Reset Password — verify token, update password, delete token
+ */
+export const resetPasswordService = async (
+  token: string,
+  newPassword: string
+): Promise<void> => {
+  const redisKey = REDIS_KEYS.RESET_TOKEN(token);
+  const userId = await getCache<string>(redisKey);
+
+  if (!userId) throw new Error("Token tidak valid atau sudah kadaluarsa");
+
+  const passwordHash = await hashPassword(newPassword);
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { passwordHash },
+  });
+
+  // Invalidate token immediately (single-use)
+  await deleteCache(redisKey);
+};
+

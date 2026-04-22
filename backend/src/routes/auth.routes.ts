@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { register, login, getMe, logout } from "../controllers/auth.controller.js";
+import { register, login, getMe, logout, forgotPassword, resetPassword } from "../controllers/auth.controller.js";
 import {
   updateProfile,
   changePassword,
@@ -18,5 +18,9 @@ router.patch("/profile", authMiddleware, updateProfile);
 router.patch("/password", authMiddleware, changePassword);
 router.get("/points", authMiddleware, getPoints);
 router.get("/coupons", authMiddleware, getCoupons);
+// Password reset (public)
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
 
 export default router;
+

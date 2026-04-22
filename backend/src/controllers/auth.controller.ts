@@ -3,12 +3,15 @@ import {
   registerService,
   loginService,
   logoutService,
+  forgotPasswordService,
+  resetPasswordService,
   registerSchema,
   loginSchema,
 } from "../services/auth.service.js";
 import { successResponse, errorResponse } from "../utils/response.js";
 import type { AuthRequest } from "../middlewares/auth.middleware.js";
 import { findUserById } from "../repositories/user.repository.js";
+
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   const parsed = registerSchema.safeParse(req.body);
@@ -75,3 +78,35 @@ export const logout = async (req: AuthRequest, res: Response): Promise<void> => 
     errorResponse(res, msg);
   }
 };
+
+export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
+  const { email } = req.body as { email?: string };
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errorResponse(res, "Email tidak valid", 422);
+    return;
+  }
+  try {
+    await forgotPasswordService(email);
+    // Always return 200 regardless of whether email existed (security)
+    successResponse(res, null, "Jika email terdaftar, link reset akan dikirim");
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Gagal memproses permintaan";
+    errorResponse(res, msg);
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response): Promise<void> => {
+  const { token, newPassword } = req.body as { token?: string; newPassword?: string };
+  if (!token || !newPassword || newPassword.length < 8) {
+    errorResponse(res, "Token dan password baru (min 8 karakter) wajib diisi", 422);
+    return;
+  }
+  try {
+    await resetPasswordService(token, newPassword);
+    successResponse(res, null, "Password berhasil direset. Silakan login dengan password baru.");
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Gagal mereset password";
+    errorResponse(res, msg, 400);
+  }
+};
+

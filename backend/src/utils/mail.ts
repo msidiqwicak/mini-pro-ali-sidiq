@@ -213,3 +213,108 @@ export async function sendPaymentConfirmation(
     throw new Error("Gagal mengirim email konfirmasi pembayaran");
   }
 }
+
+// ─── Send Reset Password Email ────────────────────────────────
+export async function sendResetPasswordEmail(
+  email: string,
+  name: string,
+  resetLink: string
+): Promise<void> {
+  const mailOptions = {
+    from: config.smtp.from,
+    to: email,
+    subject: "🔒 Reset Password SoundWave",
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%); padding: 40px 20px; border-radius: 8px 8px 0 0; text-align: center; color: white;">
+          <h1 style="margin: 0; font-size: 28px;">🔒 Reset Password</h1>
+        </div>
+        <div style="padding: 30px 20px; background: #f9f9f9;">
+          <p>Halo <strong>${name}</strong>,</p>
+          <p>Kami menerima permintaan untuk mereset password akun SoundWave Anda.</p>
+          <p>Klik tombol di bawah untuk membuat password baru. Link ini hanya berlaku selama <strong>15 menit</strong>.</p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${resetLink}"
+               style="display: inline-block; background: #e53e3e; color: white; padding: 14px 36px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px;">
+              Reset Password Saya
+            </a>
+          </div>
+          <div style="background: #fff3cd; padding: 12px 16px; border-radius: 5px; border-left: 4px solid #ffc107; margin: 16px 0;">
+            <p style="margin: 0; color: #856404; font-size: 13px;">
+              ⚠️ Jika Anda tidak meminta reset password, abaikan email ini. Password Anda tidak akan berubah.
+            </p>
+          </div>
+          <p style="color: #999; font-size: 12px; border-top: 1px solid #ddd; padding-top: 20px; margin-top: 20px;">
+            Link ini akan kadaluarsa dalam 15 menit demi keamanan akun Anda.
+          </p>
+        </div>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`✅ Reset password email sent to ${email}`);
+  } catch (error) {
+    console.error("❌ Failed to send reset password email:", error);
+    throw new Error("Gagal mengirim email reset password");
+  }
+}
+// ─── Send Rejection Email ─────────────────────────────────────
+export async function sendRejectionEmail(
+  email: string,
+  userName: string,
+  eventName: string,
+  transactionId: string
+): Promise<void> {
+  const mailOptions = {
+    from: config.smtp.from,
+    to: email,
+    subject: `❌ Pembayaran Ditolak - ${eventName}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%); padding: 40px 20px; border-radius: 8px 8px 0 0; text-align: center; color: white;">
+          <h1 style="margin: 0; font-size: 28px;">❌ Pembayaran Ditolak</h1>
+        </div>
+
+        <div style="padding: 30px 20px; background: #f9f9f9;">
+          <p>Halo <strong>${userName}</strong>,</p>
+          <p>Kami informasikan bahwa bukti pembayaran Anda untuk event <strong>${eventName}</strong> telah <strong>ditolak</strong> oleh penyelenggara.</p>
+
+          <div style="background: white; padding: 20px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #e53e3e;">
+            <h3 style="margin-top: 0; color: #e53e3e;">Detail Transaksi</h3>
+            <p style="margin: 8px 0;"><strong>ID Transaksi:</strong> <span style="font-family: monospace;">${transactionId}</span></p>
+            <p style="margin: 8px 0;"><strong>Event:</strong> ${eventName}</p>
+            <p style="margin: 8px 0;"><strong>Status:</strong> <span style="color: #e53e3e; font-weight: bold;">Ditolak</span></p>
+          </div>
+
+          <div style="background: #fff3cd; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #ffc107;">
+            <p style="margin: 0; color: #856404;">
+              <strong>ℹ️ Informasi:</strong> Poin, voucher, atau kupon yang Anda gunakan dalam transaksi ini telah dikembalikan ke akun Anda. Kursi yang sebelumnya dipesan juga telah dibebaskan.
+            </p>
+          </div>
+
+          <p>Jika Anda merasa ini adalah kesalahan, silakan hubungi penyelenggara event atau upload ulang bukti pembayaran yang valid.</p>
+
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${config.frontendUrl}/transactions" style="display: inline-block; background: #e53e3e; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+              Lihat Riwayat Transaksi
+            </a>
+          </div>
+
+          <p style="color: #999; font-size: 12px; border-top: 1px solid #ddd; padding-top: 20px; margin-top: 20px;">
+            Jika ada pertanyaan, hubungi kami di support@soundwave.id
+          </p>
+        </div>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`✅ Rejection email sent to ${email}`);
+  } catch (error) {
+    console.error("❌ Failed to send rejection email:", error);
+    // Non-blocking: don't throw, just log
+  }
+}

@@ -25,11 +25,11 @@ const EventCard = ({ event, style }: EventCardProps) => {
   return (
     <Link
       to={`/events/${event.slug}`}
-      className="block rounded-xl bg-[var(--bg-card)] border border-[var(--border)] overflow-hidden card-hover animate-fade-in-up opacity-0"
+      className="block rounded-xl bg-(--bg-card) border border-(--border) overflow-hidden card-hover animate-fade-in-up opacity-0"
       style={style}
     >
       {/* Image */}
-      <div className="relative h-48 overflow-hidden bg-[var(--bg-elevated)]">
+      <div className="relative h-48 overflow-hidden bg-(--bg-elevated)">
         {event.imageUrl ? (
           <img
             src={event.imageUrl}
@@ -39,7 +39,7 @@ const EventCard = ({ event, style }: EventCardProps) => {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <span className="font-display text-6xl text-[var(--text-muted)] opacity-30">♪</span>
+            <span className="font-display text-6xl text-(--text-muted) opacity-30">♪</span>
           </div>
         )}
 
@@ -65,20 +65,31 @@ const EventCard = ({ event, style }: EventCardProps) => {
 
       {/* Content */}
       <div className="p-5">
-        <h3 className="font-semibold text-[var(--text-primary)] text-base leading-snug mb-2 line-clamp-2">
+        <h3 className="font-semibold text-(--text-primary) text-base leading-snug mb-1 line-clamp-2">
           {event.name}
         </h3>
-        <p className="text-[var(--text-muted)] text-xs mb-4 line-clamp-2">
-          {truncate(event.description, 90)}
+        {/* Organizer name */}
+        <p className="text-[10px] text-(--text-muted) mb-2 truncate">
+          oleh{" "}
+          <a
+            href={`/organizer/${event.organizer.id}`}
+            onClick={(e) => e.stopPropagation()}
+            className="text-(--accent-gold) hover:underline"
+          >
+            {event.organizer.name}
+          </a>
+        </p>
+        <p className="text-(--text-muted) text-xs mb-4 line-clamp-2">
+          {truncate(event.description, 80)}
         </p>
 
         <div className="space-y-2 mb-4">
-          <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
-            <Calendar size={12} className="text-[var(--accent-red)] flex-shrink-0" />
+          <div className="flex items-center gap-2 text-xs text-(--text-secondary)">
+            <Calendar size={12} className="text-(--accent-red) shrink-0" />
             <span>{formatDateShort(event.startDate)}</span>
           </div>
-          <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
-            <MapPin size={12} className="text-[var(--accent-red)] flex-shrink-0" />
+          <div className="flex items-center gap-2 text-xs text-(--text-secondary)">
+            <MapPin size={12} className="text-(--accent-red) shrink-0" />
             <span className="truncate">{event.location}, {event.city}</span>
           </div>
         </div>
@@ -86,13 +97,13 @@ const EventCard = ({ event, style }: EventCardProps) => {
         {/* Seat bar */}
         <div className="mb-4">
           <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center gap-1 text-xs text-[var(--text-muted)]">
+            <div className="flex items-center gap-1 text-xs text-(--text-muted)">
               <Users size={11} />
               <span>{available.toLocaleString("id-ID")} tersisa</span>
             </div>
-            <span className="text-xs text-[var(--text-muted)]">{soldPct}% terjual</span>
+            <span className="text-xs text-(--text-muted)">{soldPct}% terjual</span>
           </div>
-          <div className="h-1.5 bg-[var(--bg-elevated)] rounded-full overflow-hidden">
+          <div className="h-1.5 bg-(--bg-elevated) rounded-full overflow-hidden">
             <div
               className="h-full rounded-full transition-all"
               style={{
@@ -111,14 +122,14 @@ const EventCard = ({ event, style }: EventCardProps) => {
         {/* Price */}
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider">
+            <p className="text-[10px] text-(--text-muted) uppercase tracking-wider">
               Mulai dari
             </p>
-            <p className="font-bold text-[var(--accent-red)] text-base">
+            <p className="font-bold text-(--accent-red) text-base">
               {event.isFree ? "GRATIS" : formatCurrency(minPrice)}
             </p>
           </div>
-          <div className="w-8 h-8 rounded-full bg-[var(--accent-red)] flex items-center justify-center">
+          <div className="w-8 h-8 rounded-full bg-(--accent-red) flex items-center justify-center">
             <span className="text-white text-sm">→</span>
           </div>
         </div>

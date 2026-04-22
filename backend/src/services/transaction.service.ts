@@ -9,7 +9,7 @@ import {
 } from "../repositories/transaction.repository.js";
 import { calculatePointsRedemption } from "./point.service.js";
 import { generateQRCode } from "../utils/slug.js";
-import { sendTicketEmail, sendPaymentConfirmation } from "../utils/mail.js";
+import { sendTicketEmail, sendPaymentConfirmation, sendRejectionEmail } from "../utils/mail.js";
 import { deleteCache } from "../utils/cacheManager.js";
 import { REDIS_KEYS } from "../utils/redisKeys.js";
 
@@ -42,6 +42,8 @@ export const createTransactionService = async (
       throw new Error("Tiket tidak sesuai dengan event");
     if (ticketType.event.status !== "PUBLISHED")
       throw new Error("Event tidak tersedia untuk pembelian");
+    if (new Date(ticketType.event.endDate) < new Date())
+      throw new Error("Event ini sudah berakhir dan tidak dapat dibeli lagi");
 
     const remaining = ticketType.quota - ticketType.sold;
     if (remaining < input.quantity)
@@ -450,7 +452,8 @@ export const rejectTransactionService = async (
   const transaction = await prisma.transaction.findUnique({
     where: { id: transactionId },
     include: {
-      event: { select: { id: true, organizerId: true } },
+      user: { select: { email: true, name: true } },
+      event: { select: { id: true, organizerId: true, name: true } },
       tickets: { select: { ticketTypeId: true } },
       redemptions: { select: { pointId: true, amountUsed: true } },
       promotion: { select: { id: true } },
@@ -515,6 +518,16 @@ export const rejectTransactionService = async (
       });
     }
   });
+
+  // Kirim email notifikasi penolakan ke customer (non-blocking)
+  sendRejectionEmail(
+    transaction.user.email,
+    transaction.user.name,
+    transaction.event.name,
+    transactionId
+  ).catch((err) =>
+    console.warn(`⚠️ Rejection email gagal dikirim untuk transaksi ${transactionId}:`, err)
+  );
 
   return { message: "Transaksi berhasil ditolak" };
 };

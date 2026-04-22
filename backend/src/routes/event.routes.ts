@@ -9,6 +9,9 @@ import {
   getCities,
   getCategories,
   getOrganizerPublicProfile,
+  getEventPromotions,
+  createPromotion,
+  deletePromotion,
 } from "../controllers/event.controller.js";
 import { getEventReviews } from "../controllers/review.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
@@ -49,5 +52,10 @@ router.delete(
   roleMiddleware("ORGANIZER"),
   deleteEventController
 );
+
+// Promotions (organizer only)
+router.get("/:eventId/promotions", authMiddleware, roleMiddleware("ORGANIZER"), getEventPromotions);
+router.post("/:eventId/promotions", authMiddleware, roleMiddleware("ORGANIZER"), createPromotion);
+router.delete("/:eventId/promotions/:promoId", authMiddleware, roleMiddleware("ORGANIZER"), deletePromotion);
 
 export default router;
