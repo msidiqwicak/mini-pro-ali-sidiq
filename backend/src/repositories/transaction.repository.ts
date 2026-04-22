@@ -98,6 +98,7 @@ export const findExpiredPendingTransactions = async (userId: string) => {
       tickets: { select: { ticketTypeId: true } },
       redemptions: { select: { pointId: true, amountUsed: true } },
       promotion: { select: { id: true } },
+      coupon: { select: { id: true } },
     },
   });
 };
@@ -117,6 +118,7 @@ export const findExpiredWaitingTransactions = async (userId: string) => {
       tickets: { select: { ticketTypeId: true } },
       redemptions: { select: { pointId: true, amountUsed: true } },
       promotion: { select: { id: true } },
+      coupon: { select: { id: true } },
     },
   });
 };

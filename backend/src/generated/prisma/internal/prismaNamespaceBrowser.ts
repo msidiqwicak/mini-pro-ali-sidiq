@@ -202,6 +202,7 @@ export const TransactionScalarFieldEnum = {
   userId: 'userId',
   eventId: 'eventId',
   promotionId: 'promotionId',
+  couponId: 'couponId',
   baseAmount: 'baseAmount',
   discountAmount: 'discountAmount',
   pointsUsed: 'pointsUsed',

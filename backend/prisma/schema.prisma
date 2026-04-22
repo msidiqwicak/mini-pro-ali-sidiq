@@ -257,6 +257,7 @@ model Transaction {
     userId      String
     eventId     String
     promotionId String?
+    couponId    String?
 
     baseAmount     Int
     discountAmount Int @default(0)
@@ -279,6 +280,7 @@ model Transaction {
     user      User       @relation(fields: [userId], references: [id])
     event     Event      @relation(fields: [eventId], references: [id])
     promotion Promotion? @relation(fields: [promotionId], references: [id])
+    coupon    Coupon?    @relation(fields: [couponId], references: [id])
 
     tickets     Ticket[]
     redemptions Redemption[]
@@ -355,6 +357,7 @@ model Coupon {
     createdAt       DateTime @default(now())
 
     user User @relation(fields: [userId], references: [id])
+    transactions Transaction[]
 
     @@index([userId])
     @@map("coupons")

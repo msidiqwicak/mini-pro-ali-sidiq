@@ -45,6 +45,7 @@ export type TransactionMinAggregateOutputType = {
   userId: string | null
   eventId: string | null
   promotionId: string | null
+  couponId: string | null
   baseAmount: number | null
   discountAmount: number | null
   pointsUsed: number | null
@@ -65,6 +66,7 @@ export type TransactionMaxAggregateOutputType = {
   userId: string | null
   eventId: string | null
   promotionId: string | null
+  couponId: string | null
   baseAmount: number | null
   discountAmount: number | null
   pointsUsed: number | null
@@ -85,6 +87,7 @@ export type TransactionCountAggregateOutputType = {
   userId: number
   eventId: number
   promotionId: number
+  couponId: number
   baseAmount: number
   discountAmount: number
   pointsUsed: number
@@ -121,6 +124,7 @@ export type TransactionMinAggregateInputType = {
   userId?: true
   eventId?: true
   promotionId?: true
+  couponId?: true
   baseAmount?: true
   discountAmount?: true
   pointsUsed?: true
@@ -141,6 +145,7 @@ export type TransactionMaxAggregateInputType = {
   userId?: true
   eventId?: true
   promotionId?: true
+  couponId?: true
   baseAmount?: true
   discountAmount?: true
   pointsUsed?: true
@@ -161,6 +166,7 @@ export type TransactionCountAggregateInputType = {
   userId?: true
   eventId?: true
   promotionId?: true
+  couponId?: true
   baseAmount?: true
   discountAmount?: true
   pointsUsed?: true
@@ -268,6 +274,7 @@ export type TransactionGroupByOutputType = {
   userId: string
   eventId: string
   promotionId: string | null
+  couponId: string | null
   baseAmount: number
   discountAmount: number
   pointsUsed: number
@@ -311,6 +318,7 @@ export type TransactionWhereInput = {
   userId?: Prisma.StringFilter<"Transaction"> | string
   eventId?: Prisma.StringFilter<"Transaction"> | string
   promotionId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  couponId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   baseAmount?: Prisma.IntFilter<"Transaction"> | number
   discountAmount?: Prisma.IntFilter<"Transaction"> | number
   pointsUsed?: Prisma.IntFilter<"Transaction"> | number
@@ -327,6 +335,7 @@ export type TransactionWhereInput = {
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   event?: Prisma.XOR<Prisma.EventScalarRelationFilter, Prisma.EventWhereInput>
   promotion?: Prisma.XOR<Prisma.PromotionNullableScalarRelationFilter, Prisma.PromotionWhereInput> | null
+  coupon?: Prisma.XOR<Prisma.CouponNullableScalarRelationFilter, Prisma.CouponWhereInput> | null
   tickets?: Prisma.TicketListRelationFilter
   redemptions?: Prisma.RedemptionListRelationFilter
 }
@@ -336,6 +345,7 @@ export type TransactionOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   promotionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  couponId?: Prisma.SortOrderInput | Prisma.SortOrder
   baseAmount?: Prisma.SortOrder
   discountAmount?: Prisma.SortOrder
   pointsUsed?: Prisma.SortOrder
@@ -352,6 +362,7 @@ export type TransactionOrderByWithRelationInput = {
   user?: Prisma.UserOrderByWithRelationInput
   event?: Prisma.EventOrderByWithRelationInput
   promotion?: Prisma.PromotionOrderByWithRelationInput
+  coupon?: Prisma.CouponOrderByWithRelationInput
   tickets?: Prisma.TicketOrderByRelationAggregateInput
   redemptions?: Prisma.RedemptionOrderByRelationAggregateInput
 }
@@ -364,6 +375,7 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.StringFilter<"Transaction"> | string
   eventId?: Prisma.StringFilter<"Transaction"> | string
   promotionId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  couponId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   baseAmount?: Prisma.IntFilter<"Transaction"> | number
   discountAmount?: Prisma.IntFilter<"Transaction"> | number
   pointsUsed?: Prisma.IntFilter<"Transaction"> | number
@@ -380,6 +392,7 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   event?: Prisma.XOR<Prisma.EventScalarRelationFilter, Prisma.EventWhereInput>
   promotion?: Prisma.XOR<Prisma.PromotionNullableScalarRelationFilter, Prisma.PromotionWhereInput> | null
+  coupon?: Prisma.XOR<Prisma.CouponNullableScalarRelationFilter, Prisma.CouponWhereInput> | null
   tickets?: Prisma.TicketListRelationFilter
   redemptions?: Prisma.RedemptionListRelationFilter
 }, "id">
@@ -389,6 +402,7 @@ export type TransactionOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   promotionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  couponId?: Prisma.SortOrderInput | Prisma.SortOrder
   baseAmount?: Prisma.SortOrder
   discountAmount?: Prisma.SortOrder
   pointsUsed?: Prisma.SortOrder
@@ -417,6 +431,7 @@ export type TransactionScalarWhereWithAggregatesInput = {
   userId?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
   eventId?: Prisma.StringWithAggregatesFilter<"Transaction"> | string
   promotionId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
+  couponId?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
   baseAmount?: Prisma.IntWithAggregatesFilter<"Transaction"> | number
   discountAmount?: Prisma.IntWithAggregatesFilter<"Transaction"> | number
   pointsUsed?: Prisma.IntWithAggregatesFilter<"Transaction"> | number
@@ -450,6 +465,7 @@ export type TransactionCreateInput = {
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   event: Prisma.EventCreateNestedOneWithoutTransactionsInput
   promotion?: Prisma.PromotionCreateNestedOneWithoutTransactionsInput
+  coupon?: Prisma.CouponCreateNestedOneWithoutTransactionsInput
   tickets?: Prisma.TicketCreateNestedManyWithoutTransactionInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutTransactionInput
 }
@@ -459,6 +475,7 @@ export type TransactionUncheckedCreateInput = {
   userId: string
   eventId: string
   promotionId?: string | null
+  couponId?: string | null
   baseAmount: number
   discountAmount?: number
   pointsUsed?: number
@@ -494,6 +511,7 @@ export type TransactionUpdateInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   event?: Prisma.EventUpdateOneRequiredWithoutTransactionsNestedInput
   promotion?: Prisma.PromotionUpdateOneWithoutTransactionsNestedInput
+  coupon?: Prisma.CouponUpdateOneWithoutTransactionsNestedInput
   tickets?: Prisma.TicketUpdateManyWithoutTransactionNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutTransactionNestedInput
 }
@@ -503,6 +521,7 @@ export type TransactionUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   promotionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  couponId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseAmount?: Prisma.IntFieldUpdateOperationsInput | number
   discountAmount?: Prisma.IntFieldUpdateOperationsInput | number
   pointsUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -525,6 +544,7 @@ export type TransactionCreateManyInput = {
   userId: string
   eventId: string
   promotionId?: string | null
+  couponId?: string | null
   baseAmount: number
   discountAmount?: number
   pointsUsed?: number
@@ -562,6 +582,7 @@ export type TransactionUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   promotionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  couponId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseAmount?: Prisma.IntFieldUpdateOperationsInput | number
   discountAmount?: Prisma.IntFieldUpdateOperationsInput | number
   pointsUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -597,6 +618,7 @@ export type TransactionCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   promotionId?: Prisma.SortOrder
+  couponId?: Prisma.SortOrder
   baseAmount?: Prisma.SortOrder
   discountAmount?: Prisma.SortOrder
   pointsUsed?: Prisma.SortOrder
@@ -624,6 +646,7 @@ export type TransactionMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   promotionId?: Prisma.SortOrder
+  couponId?: Prisma.SortOrder
   baseAmount?: Prisma.SortOrder
   discountAmount?: Prisma.SortOrder
   pointsUsed?: Prisma.SortOrder
@@ -644,6 +667,7 @@ export type TransactionMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   promotionId?: Prisma.SortOrder
+  couponId?: Prisma.SortOrder
   baseAmount?: Prisma.SortOrder
   discountAmount?: Prisma.SortOrder
   pointsUsed?: Prisma.SortOrder
@@ -828,6 +852,48 @@ export type TransactionUncheckedUpdateManyWithoutPromotionNestedInput = {
   deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
 }
 
+export type TransactionCreateNestedManyWithoutCouponInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutCouponInput, Prisma.TransactionUncheckedCreateWithoutCouponInput> | Prisma.TransactionCreateWithoutCouponInput[] | Prisma.TransactionUncheckedCreateWithoutCouponInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutCouponInput | Prisma.TransactionCreateOrConnectWithoutCouponInput[]
+  createMany?: Prisma.TransactionCreateManyCouponInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionUncheckedCreateNestedManyWithoutCouponInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutCouponInput, Prisma.TransactionUncheckedCreateWithoutCouponInput> | Prisma.TransactionCreateWithoutCouponInput[] | Prisma.TransactionUncheckedCreateWithoutCouponInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutCouponInput | Prisma.TransactionCreateOrConnectWithoutCouponInput[]
+  createMany?: Prisma.TransactionCreateManyCouponInputEnvelope
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+}
+
+export type TransactionUpdateManyWithoutCouponNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutCouponInput, Prisma.TransactionUncheckedCreateWithoutCouponInput> | Prisma.TransactionCreateWithoutCouponInput[] | Prisma.TransactionUncheckedCreateWithoutCouponInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutCouponInput | Prisma.TransactionCreateOrConnectWithoutCouponInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutCouponInput | Prisma.TransactionUpsertWithWhereUniqueWithoutCouponInput[]
+  createMany?: Prisma.TransactionCreateManyCouponInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutCouponInput | Prisma.TransactionUpdateWithWhereUniqueWithoutCouponInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutCouponInput | Prisma.TransactionUpdateManyWithWhereWithoutCouponInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
+export type TransactionUncheckedUpdateManyWithoutCouponNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutCouponInput, Prisma.TransactionUncheckedCreateWithoutCouponInput> | Prisma.TransactionCreateWithoutCouponInput[] | Prisma.TransactionUncheckedCreateWithoutCouponInput[]
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutCouponInput | Prisma.TransactionCreateOrConnectWithoutCouponInput[]
+  upsert?: Prisma.TransactionUpsertWithWhereUniqueWithoutCouponInput | Prisma.TransactionUpsertWithWhereUniqueWithoutCouponInput[]
+  createMany?: Prisma.TransactionCreateManyCouponInputEnvelope
+  set?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  disconnect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  delete?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  connect?: Prisma.TransactionWhereUniqueInput | Prisma.TransactionWhereUniqueInput[]
+  update?: Prisma.TransactionUpdateWithWhereUniqueWithoutCouponInput | Prisma.TransactionUpdateWithWhereUniqueWithoutCouponInput[]
+  updateMany?: Prisma.TransactionUpdateManyWithWhereWithoutCouponInput | Prisma.TransactionUpdateManyWithWhereWithoutCouponInput[]
+  deleteMany?: Prisma.TransactionScalarWhereInput | Prisma.TransactionScalarWhereInput[]
+}
+
 export type TransactionCreateWithoutUserInput = {
   id?: string
   baseAmount: number
@@ -845,6 +911,7 @@ export type TransactionCreateWithoutUserInput = {
   updatedAt?: Date | string
   event: Prisma.EventCreateNestedOneWithoutTransactionsInput
   promotion?: Prisma.PromotionCreateNestedOneWithoutTransactionsInput
+  coupon?: Prisma.CouponCreateNestedOneWithoutTransactionsInput
   tickets?: Prisma.TicketCreateNestedManyWithoutTransactionInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutTransactionInput
 }
@@ -853,6 +920,7 @@ export type TransactionUncheckedCreateWithoutUserInput = {
   id?: string
   eventId: string
   promotionId?: string | null
+  couponId?: string | null
   baseAmount: number
   discountAmount?: number
   pointsUsed?: number
@@ -904,6 +972,7 @@ export type TransactionScalarWhereInput = {
   userId?: Prisma.StringFilter<"Transaction"> | string
   eventId?: Prisma.StringFilter<"Transaction"> | string
   promotionId?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  couponId?: Prisma.StringNullableFilter<"Transaction"> | string | null
   baseAmount?: Prisma.IntFilter<"Transaction"> | number
   discountAmount?: Prisma.IntFilter<"Transaction"> | number
   pointsUsed?: Prisma.IntFilter<"Transaction"> | number
@@ -937,6 +1006,7 @@ export type TransactionCreateWithoutRedemptionsInput = {
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   event: Prisma.EventCreateNestedOneWithoutTransactionsInput
   promotion?: Prisma.PromotionCreateNestedOneWithoutTransactionsInput
+  coupon?: Prisma.CouponCreateNestedOneWithoutTransactionsInput
   tickets?: Prisma.TicketCreateNestedManyWithoutTransactionInput
 }
 
@@ -945,6 +1015,7 @@ export type TransactionUncheckedCreateWithoutRedemptionsInput = {
   userId: string
   eventId: string
   promotionId?: string | null
+  couponId?: string | null
   baseAmount: number
   discountAmount?: number
   pointsUsed?: number
@@ -995,6 +1066,7 @@ export type TransactionUpdateWithoutRedemptionsInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   event?: Prisma.EventUpdateOneRequiredWithoutTransactionsNestedInput
   promotion?: Prisma.PromotionUpdateOneWithoutTransactionsNestedInput
+  coupon?: Prisma.CouponUpdateOneWithoutTransactionsNestedInput
   tickets?: Prisma.TicketUpdateManyWithoutTransactionNestedInput
 }
 
@@ -1003,6 +1075,7 @@ export type TransactionUncheckedUpdateWithoutRedemptionsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   promotionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  couponId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseAmount?: Prisma.IntFieldUpdateOperationsInput | number
   discountAmount?: Prisma.IntFieldUpdateOperationsInput | number
   pointsUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1036,6 +1109,7 @@ export type TransactionCreateWithoutEventInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   promotion?: Prisma.PromotionCreateNestedOneWithoutTransactionsInput
+  coupon?: Prisma.CouponCreateNestedOneWithoutTransactionsInput
   tickets?: Prisma.TicketCreateNestedManyWithoutTransactionInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutTransactionInput
 }
@@ -1044,6 +1118,7 @@ export type TransactionUncheckedCreateWithoutEventInput = {
   id?: string
   userId: string
   promotionId?: string | null
+  couponId?: string | null
   baseAmount: number
   discountAmount?: number
   pointsUsed?: number
@@ -1105,6 +1180,7 @@ export type TransactionCreateWithoutTicketsInput = {
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   event: Prisma.EventCreateNestedOneWithoutTransactionsInput
   promotion?: Prisma.PromotionCreateNestedOneWithoutTransactionsInput
+  coupon?: Prisma.CouponCreateNestedOneWithoutTransactionsInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutTransactionInput
 }
 
@@ -1113,6 +1189,7 @@ export type TransactionUncheckedCreateWithoutTicketsInput = {
   userId: string
   eventId: string
   promotionId?: string | null
+  couponId?: string | null
   baseAmount: number
   discountAmount?: number
   pointsUsed?: number
@@ -1163,6 +1240,7 @@ export type TransactionUpdateWithoutTicketsInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   event?: Prisma.EventUpdateOneRequiredWithoutTransactionsNestedInput
   promotion?: Prisma.PromotionUpdateOneWithoutTransactionsNestedInput
+  coupon?: Prisma.CouponUpdateOneWithoutTransactionsNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutTransactionNestedInput
 }
 
@@ -1171,6 +1249,7 @@ export type TransactionUncheckedUpdateWithoutTicketsInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   promotionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  couponId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseAmount?: Prisma.IntFieldUpdateOperationsInput | number
   discountAmount?: Prisma.IntFieldUpdateOperationsInput | number
   pointsUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1204,6 +1283,7 @@ export type TransactionCreateWithoutPromotionInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutTransactionsInput
   event: Prisma.EventCreateNestedOneWithoutTransactionsInput
+  coupon?: Prisma.CouponCreateNestedOneWithoutTransactionsInput
   tickets?: Prisma.TicketCreateNestedManyWithoutTransactionInput
   redemptions?: Prisma.RedemptionCreateNestedManyWithoutTransactionInput
 }
@@ -1212,6 +1292,7 @@ export type TransactionUncheckedCreateWithoutPromotionInput = {
   id?: string
   userId: string
   eventId: string
+  couponId?: string | null
   baseAmount: number
   discountAmount?: number
   pointsUsed?: number
@@ -1255,10 +1336,81 @@ export type TransactionUpdateManyWithWhereWithoutPromotionInput = {
   data: Prisma.XOR<Prisma.TransactionUpdateManyMutationInput, Prisma.TransactionUncheckedUpdateManyWithoutPromotionInput>
 }
 
+export type TransactionCreateWithoutCouponInput = {
+  id?: string
+  baseAmount: number
+  discountAmount?: number
+  pointsUsed?: number
+  finalAmount: number
+  status?: $Enums.TransactionStatus
+  paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
+  paidAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutTransactionsInput
+  event: Prisma.EventCreateNestedOneWithoutTransactionsInput
+  promotion?: Prisma.PromotionCreateNestedOneWithoutTransactionsInput
+  tickets?: Prisma.TicketCreateNestedManyWithoutTransactionInput
+  redemptions?: Prisma.RedemptionCreateNestedManyWithoutTransactionInput
+}
+
+export type TransactionUncheckedCreateWithoutCouponInput = {
+  id?: string
+  userId: string
+  eventId: string
+  promotionId?: string | null
+  baseAmount: number
+  discountAmount?: number
+  pointsUsed?: number
+  finalAmount: number
+  status?: $Enums.TransactionStatus
+  paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
+  paidAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutTransactionInput
+  redemptions?: Prisma.RedemptionUncheckedCreateNestedManyWithoutTransactionInput
+}
+
+export type TransactionCreateOrConnectWithoutCouponInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutCouponInput, Prisma.TransactionUncheckedCreateWithoutCouponInput>
+}
+
+export type TransactionCreateManyCouponInputEnvelope = {
+  data: Prisma.TransactionCreateManyCouponInput | Prisma.TransactionCreateManyCouponInput[]
+  skipDuplicates?: boolean
+}
+
+export type TransactionUpsertWithWhereUniqueWithoutCouponInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  update: Prisma.XOR<Prisma.TransactionUpdateWithoutCouponInput, Prisma.TransactionUncheckedUpdateWithoutCouponInput>
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutCouponInput, Prisma.TransactionUncheckedCreateWithoutCouponInput>
+}
+
+export type TransactionUpdateWithWhereUniqueWithoutCouponInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  data: Prisma.XOR<Prisma.TransactionUpdateWithoutCouponInput, Prisma.TransactionUncheckedUpdateWithoutCouponInput>
+}
+
+export type TransactionUpdateManyWithWhereWithoutCouponInput = {
+  where: Prisma.TransactionScalarWhereInput
+  data: Prisma.XOR<Prisma.TransactionUpdateManyMutationInput, Prisma.TransactionUncheckedUpdateManyWithoutCouponInput>
+}
+
 export type TransactionCreateManyUserInput = {
   id?: string
   eventId: string
   promotionId?: string | null
+  couponId?: string | null
   baseAmount: number
   discountAmount?: number
   pointsUsed?: number
@@ -1291,6 +1443,7 @@ export type TransactionUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   event?: Prisma.EventUpdateOneRequiredWithoutTransactionsNestedInput
   promotion?: Prisma.PromotionUpdateOneWithoutTransactionsNestedInput
+  coupon?: Prisma.CouponUpdateOneWithoutTransactionsNestedInput
   tickets?: Prisma.TicketUpdateManyWithoutTransactionNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutTransactionNestedInput
 }
@@ -1299,6 +1452,7 @@ export type TransactionUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   promotionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  couponId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseAmount?: Prisma.IntFieldUpdateOperationsInput | number
   discountAmount?: Prisma.IntFieldUpdateOperationsInput | number
   pointsUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1320,6 +1474,7 @@ export type TransactionUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   promotionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  couponId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseAmount?: Prisma.IntFieldUpdateOperationsInput | number
   discountAmount?: Prisma.IntFieldUpdateOperationsInput | number
   pointsUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1339,6 +1494,7 @@ export type TransactionCreateManyEventInput = {
   id?: string
   userId: string
   promotionId?: string | null
+  couponId?: string | null
   baseAmount: number
   discountAmount?: number
   pointsUsed?: number
@@ -1371,6 +1527,7 @@ export type TransactionUpdateWithoutEventInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   promotion?: Prisma.PromotionUpdateOneWithoutTransactionsNestedInput
+  coupon?: Prisma.CouponUpdateOneWithoutTransactionsNestedInput
   tickets?: Prisma.TicketUpdateManyWithoutTransactionNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutTransactionNestedInput
 }
@@ -1379,6 +1536,7 @@ export type TransactionUncheckedUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   promotionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  couponId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseAmount?: Prisma.IntFieldUpdateOperationsInput | number
   discountAmount?: Prisma.IntFieldUpdateOperationsInput | number
   pointsUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1400,6 +1558,7 @@ export type TransactionUncheckedUpdateManyWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   promotionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  couponId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseAmount?: Prisma.IntFieldUpdateOperationsInput | number
   discountAmount?: Prisma.IntFieldUpdateOperationsInput | number
   pointsUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1419,6 +1578,7 @@ export type TransactionCreateManyPromotionInput = {
   id?: string
   userId: string
   eventId: string
+  couponId?: string | null
   baseAmount: number
   discountAmount?: number
   pointsUsed?: number
@@ -1451,6 +1611,7 @@ export type TransactionUpdateWithoutPromotionInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
   event?: Prisma.EventUpdateOneRequiredWithoutTransactionsNestedInput
+  coupon?: Prisma.CouponUpdateOneWithoutTransactionsNestedInput
   tickets?: Prisma.TicketUpdateManyWithoutTransactionNestedInput
   redemptions?: Prisma.RedemptionUpdateManyWithoutTransactionNestedInput
 }
@@ -1459,6 +1620,7 @@ export type TransactionUncheckedUpdateWithoutPromotionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
+  couponId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseAmount?: Prisma.IntFieldUpdateOperationsInput | number
   discountAmount?: Prisma.IntFieldUpdateOperationsInput | number
   pointsUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1480,6 +1642,91 @@ export type TransactionUncheckedUpdateManyWithoutPromotionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
+  couponId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  baseAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  discountAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  pointsUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TransactionCreateManyCouponInput = {
+  id?: string
+  userId: string
+  eventId: string
+  promotionId?: string | null
+  baseAmount: number
+  discountAmount?: number
+  pointsUsed?: number
+  finalAmount: number
+  status?: $Enums.TransactionStatus
+  paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
+  paidAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TransactionUpdateWithoutCouponInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  baseAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  discountAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  pointsUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutTransactionsNestedInput
+  event?: Prisma.EventUpdateOneRequiredWithoutTransactionsNestedInput
+  promotion?: Prisma.PromotionUpdateOneWithoutTransactionsNestedInput
+  tickets?: Prisma.TicketUpdateManyWithoutTransactionNestedInput
+  redemptions?: Prisma.RedemptionUpdateManyWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateWithoutCouponInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  eventId?: Prisma.StringFieldUpdateOperationsInput | string
+  promotionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  baseAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  discountAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  pointsUsed?: Prisma.IntFieldUpdateOperationsInput | number
+  finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tickets?: Prisma.TicketUncheckedUpdateManyWithoutTransactionNestedInput
+  redemptions?: Prisma.RedemptionUncheckedUpdateManyWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateManyWithoutCouponInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  eventId?: Prisma.StringFieldUpdateOperationsInput | string
+  promotionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   baseAmount?: Prisma.IntFieldUpdateOperationsInput | number
   discountAmount?: Prisma.IntFieldUpdateOperationsInput | number
   pointsUsed?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1540,6 +1787,7 @@ export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   userId?: boolean
   eventId?: boolean
   promotionId?: boolean
+  couponId?: boolean
   baseAmount?: boolean
   discountAmount?: boolean
   pointsUsed?: boolean
@@ -1556,6 +1804,7 @@ export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   promotion?: boolean | Prisma.Transaction$promotionArgs<ExtArgs>
+  coupon?: boolean | Prisma.Transaction$couponArgs<ExtArgs>
   tickets?: boolean | Prisma.Transaction$ticketsArgs<ExtArgs>
   redemptions?: boolean | Prisma.Transaction$redemptionsArgs<ExtArgs>
   _count?: boolean | Prisma.TransactionCountOutputTypeDefaultArgs<ExtArgs>
@@ -1566,6 +1815,7 @@ export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   userId?: boolean
   eventId?: boolean
   promotionId?: boolean
+  couponId?: boolean
   baseAmount?: boolean
   discountAmount?: boolean
   pointsUsed?: boolean
@@ -1582,6 +1832,7 @@ export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   promotion?: boolean | Prisma.Transaction$promotionArgs<ExtArgs>
+  coupon?: boolean | Prisma.Transaction$couponArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
 export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1589,6 +1840,7 @@ export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   userId?: boolean
   eventId?: boolean
   promotionId?: boolean
+  couponId?: boolean
   baseAmount?: boolean
   discountAmount?: boolean
   pointsUsed?: boolean
@@ -1605,6 +1857,7 @@ export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   promotion?: boolean | Prisma.Transaction$promotionArgs<ExtArgs>
+  coupon?: boolean | Prisma.Transaction$couponArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
 export type TransactionSelectScalar = {
@@ -1612,6 +1865,7 @@ export type TransactionSelectScalar = {
   userId?: boolean
   eventId?: boolean
   promotionId?: boolean
+  couponId?: boolean
   baseAmount?: boolean
   discountAmount?: boolean
   pointsUsed?: boolean
@@ -1627,11 +1881,12 @@ export type TransactionSelectScalar = {
   updatedAt?: boolean
 }
 
-export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "eventId" | "promotionId" | "baseAmount" | "discountAmount" | "pointsUsed" | "finalAmount" | "status" | "paymentMethod" | "paymentProofUrl" | "bankName" | "bankAccountName" | "bankAccountNumber" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
+export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "eventId" | "promotionId" | "couponId" | "baseAmount" | "discountAmount" | "pointsUsed" | "finalAmount" | "status" | "paymentMethod" | "paymentProofUrl" | "bankName" | "bankAccountName" | "bankAccountNumber" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
 export type TransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   promotion?: boolean | Prisma.Transaction$promotionArgs<ExtArgs>
+  coupon?: boolean | Prisma.Transaction$couponArgs<ExtArgs>
   tickets?: boolean | Prisma.Transaction$ticketsArgs<ExtArgs>
   redemptions?: boolean | Prisma.Transaction$redemptionsArgs<ExtArgs>
   _count?: boolean | Prisma.TransactionCountOutputTypeDefaultArgs<ExtArgs>
@@ -1640,11 +1895,13 @@ export type TransactionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   promotion?: boolean | Prisma.Transaction$promotionArgs<ExtArgs>
+  coupon?: boolean | Prisma.Transaction$couponArgs<ExtArgs>
 }
 export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   promotion?: boolean | Prisma.Transaction$promotionArgs<ExtArgs>
+  coupon?: boolean | Prisma.Transaction$couponArgs<ExtArgs>
 }
 
 export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1653,6 +1910,7 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     user: Prisma.$UserPayload<ExtArgs>
     event: Prisma.$EventPayload<ExtArgs>
     promotion: Prisma.$PromotionPayload<ExtArgs> | null
+    coupon: Prisma.$CouponPayload<ExtArgs> | null
     tickets: Prisma.$TicketPayload<ExtArgs>[]
     redemptions: Prisma.$RedemptionPayload<ExtArgs>[]
   }
@@ -1661,6 +1919,7 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     userId: string
     eventId: string
     promotionId: string | null
+    couponId: string | null
     baseAmount: number
     discountAmount: number
     pointsUsed: number
@@ -2071,6 +2330,7 @@ export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends runt
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   event<T extends Prisma.EventDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EventDefaultArgs<ExtArgs>>): Prisma.Prisma__EventClient<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   promotion<T extends Prisma.Transaction$promotionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$promotionArgs<ExtArgs>>): Prisma.Prisma__PromotionClient<runtime.Types.Result.GetResult<Prisma.$PromotionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  coupon<T extends Prisma.Transaction$couponArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$couponArgs<ExtArgs>>): Prisma.Prisma__CouponClient<runtime.Types.Result.GetResult<Prisma.$CouponPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   tickets<T extends Prisma.Transaction$ticketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   redemptions<T extends Prisma.Transaction$redemptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$redemptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RedemptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -2106,6 +2366,7 @@ export interface TransactionFieldRefs {
   readonly userId: Prisma.FieldRef<"Transaction", 'String'>
   readonly eventId: Prisma.FieldRef<"Transaction", 'String'>
   readonly promotionId: Prisma.FieldRef<"Transaction", 'String'>
+  readonly couponId: Prisma.FieldRef<"Transaction", 'String'>
   readonly baseAmount: Prisma.FieldRef<"Transaction", 'Int'>
   readonly discountAmount: Prisma.FieldRef<"Transaction", 'Int'>
   readonly pointsUsed: Prisma.FieldRef<"Transaction", 'Int'>
@@ -2536,6 +2797,25 @@ export type Transaction$promotionArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   include?: Prisma.PromotionInclude<ExtArgs> | null
   where?: Prisma.PromotionWhereInput
+}
+
+/**
+ * Transaction.coupon
+ */
+export type Transaction$couponArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Coupon
+   */
+  select?: Prisma.CouponSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Coupon
+   */
+  omit?: Prisma.CouponOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CouponInclude<ExtArgs> | null
+  where?: Prisma.CouponWhereInput
 }
 
 /**

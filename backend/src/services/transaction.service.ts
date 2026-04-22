@@ -53,9 +53,12 @@ export const createTransactionService = async (
     const baseAmount = ticketType.price * input.quantity;
     let discountAmount = 0;
     let promotionId: string | undefined;
+    let couponId: string | undefined;
 
     // ─── STEP 3: Apply promotion (if any) ────────────────────────
     if (input.promotionCode) {
+      const now = new Date();
+
       const promo = await tx.promotion.findFirst({
         where: {
           code: input.promotionCode,
@@ -63,40 +66,63 @@ export const createTransactionService = async (
         },
       });
 
-      if (!promo) {
-        throw new Error("Kode promo tidak valid");
-      }
+      if (promo) {
+        if (now < promo.startDate) {
+          throw new Error("Kode promo ini belum aktif");
+        }
+        if (now > promo.endDate) {
+          throw new Error("Kode promo sudah kadaluarsa");
+        }
+        if (promo.usedCount >= promo.maxUsage) {
+          throw new Error("Kode promo sudah habis digunakan");
+        }
 
-      const now = new Date();
-      if (now < promo.startDate) {
-        throw new Error("Kode promo ini belum aktif");
-      }
-      if (now > promo.endDate) {
-        throw new Error("Kode promo sudah kadaluarsa");
-      }
-      if (promo.usedCount >= promo.maxUsage) {
-        throw new Error("Kode promo sudah habis digunakan");
-      }
+        // Calculate discount
+        if (promo.discountPercent) {
+          discountAmount = Math.floor((baseAmount * promo.discountPercent) / 100);
+        } else if (promo.discountAmount) {
+          discountAmount = Math.min(promo.discountAmount, baseAmount);
+        }
 
-      // Calculate discount
-      if (promo.discountPercent) {
-        discountAmount = Math.floor((baseAmount * promo.discountPercent) / 100);
-      } else if (promo.discountAmount) {
-        discountAmount = Math.min(promo.discountAmount, baseAmount);
+        promotionId = promo.id;
+
+        // Update promo usage
+        await tx.promotion.update({
+          where: { id: promo.id },
+          data: { usedCount: { increment: 1 } },
+        });
+      } else {
+        const coupon = await tx.coupon.findFirst({
+          where: {
+            code: input.promotionCode,
+            userId: userId,
+          },
+        });
+
+        if (!coupon) {
+          throw new Error("Kode promo tidak valid");
+        }
+        if (coupon.isUsed) {
+          throw new Error("Kupon diskon sudah digunakan");
+        }
+        if (now > coupon.expiredAt) {
+          throw new Error("Kupon diskon sudah kadaluarsa");
+        }
+
+        discountAmount = Math.floor((baseAmount * coupon.discountPercent) / 100);
+        couponId = coupon.id;
+
+        // Mark coupon as used
+        await tx.coupon.update({
+          where: { id: coupon.id },
+          data: { isUsed: true },
+        });
       }
-
-      promotionId = promo.id;
-
-      // Update promo usage
-      await tx.promotion.update({
-        where: { id: promo.id },
-        data: { usedCount: { increment: 1 } },
-      });
     }
 
     // ─── STEP 4: Apply referral discount (10%) ───────────────────
-    // Referral discount applied via REFERRAL_VOUCHER promo code
-    // (already handled in Step 3 if code is referral type)
+    // Referral discount applied via Coupon
+    // (already handled in Step 3 if code is referral coupon type)
 
     // ─── STEP 5: Apply points redemption ─────────────────────────
     let pointsUsed = 0;
@@ -126,6 +152,7 @@ export const createTransactionService = async (
         userId,
         eventId: input.eventId,
         promotionId: promotionId ?? null,
+        couponId: couponId ?? null,
         baseAmount,
         discountAmount,
         pointsUsed,
@@ -252,6 +279,14 @@ export const syncStaleTransactions = async (userId: string) => {
           data: { usedCount: { decrement: 1 } },
         });
       }
+
+      // Rollback Coupon
+      if (tx.coupon?.id) {
+        await db.coupon.update({
+          where: { id: tx.coupon.id },
+          data: { isUsed: false },
+        });
+      }
     });
   }
 
@@ -286,6 +321,14 @@ export const syncStaleTransactions = async (userId: string) => {
         await db.promotion.update({
           where: { id: tx.promotion.id },
           data: { usedCount: { decrement: 1 } },
+        });
+      }
+
+      // Rollback Coupon
+      if (tx.coupon?.id) {
+        await db.coupon.update({
+          where: { id: tx.coupon.id },
+          data: { isUsed: false },
         });
       }
     });
@@ -411,6 +454,7 @@ export const rejectTransactionService = async (
       tickets: { select: { ticketTypeId: true } },
       redemptions: { select: { pointId: true, amountUsed: true } },
       promotion: { select: { id: true } },
+      coupon: { select: { id: true } },
     },
   });
 
@@ -460,6 +504,14 @@ export const rejectTransactionService = async (
       await tx.promotion.update({
         where: { id: transaction.promotion.id },
         data: { usedCount: { decrement: 1 } },
+      });
+    }
+
+    // Rollback Coupon
+    if (transaction.coupon?.id) {
+      await tx.coupon.update({
+        where: { id: transaction.coupon.id },
+        data: { isUsed: false },
       });
     }
   });
