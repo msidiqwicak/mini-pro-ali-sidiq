@@ -7,7 +7,8 @@
     "db:migrate": "prisma migrate dev --config prisma.config.ts",
     "db:push": "prisma db push --config prisma.config.ts",
     "db:seed": "tsx prisma/seed.ts",
-    "db:studio": "prisma studio --config prisma.config.ts"
+    "db:studio": "prisma studio --config prisma.config.ts",
+    "postinstall": "prisma generate --config prisma.config.ts"
   },
   "type": "module",
   "dependencies": {
