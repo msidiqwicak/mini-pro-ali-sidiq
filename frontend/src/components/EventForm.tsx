@@ -105,7 +105,7 @@ const EventForm = ({
 
   const Field = ({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) => (
     <div>
-      <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">{label}</label>
+      <label className="block text-sm font-medium text-(--text-secondary) mb-1.5">{label}</label>
       {children}
       {error && <p className="mt-1 text-xs text-red-400">{error}</p>}
     </div>
@@ -120,7 +120,7 @@ const EventForm = ({
       )}
 
       {/* Basic info */}
-      <div className="rounded-xl bg-[var(--bg-card)] border border-[var(--border)] p-6 space-y-5">
+      <div className="rounded-xl bg-(--bg-card) border border-(--border) p-6 space-y-5">
         <h3 className="font-semibold text-white text-sm uppercase tracking-wider">Informasi Dasar</h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -148,7 +148,7 @@ const EventForm = ({
 
         {/* Image Upload */}
         <div>
-          <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">
+          <label className="block text-sm font-medium text-(--text-secondary) mb-1.5">
             Gambar Event
           </label>
 
@@ -166,12 +166,12 @@ const EventForm = ({
           <div className="flex items-start gap-4">
             {/* Preview */}
             {imagePreview ? (
-              <div className="relative w-24 h-24 rounded-xl overflow-hidden border border-[var(--border)] flex-shrink-0">
+              <div className="relative w-24 h-24 rounded-xl overflow-hidden border border-(--border) shrink-0">
                 <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
               </div>
             ) : (
-              <div className="w-24 h-24 rounded-xl bg-[var(--bg-elevated)] border border-dashed border-[var(--border)] flex items-center justify-center flex-shrink-0">
-                <ImageUp size={24} className="text-[var(--text-muted)]" />
+              <div className="w-24 h-24 rounded-xl bg-(--bg-elevated) border border-dashed border-(--border) flex items-center justify-center shrink-0">
+                <ImageUp size={24} className="text-(--text-muted)" />
               </div>
             )}
 
@@ -180,7 +180,7 @@ const EventForm = ({
                 type="button"
                 disabled={uploadingImage}
                 onClick={() => imageInputRef.current?.click()}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-sm text-white hover:border-[var(--accent-red)] transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-(--border) bg-(--bg-elevated) text-sm text-white hover:border-(--accent-red) transition-colors disabled:opacity-50"
               >
                 {uploadingImage ? (
                   <><Loader2 size={15} className="animate-spin" /> Mengupload...</>
@@ -188,7 +188,7 @@ const EventForm = ({
                   <><ImageUp size={15} /> {imagePreview ? "Ganti Gambar" : "Upload Gambar"}</>
                 )}
               </button>
-              <p className="text-xs text-[var(--text-muted)]">JPG, PNG, WebP — maks. 5 MB</p>
+              <p className="text-xs text-(--text-muted)">JPG, PNG, WebP — maks. 5 MB</p>
               {imageError && <p className="text-xs text-red-400">{imageError}</p>}
               {errors.imageUrl && <p className="text-xs text-red-400">{errors.imageUrl.message}</p>}
             </div>
@@ -197,7 +197,7 @@ const EventForm = ({
       </div>
 
       {/* Location & Date */}
-      <div className="rounded-xl bg-[var(--bg-card)] border border-[var(--border)] p-6 space-y-5">
+      <div className="rounded-xl bg-(--bg-card) border border-(--border) p-6 space-y-5">
         <h3 className="font-semibold text-white text-sm uppercase tracking-wider">Lokasi & Waktu</h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -217,7 +217,7 @@ const EventForm = ({
       </div>
 
       {/* Capacity & Status */}
-      <div className="rounded-xl bg-[var(--bg-card)] border border-[var(--border)] p-6 space-y-5">
+      <div className="rounded-xl bg-(--bg-card) border border-(--border) p-6 space-y-5">
         <h3 className="font-semibold text-white text-sm uppercase tracking-wider">Kapasitas & Status</h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -234,10 +234,10 @@ const EventForm = ({
             <label className="flex items-center gap-3 cursor-pointer">
               <div className="relative">
                 <input {...register("isFree")} type="checkbox" className="sr-only peer" />
-                <div className="w-10 h-6 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-full peer-checked:bg-[var(--accent-red)] transition-colors" />
+                <div className="w-10 h-6 bg-(--bg-elevated) border border-(--border) rounded-full peer-checked:bg-(--accent-red) transition-colors" />
                 <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-4" />
               </div>
-              <span className="text-sm text-[var(--text-secondary)]">Event Gratis</span>
+              <span className="text-sm text-(--text-secondary)">Event Gratis</span>
             </label>
           </div>
         </div>
@@ -247,13 +247,13 @@ const EventForm = ({
 
       {/* Ticket Types */}
       {showTicketTypes && (
-        <div className="rounded-xl bg-[var(--bg-card)] border border-[var(--border)] p-6 space-y-4">
+        <div className="rounded-xl bg-(--bg-card) border border-(--border) p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-white text-sm uppercase tracking-wider">Tipe Tiket</h3>
             <button
               type="button"
               onClick={() => append({ name: "", description: "", price: 0, quota: 100 })}
-              className="flex items-center gap-1.5 text-xs text-[var(--accent-red)] hover:opacity-80"
+              className="flex items-center gap-1.5 text-xs text-(--accent-red) hover:opacity-80"
             >
               <Plus size={13} /> Tambah Tipe
             </button>
@@ -267,13 +267,13 @@ const EventForm = ({
             {fields.map((field, idx) => (
               <div
                 key={field.id}
-                className="relative p-4 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border)]"
+                className="relative p-4 rounded-xl bg-(--bg-elevated) border border-(--border)"
               >
                 {fields.length > 1 && (
                   <button
                     type="button"
                     onClick={() => remove(idx)}
-                    className="absolute top-3 right-3 w-6 h-6 flex items-center justify-center rounded text-[var(--text-muted)] hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                    className="absolute top-3 right-3 w-6 h-6 flex items-center justify-center rounded text-(--text-muted) hover:text-red-400 hover:bg-red-500/10 transition-colors"
                   >
                     <Trash2 size={12} />
                   </button>
@@ -281,7 +281,7 @@ const EventForm = ({
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   <div className="sm:col-span-2">
-                    <label className="block text-xs text-[var(--text-muted)] mb-1">Nama Tiket *</label>
+                    <label className="block text-xs text-(--text-muted) mb-1">Nama Tiket *</label>
                     <input
                       {...register(`ticketTypes.${idx}.name`)}
                       placeholder="VIP, REGULER, dll."
@@ -292,8 +292,8 @@ const EventForm = ({
                     )}
                   </div>
                   <div>
-                    <label className="block text-xs text-[var(--text-muted)] mb-1">
-                      Harga (Rp) {isFree && <span className="text-[var(--text-muted)]">(0 = gratis)</span>}
+                    <label className="block text-xs text-(--text-muted) mb-1">
+                      Harga (Rp) {isFree && <span className="text-(--text-muted)">(0 = gratis)</span>}
                     </label>
                     <input
                       {...register(`ticketTypes.${idx}.price`)}
@@ -305,7 +305,7 @@ const EventForm = ({
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-[var(--text-muted)] mb-1">Kuota *</label>
+                    <label className="block text-xs text-(--text-muted) mb-1">Kuota *</label>
                     <input
                       {...register(`ticketTypes.${idx}.quota`)}
                       type="number"
@@ -314,7 +314,7 @@ const EventForm = ({
                     />
                   </div>
                   <div className="sm:col-span-4">
-                    <label className="block text-xs text-[var(--text-muted)] mb-1">Deskripsi (opsional)</label>
+                    <label className="block text-xs text-(--text-muted) mb-1">Deskripsi (opsional)</label>
                     <input
                       {...register(`ticketTypes.${idx}.description`)}
                       placeholder="Fasilitas yang didapat..."
@@ -329,16 +329,16 @@ const EventForm = ({
       )}
 
       {/* Promotions / Voucher Discount */}
-      <div className="rounded-xl bg-[var(--bg-card)] border border-[var(--border)] p-6 space-y-4">
+      <div className="rounded-xl bg-(--bg-card) border border-(--border) p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-semibold text-white text-sm uppercase tracking-wider">Voucher Diskon</h3>
-            <p className="text-xs text-[var(--text-muted)] mt-1">Voucher diskon khusus untuk event ini (opsional)</p>
+            <p className="text-xs text-(--text-muted) mt-1">Voucher diskon khusus untuk event ini (opsional)</p>
           </div>
           <button
             type="button"
             onClick={() => appendPromo({ code: "", discountPercent: 10, maxUsage: 100, startDate: "", endDate: "" })}
-            className="flex items-center gap-1.5 text-xs text-[var(--accent-red)] hover:opacity-80"
+            className="flex items-center gap-1.5 text-xs text-(--accent-red) hover:opacity-80"
           >
             <Plus size={13} /> Tambah Voucher
           </button>
@@ -352,19 +352,19 @@ const EventForm = ({
           {promoFields.map((field, idx) => (
             <div
               key={field.id}
-              className="relative p-4 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border)]"
+              className="relative p-4 rounded-xl bg-(--bg-elevated) border border-(--border)"
             >
               <button
                 type="button"
                 onClick={() => removePromo(idx)}
-                className="absolute top-3 right-3 w-6 h-6 flex items-center justify-center rounded text-[var(--text-muted)] hover:text-red-400 hover:bg-red-500/10 transition-colors z-10"
+                className="absolute top-3 right-3 w-6 h-6 flex items-center justify-center rounded text-(--text-muted) hover:text-red-400 hover:bg-red-500/10 transition-colors z-10"
               >
                 <Trash2 size={12} />
               </button>
 
               <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
                 <div className="sm:col-span-2">
-                  <label className="block text-xs text-[var(--text-muted)] mb-1">Kode Voucher *</label>
+                  <label className="block text-xs text-(--text-muted) mb-1">Kode Voucher *</label>
                   <input
                     {...register(`promotions.${idx}.code`)}
                     placeholder="Contoh: SUMMER2026"
@@ -375,7 +375,7 @@ const EventForm = ({
                   )}
                 </div>
                 <div>
-                  <label className="block text-xs text-[var(--text-muted)] mb-1">Diskon (%) *</label>
+                  <label className="block text-xs text-(--text-muted) mb-1">Diskon (%) *</label>
                   <input
                     {...register(`promotions.${idx}.discountPercent`)}
                     type="number"
@@ -385,7 +385,7 @@ const EventForm = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-[var(--text-muted)] mb-1">Kuota Pakai *</label>
+                  <label className="block text-xs text-(--text-muted) mb-1">Kuota Pakai *</label>
                   <input
                     {...register(`promotions.${idx}.maxUsage`)}
                     type="number"
@@ -396,7 +396,7 @@ const EventForm = ({
                 <div className="sm:col-span-1" />
 
                 <div className="sm:col-span-2">
-                  <label className="block text-xs text-[var(--text-muted)] mb-1">Mulai Berlaku *</label>
+                  <label className="block text-xs text-(--text-muted) mb-1">Mulai Berlaku *</label>
                   <input
                     {...register(`promotions.${idx}.startDate`)}
                     type="datetime-local"
@@ -404,7 +404,7 @@ const EventForm = ({
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-xs text-[var(--text-muted)] mb-1">Selesai Berlaku *</label>
+                  <label className="block text-xs text-(--text-muted) mb-1">Selesai Berlaku *</label>
                   <input
                     {...register(`promotions.${idx}.endDate`)}
                     type="datetime-local"
@@ -415,7 +415,7 @@ const EventForm = ({
             </div>
           ))}
           {promoFields.length === 0 && (
-            <div className="text-center py-6 border border-dashed border-[var(--border)] rounded-xl text-sm text-[var(--text-muted)]">
+            <div className="text-center py-6 border border-dashed border-(--border) rounded-xl text-sm text-(--text-muted)">
               Belum ada voucher diskon. Klik "Tambah Voucher" untuk membuat.
             </div>
           )}

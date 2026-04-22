@@ -28,7 +28,13 @@ export const authService = {
     return res.data;
   },
 
-  updateProfile: async (data: { name?: string; avatarUrl?: string }) => {
+  updateProfile: async (data: { 
+    name?: string; 
+    avatarUrl?: string;
+    bankName?: string;
+    bankAccountName?: string;
+    bankAccountNumber?: string;
+  }) => {
     const res = await api.patch<ApiResponse<User>>("/auth/profile", data);
     return res.data;
   },

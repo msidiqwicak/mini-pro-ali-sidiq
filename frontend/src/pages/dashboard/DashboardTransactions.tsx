@@ -76,7 +76,7 @@ const DashboardTransactions = () => {
     <div className="space-y-6">
       <div>
         <h1 className="font-display text-3xl text-white tracking-wider">TRANSAKSI</h1>
-        <p className="text-sm text-[var(--text-muted)] mt-1">Lihat riwayat dan konfirmasi pembayaran</p>
+        <p className="text-sm text-(--text-muted) mt-1">Lihat riwayat dan konfirmasi pembayaran</p>
       </div>
 
       {error && (
@@ -100,14 +100,14 @@ const DashboardTransactions = () => {
       )}
 
       {/* Table */}
-      <div className="rounded-xl bg-[var(--bg-card)] border border-[var(--border)] overflow-hidden">
+      <div className="rounded-xl bg-(--bg-card) border border-(--border) overflow-hidden">
         {isLoading ? (
           <div className="p-8 space-y-3">
             {[1, 2, 3].map((i) => <div key={i} className="skeleton h-14 rounded" />)}
           </div>
         ) : transactions.length === 0 ? (
           <div className="text-center py-16">
-            <p className="text-[var(--text-muted)] text-sm">
+            <p className="text-(--text-muted) text-sm">
               {selectedEventId ? "Belum ada transaksi untuk event ini" : "Pilih event untuk melihat transaksi"}
             </p>
           </div>
@@ -115,22 +115,22 @@ const DashboardTransactions = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-[var(--border)] bg-[var(--bg-elevated)]">
-                  <th className="text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider px-5 py-3">ID / Pembeli</th>
-                  <th className="text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider px-5 py-3">Tiket & Harga</th>
-                  <th className="text-left text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider px-5 py-3">Status</th>
-                  <th className="text-center text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider px-5 py-3">Bukti / Aksi</th>
+                <tr className="border-b border-(--border) bg-(--bg-elevated)">
+                  <th className="text-left text-xs font-medium text-(--text-muted) uppercase tracking-wider px-5 py-3">ID / Pembeli</th>
+                  <th className="text-left text-xs font-medium text-(--text-muted) uppercase tracking-wider px-5 py-3">Tiket & Harga</th>
+                  <th className="text-left text-xs font-medium text-(--text-muted) uppercase tracking-wider px-5 py-3">Status</th>
+                  <th className="text-center text-xs font-medium text-(--text-muted) uppercase tracking-wider px-5 py-3">Bukti / Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--border)]">
+              <tbody className="divide-y divide-(--border)">
                 {transactions.map((tx) => (
-                  <tr key={tx.id} className="hover:bg-[var(--bg-elevated)] transition-colors">
+                  <tr key={tx.id} className="hover:bg-(--bg-elevated) transition-colors">
                     <td className="px-5 py-4">
-                      <p className="font-mono text-[10px] text-[var(--text-muted)] mb-1">
+                      <p className="font-mono text-[10px] text-(--text-muted) mb-1">
                         #{tx.id.slice(-8).toUpperCase()}
                       </p>
                       <p className="text-sm text-white font-medium line-clamp-1">{tx.user.name}</p>
-                      <p className="text-xs text-[var(--text-muted)] truncate max-w-[150px]">{tx.user.email}</p>
+                      <p className="text-xs text-(--text-muted) truncate max-w-[150px]">{tx.user.email}</p>
                     </td>
                     
                     <td className="px-5 py-4">
@@ -150,7 +150,7 @@ const DashboardTransactions = () => {
                       <span className={`badge text-[10px] ${getStatusColor(tx.status)}`}>
                         {getStatusLabel(tx.status)}
                       </span>
-                      <p className="text-[10px] text-[var(--text-muted)] mt-1.5 whitespace-nowrap">
+                      <p className="text-[10px] text-(--text-muted) mt-1.5 whitespace-nowrap">
                         {formatDateTime(tx.createdAt)}
                       </p>
                     </td>
@@ -168,7 +168,7 @@ const DashboardTransactions = () => {
                               <FileImage size={14} /> Lihat Bukti
                             </a>
                           ) : (
-                            <span className="text-xs text-[var(--text-muted)] italic">Tidak ada bukti</span>
+                            <span className="text-xs text-(--text-muted) italic">Tidak ada bukti</span>
                           )}
                           
                           <div className="flex items-center gap-2 mt-1">
@@ -197,12 +197,12 @@ const DashboardTransactions = () => {
                               href={tx.paymentProofUrl} 
                               target="_blank" 
                               rel="noreferrer"
-                              className="inline-flex items-center gap-1.5 text-xs text-[var(--text-secondary)] hover:text-white transition-colors"
+                              className="inline-flex items-center gap-1.5 text-xs text-(--text-secondary) hover:text-white transition-colors"
                             >
                               <FileImage size={14} /> Lihat Bukti
                             </a>
                           ) : (
-                            <span className="text-xs text-[var(--text-muted)]">-</span>
+                            <span className="text-xs text-(--text-muted)">-</span>
                           )}
                         </div>
                       )}

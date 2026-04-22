@@ -205,7 +205,7 @@ const ProfilePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)]">
+    <div className="min-h-screen bg-(--bg-primary)">
       <Navbar />
 
       <div className="max-w-3xl mx-auto px-4 pt-28 pb-20">
@@ -213,14 +213,14 @@ const ProfilePage = () => {
         <div className="flex items-center gap-4 mb-8">
           {/* Clickable avatar with upload overlay */}
           <div
-            className="relative w-16 h-16 rounded-full overflow-hidden bg-[var(--bg-elevated)] border-2 border-[var(--border)] flex items-center justify-center flex-shrink-0 cursor-pointer group"
+            className="relative w-16 h-16 rounded-full overflow-hidden bg-(--bg-elevated) border-2 border-(--border) flex items-center justify-center shrink-0 cursor-pointer group"
             onClick={() => !avatarUploading && avatarInputRef.current?.click()}
             title="Klik untuk ganti foto profil"
           >
             {user?.avatarUrl ? (
               <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
             ) : (
-              <User size={28} className="text-[var(--text-muted)]" />
+              <User size={28} className="text-(--text-muted)" />
             )}
             {/* Hover / loading overlay */}
             <div className={`absolute inset-0 bg-black/50 flex items-center justify-center transition-opacity ${
@@ -241,16 +241,16 @@ const ProfilePage = () => {
           />
           <div>
             <h1 className="text-2xl font-bold text-white">{user?.name}</h1>
-            <p className="text-sm text-[var(--text-muted)]">{user?.email}</p>
-            <span className="inline-block mt-1 text-xs font-medium px-2 py-0.5 rounded-full bg-[var(--accent-red)]/20 text-[var(--accent-red)]">
+            <p className="text-sm text-(--text-muted)">{user?.email}</p>
+            <span className="inline-block mt-1 text-xs font-medium px-2 py-0.5 rounded-full bg-(--accent-red)/20 text-(--accent-red)">
               {user?.role === "ORGANIZER" ? "Organizer" : "Customer"}
             </span>
-            <p className="text-xs text-[var(--text-muted)] mt-1">Klik foto untuk mengganti</p>
+            <p className="text-xs text-(--text-muted) mt-1">Klik foto untuk mengganti</p>
           </div>
         </div>
 
         {/* ── Tabs ── */}
-        <div className="flex gap-1 bg-[var(--bg-secondary)] rounded-lg p-1 mb-6 overflow-x-auto">
+        <div className="flex gap-1 bg-(--bg-secondary) rounded-lg p-1 mb-6 overflow-x-auto">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -258,8 +258,8 @@ const ProfilePage = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-all flex-1 justify-center ${
                 activeTab === tab.id
-                  ? "bg-[var(--accent-red)] text-white"
-                  : "text-[var(--text-muted)] hover:text-white"
+                  ? "bg-(--accent-red) text-white"
+                  : "text-(--text-muted) hover:text-white"
               }`}
             >
               {tab.icon}
@@ -273,37 +273,37 @@ const ProfilePage = () => {
           <div className="space-y-6">
             {/* Referral Code Card */}
             {user?.referralCode && (
-              <div className="rounded-xl bg-gradient-to-r from-[var(--accent-red)]/10 to-[var(--accent-gold)]/10 border border-[var(--accent-red)]/20 p-5">
+              <div className="rounded-xl bg-linear-to-r from-(--accent-red)/10 to-(--accent-gold)/10 border border-(--accent-red)/20 p-5">
                 <div className="flex items-center gap-2 mb-3">
-                  <Gift size={18} className="text-[var(--accent-red)]" />
+                  <Gift size={18} className="text-(--accent-red)" />
                   <span className="text-sm font-semibold text-white">Kode Referral Kamu</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <code
                     id="referral-code-display"
-                    className="flex-1 font-mono text-lg font-bold text-white bg-[var(--bg-elevated)] rounded-lg px-4 py-2 tracking-widest border border-[var(--border)]"
+                    className="flex-1 font-mono text-lg font-bold text-white bg-(--bg-elevated) rounded-lg px-4 py-2 tracking-widest border border-(--border)"
                   >
                     {user.referralCode}
                   </code>
                   <button
                     id="copy-referral-btn"
                     onClick={copyReferral}
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--accent-red)] text-white text-sm font-medium hover:opacity-90 transition-all"
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-(--accent-red) text-white text-sm font-medium hover:opacity-90 transition-all"
                   >
                     {copied ? <Check size={15} /> : <Copy size={15} />}
                     {copied ? "Disalin!" : "Salin"}
                   </button>
                 </div>
-                <p className="text-xs text-[var(--text-muted)] mt-2">
+                <p className="text-xs text-(--text-muted) mt-2">
                   Bagikan kode ini ke teman. Setiap teman yang mendaftar menggunakan kode kamu, kamu akan mendapat <strong className="text-white">10.000 poin</strong>!
                 </p>
               </div>
             )}
 
             {/* Profile Form */}
-            <div className="bg-[var(--bg-card)] rounded-xl border border-[var(--border)] p-6">
+            <div className="bg-(--bg-card) rounded-xl border border-(--border) p-6">
               <div className="flex items-center gap-2 mb-5">
-                <Edit3 size={16} className="text-[var(--accent-red)]" />
+                <Edit3 size={16} className="text-(--accent-red)" />
                 <h2 className="text-base font-semibold text-white">Edit Profil</h2>
               </div>
 
@@ -320,7 +320,7 @@ const ProfilePage = () => {
 
               <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">
+                  <label className="block text-sm font-medium text-(--text-secondary) mb-1.5">
                     Nama Lengkap
                   </label>
                   <input
@@ -338,13 +338,13 @@ const ProfilePage = () => {
                 <input type="hidden" {...profileForm.register("avatarUrl")} />
 
                 {user?.role === "ORGANIZER" && (
-                  <div className="pt-4 mt-2 border-t border-[var(--border)] space-y-4">
+                  <div className="pt-4 mt-2 border-t border-(--border) space-y-4">
                     <h3 className="text-sm font-semibold text-white">Informasi Rekening Bank (Pembayaran)</h3>
-                    <p className="text-xs text-[var(--text-muted)]">Informasi rekening ini akan ditampilkan saat pelanggan melakukan pembayaran transfer bank.</p>
+                    <p className="text-xs text-(--text-muted)">Informasi rekening ini akan ditampilkan saat pelanggan melakukan pembayaran transfer bank.</p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Nama Bank</label>
+                        <label className="block text-sm font-medium text-(--text-secondary) mb-1.5">Nama Bank</label>
                         <input
                           id="profile-bank-name"
                           {...profileForm.register("bankName")}
@@ -353,7 +353,7 @@ const ProfilePage = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Nomor Rekening</label>
+                        <label className="block text-sm font-medium text-(--text-secondary) mb-1.5">Nomor Rekening</label>
                         <input
                           id="profile-bank-account-number"
                           {...profileForm.register("bankAccountNumber")}
@@ -363,7 +363,7 @@ const ProfilePage = () => {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Nama Pemilik Rekening</label>
+                      <label className="block text-sm font-medium text-(--text-secondary) mb-1.5">Nama Pemilik Rekening</label>
                       <input
                         id="profile-bank-account-name"
                         {...profileForm.register("bankAccountName")}
@@ -391,24 +391,24 @@ const ProfilePage = () => {
         {activeTab === "points" && (
           <div className="space-y-4">
             {/* Total balance card */}
-            <div className="rounded-xl bg-gradient-to-r from-[var(--accent-red)]/10 to-purple-500/10 border border-[var(--accent-red)]/20 p-6">
+            <div className="rounded-xl bg-linear-to-r from-(--accent-red)/10 to-purple-500/10 border border-(--accent-red)/20 p-6">
               <div className="flex items-center gap-2 mb-1">
-                <Star size={18} className="text-[var(--accent-gold)]" />
-                <span className="text-sm text-[var(--text-muted)]">Total Poin Aktif</span>
+                <Star size={18} className="text-(--accent-gold)" />
+                <span className="text-sm text-(--text-muted)">Total Poin Aktif</span>
               </div>
               <p id="points-total" className="text-4xl font-bold text-white font-display">
                 {fmtIDR(pointTotal)}
               </p>
-              <p className="text-xs text-[var(--text-muted)] mt-1">
+              <p className="text-xs text-(--text-muted) mt-1">
                 Gunakan poin untuk diskon pembelian tiket
               </p>
             </div>
 
             {/* Points list */}
             {dataLoading ? (
-              <div className="text-center py-10 text-[var(--text-muted)]">Memuat data...</div>
+              <div className="text-center py-10 text-(--text-muted)">Memuat data...</div>
             ) : points.length === 0 ? (
-              <div className="text-center py-12 text-[var(--text-muted)]">
+              <div className="text-center py-12 text-(--text-muted)">
                 <Coins size={40} className="mx-auto mb-3 opacity-30" />
                 <p>Belum ada poin. Bagikan kode referral kamu!</p>
               </div>
@@ -417,17 +417,17 @@ const ProfilePage = () => {
                 {points.map((pt) => (
                   <div
                     key={pt.id}
-                    className="flex items-center justify-between bg-[var(--bg-card)] border border-[var(--border)] rounded-xl px-5 py-4"
+                    className="flex items-center justify-between bg-(--bg-card) border border-(--border) rounded-xl px-5 py-4"
                   >
                     <div>
                       <p className="text-sm font-medium text-white">{pt.source}</p>
-                      <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                      <p className="text-xs text-(--text-muted) mt-0.5">
                         Berlaku sampai{" "}
-                        <span className="text-[var(--accent-gold)]">{fmt(pt.expiredAt)}</span>
+                        <span className="text-(--accent-gold)">{fmt(pt.expiredAt)}</span>
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-lg font-bold text-[var(--accent-gold)]">
+                      <p className="text-lg font-bold text-(--accent-gold)">
                         +{fmtIDR(pt.amount)}
                       </p>
                       <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/15 text-green-400 font-medium">
@@ -445,14 +445,14 @@ const ProfilePage = () => {
         {activeTab === "coupons" && (
           <div className="space-y-4">
             <div className="flex items-center gap-2 mb-2">
-              <Ticket size={18} className="text-[var(--accent-red)]" />
+              <Ticket size={18} className="text-(--accent-red)" />
               <h2 className="text-base font-semibold text-white">Kupon Diskon Kamu</h2>
             </div>
 
             {dataLoading ? (
-              <div className="text-center py-10 text-[var(--text-muted)]">Memuat data...</div>
+              <div className="text-center py-10 text-(--text-muted)">Memuat data...</div>
             ) : coupons.length === 0 ? (
-              <div className="text-center py-12 text-[var(--text-muted)]">
+              <div className="text-center py-12 text-(--text-muted)">
                 <Ticket size={40} className="mx-auto mb-3 opacity-30" />
                 <p>Belum ada kupon. Daftar menggunakan kode referral teman untuk mendapatkan diskon!</p>
               </div>
@@ -466,12 +466,12 @@ const ProfilePage = () => {
                       key={cp.id}
                       className={`relative overflow-hidden rounded-xl border px-5 py-4 ${
                         isAvailable
-                          ? "bg-[var(--bg-card)] border-[var(--accent-red)]/30"
-                          : "bg-[var(--bg-secondary)] border-[var(--border)] opacity-60"
+                          ? "bg-(--bg-card) border-(--accent-red)/30"
+                          : "bg-(--bg-secondary) border-(--border) opacity-60"
                       }`}
                     >
                       {/* Left accent */}
-                      <div className={`absolute left-0 top-0 bottom-0 w-1 ${isAvailable ? "bg-[var(--accent-red)]" : "bg-gray-600"}`} />
+                      <div className={`absolute left-0 top-0 bottom-0 w-1 ${isAvailable ? "bg-(--accent-red)" : "bg-gray-600"}`} />
 
                       <div className="flex items-center justify-between pl-2">
                         <div>
@@ -481,15 +481,15 @@ const ProfilePage = () => {
                           >
                             {cp.code}
                           </code>
-                          <p className="text-xs text-[var(--text-muted)] mt-0.5">
+                          <p className="text-xs text-(--text-muted) mt-0.5">
                             Berlaku sampai{" "}
-                            <span className={isExpired ? "text-red-400" : "text-[var(--accent-gold)]"}>
+                            <span className={isExpired ? "text-red-400" : "text-(--accent-gold)"}>
                               {fmt(cp.expiredAt)}
                             </span>
                           </p>
                         </div>
                         <div className="text-right flex flex-col items-end gap-1">
-                          <p className="text-2xl font-bold text-[var(--accent-red)]">
+                          <p className="text-2xl font-bold text-(--accent-red)">
                             {cp.discountPercent}%
                           </p>
                           <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
@@ -509,7 +509,7 @@ const ProfilePage = () => {
               </div>
             )}
 
-            <p className="text-xs text-[var(--text-muted)] text-center pt-2">
+            <p className="text-xs text-(--text-muted) text-center pt-2">
               Masukkan kode kupon saat checkout untuk mendapatkan diskon
             </p>
           </div>
@@ -517,9 +517,9 @@ const ProfilePage = () => {
 
         {/* ══════════════════ TAB: KEAMANAN ══════════════════ */}
         {activeTab === "security" && (
-          <div className="bg-[var(--bg-card)] rounded-xl border border-[var(--border)] p-6">
+          <div className="bg-(--bg-card) rounded-xl border border-(--border) p-6">
             <div className="flex items-center gap-2 mb-5">
-              <Shield size={16} className="text-[var(--accent-red)]" />
+              <Shield size={16} className="text-(--accent-red)" />
               <h2 className="text-base font-semibold text-white">Ubah Password</h2>
             </div>
 
@@ -537,7 +537,7 @@ const ProfilePage = () => {
             <form onSubmit={pwForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
               {/* Current password */}
               <div>
-                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">
+                <label className="block text-sm font-medium text-(--text-secondary) mb-1.5">
                   Password Lama
                 </label>
                 <div className="relative">
@@ -551,7 +551,7 @@ const ProfilePage = () => {
                   <button
                     type="button"
                     onClick={() => setShowCurrent(!showCurrent)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-white"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-(--text-muted) hover:text-white"
                   >
                     {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -563,7 +563,7 @@ const ProfilePage = () => {
 
               {/* New password */}
               <div>
-                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">
+                <label className="block text-sm font-medium text-(--text-secondary) mb-1.5">
                   Password Baru
                 </label>
                 <div className="relative">
@@ -577,7 +577,7 @@ const ProfilePage = () => {
                   <button
                     type="button"
                     onClick={() => setShowNew(!showNew)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-white"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-(--text-muted) hover:text-white"
                   >
                     {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -589,7 +589,7 @@ const ProfilePage = () => {
 
               {/* Confirm password */}
               <div>
-                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">
+                <label className="block text-sm font-medium text-(--text-secondary) mb-1.5">
                   Konfirmasi Password Baru
                 </label>
                 <div className="relative">
@@ -603,7 +603,7 @@ const ProfilePage = () => {
                   <button
                     type="button"
                     onClick={() => setShowConfirm(!showConfirm)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-white"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-(--text-muted) hover:text-white"
                   >
                     {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
