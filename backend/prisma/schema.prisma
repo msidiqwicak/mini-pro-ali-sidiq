@@ -24,6 +24,7 @@ enum EventStatus {
 
 enum TransactionStatus {
     PENDING
+    WAITING_PAYMENT
     PAID
     CANCELLED
     REFUNDED
@@ -171,6 +172,11 @@ model Event {
     totalSeats Int
     soldSeats  Int @default(0)
 
+    // Info rekening bank untuk pembayaran transfer
+    bankName          String?
+    bankAccountName   String?
+    bankAccountNumber String?
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
@@ -254,7 +260,11 @@ model Transaction {
 
     status TransactionStatus @default(PENDING)
 
-    paymentMethod String?
+    paymentMethod    String?
+    paymentProofUrl  String?   // URL Cloudinary bukti transfer
+    bankName         String?   // Nama bank tujuan saat transaksi dibuat
+    bankAccountName  String?   // Nama rekening tujuan
+    bankAccountNumber String?  // Nomor rekening tujuan
     paidAt        DateTime?
 
     createdAt DateTime @default(now())

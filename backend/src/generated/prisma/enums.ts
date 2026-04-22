@@ -29,6 +29,7 @@ export type EventStatus = (typeof EventStatus)[keyof typeof EventStatus]
 
 export const TransactionStatus = {
   PENDING: 'PENDING',
+  WAITING_PAYMENT: 'WAITING_PAYMENT',
   PAID: 'PAID',
   CANCELLED: 'CANCELLED',
   REFUNDED: 'REFUNDED'

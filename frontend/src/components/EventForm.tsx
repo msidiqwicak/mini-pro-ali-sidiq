@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Plus, Trash2 } from "lucide-react";
+import { ImageUp, Loader2, Plus, Trash2 } from "lucide-react";
 import { eventService } from "../services/event.service";
+import { uploadImage } from "../services/upload.service";
 import type { Category } from "../types";
 
 const schema = z.object({
@@ -16,6 +17,9 @@ const schema = z.object({
   startDate: z.string().min(1, "Tanggal mulai wajib diisi"),
   endDate: z.string().min(1, "Tanggal selesai wajib diisi"),
   isFree: z.boolean(),
+  bankName: z.string().optional(),
+  bankAccountName: z.string().optional(),
+  bankAccountNumber: z.string().optional(),
   totalSeats: z.coerce.number().int().positive("Harus positif"),
   status: z.enum(["DRAFT", "PUBLISHED"]),
   ticketTypes: z.array(z.object({
@@ -53,22 +57,47 @@ const EventForm = ({
   showTicketTypes = true,
 }: EventFormProps) => {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [imagePreview, setImagePreview] = useState<string>(defaultValues?.imageUrl ?? "");
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [imageError, setImageError] = useState("");
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     eventService.getCategories().then((r) => setCategories(r.data ?? [])).catch(() => {});
   }, []);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImageError("");
+    setUploadingImage(true);
+    try {
+      const url = await uploadImage(file, "events");
+      setValue("imageUrl", url);
+      setImagePreview(url);
+    } catch {
+      setImageError("Upload gagal. Coba lagi.");
+    } finally {
+      setUploadingImage(false);
+      if (imageInputRef.current) imageInputRef.current.value = "";
+    }
+  };
 
   const {
     register,
     handleSubmit,
     control,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<EventFormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       status: "DRAFT",
       isFree: false,
+      bankName: "",
+      bankAccountName: "",
+      bankAccountNumber: "",
       ticketTypes: [{ name: "REGULER", description: "", price: 0, quota: 100 }],
       ...defaultValues,
     },
@@ -121,9 +150,54 @@ const EventForm = ({
           />
         </Field>
 
-        <Field label="URL Gambar" error={errors.imageUrl?.message}>
-          <input {...register("imageUrl")} placeholder="https://..." className="input-field" />
-        </Field>
+        {/* Image Upload */}
+        <div>
+          <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">
+            Gambar Event
+          </label>
+
+          {/* Hidden real input for form registration */}
+          <input type="hidden" {...register("imageUrl")} />
+          {/* Hidden file picker */}
+          <input
+            ref={imageInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            className="hidden"
+            onChange={handleImageUpload}
+          />
+
+          <div className="flex items-start gap-4">
+            {/* Preview */}
+            {imagePreview ? (
+              <div className="relative w-24 h-24 rounded-xl overflow-hidden border border-[var(--border)] flex-shrink-0">
+                <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+              </div>
+            ) : (
+              <div className="w-24 h-24 rounded-xl bg-[var(--bg-elevated)] border border-dashed border-[var(--border)] flex items-center justify-center flex-shrink-0">
+                <ImageUp size={24} className="text-[var(--text-muted)]" />
+              </div>
+            )}
+
+            <div className="flex flex-col gap-2">
+              <button
+                type="button"
+                disabled={uploadingImage}
+                onClick={() => imageInputRef.current?.click()}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] text-sm text-white hover:border-[var(--accent-red)] transition-colors disabled:opacity-50"
+              >
+                {uploadingImage ? (
+                  <><Loader2 size={15} className="animate-spin" /> Mengupload...</>
+                ) : (
+                  <><ImageUp size={15} /> {imagePreview ? "Ganti Gambar" : "Upload Gambar"}</>
+                )}
+              </button>
+              <p className="text-xs text-[var(--text-muted)]">JPG, PNG, WebP — maks. 5 MB</p>
+              {imageError && <p className="text-xs text-red-400">{imageError}</p>}
+              {errors.imageUrl && <p className="text-xs text-red-400">{errors.imageUrl.message}</p>}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Location & Date */}
@@ -172,6 +246,25 @@ const EventForm = ({
           </div>
         </div>
       </div>
+
+      {/* Info Rekening Bank */}
+      {!isFree && (
+        <div className="rounded-xl bg-[var(--bg-card)] border border-[var(--border)] p-6 space-y-5">
+          <h3 className="font-semibold text-white text-sm uppercase tracking-wider">Info Pembayaran Bank</h3>
+          <p className="text-xs text-[var(--text-muted)] mt-1 mb-2">Informasi rekening untuk transfer pembayaran pembeli tiket.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            <Field label="Nama Bank *" error={errors.bankName?.message}>
+              <input {...register("bankName")} placeholder="Contoh: BCA, Mandiri" className="input-field" />
+            </Field>
+            <Field label="Atas Nama (Pemilik) *" error={errors.bankAccountName?.message}>
+              <input {...register("bankAccountName")} placeholder="Nama pemilik rekening" className="input-field" />
+            </Field>
+            <Field label="Nomor Rekening *" error={errors.bankAccountNumber?.message}>
+              <input {...register("bankAccountNumber")} placeholder="Contoh: 1234567890" className="input-field" />
+            </Field>
+          </div>
+        </div>
+      )}
 
       {/* Ticket Types */}
       {showTicketTypes && (

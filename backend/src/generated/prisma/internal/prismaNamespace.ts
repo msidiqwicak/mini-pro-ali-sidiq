@@ -1418,6 +1418,9 @@ export const EventScalarFieldEnum = {
   status: 'status',
   totalSeats: 'totalSeats',
   soldSeats: 'soldSeats',
+  bankName: 'bankName',
+  bankAccountName: 'bankAccountName',
+  bankAccountNumber: 'bankAccountNumber',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1463,6 +1466,10 @@ export const TransactionScalarFieldEnum = {
   finalAmount: 'finalAmount',
   status: 'status',
   paymentMethod: 'paymentMethod',
+  paymentProofUrl: 'paymentProofUrl',
+  bankName: 'bankName',
+  bankAccountName: 'bankAccountName',
+  bankAccountNumber: 'bankAccountNumber',
   paidAt: 'paidAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

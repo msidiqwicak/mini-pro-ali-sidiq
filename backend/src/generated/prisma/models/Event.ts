@@ -52,6 +52,9 @@ export type EventMinAggregateOutputType = {
   status: $Enums.EventStatus | null
   totalSeats: number | null
   soldSeats: number | null
+  bankName: string | null
+  bankAccountName: string | null
+  bankAccountNumber: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -72,6 +75,9 @@ export type EventMaxAggregateOutputType = {
   status: $Enums.EventStatus | null
   totalSeats: number | null
   soldSeats: number | null
+  bankName: string | null
+  bankAccountName: string | null
+  bankAccountNumber: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -92,6 +98,9 @@ export type EventCountAggregateOutputType = {
   status: number
   totalSeats: number
   soldSeats: number
+  bankName: number
+  bankAccountName: number
+  bankAccountNumber: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -124,6 +133,9 @@ export type EventMinAggregateInputType = {
   status?: true
   totalSeats?: true
   soldSeats?: true
+  bankName?: true
+  bankAccountName?: true
+  bankAccountNumber?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -144,6 +156,9 @@ export type EventMaxAggregateInputType = {
   status?: true
   totalSeats?: true
   soldSeats?: true
+  bankName?: true
+  bankAccountName?: true
+  bankAccountNumber?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -164,6 +179,9 @@ export type EventCountAggregateInputType = {
   status?: true
   totalSeats?: true
   soldSeats?: true
+  bankName?: true
+  bankAccountName?: true
+  bankAccountNumber?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -271,6 +289,9 @@ export type EventGroupByOutputType = {
   status: $Enums.EventStatus
   totalSeats: number
   soldSeats: number
+  bankName: string | null
+  bankAccountName: string | null
+  bankAccountNumber: string | null
   createdAt: Date
   updatedAt: Date
   _count: EventCountAggregateOutputType | null
@@ -314,6 +335,9 @@ export type EventWhereInput = {
   status?: Prisma.EnumEventStatusFilter<"Event"> | $Enums.EventStatus
   totalSeats?: Prisma.IntFilter<"Event"> | number
   soldSeats?: Prisma.IntFilter<"Event"> | number
+  bankName?: Prisma.StringNullableFilter<"Event"> | string | null
+  bankAccountName?: Prisma.StringNullableFilter<"Event"> | string | null
+  bankAccountNumber?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   organizer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -340,6 +364,9 @@ export type EventOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   soldSeats?: Prisma.SortOrder
+  bankName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   organizer?: Prisma.UserOrderByWithRelationInput
@@ -369,6 +396,9 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumEventStatusFilter<"Event"> | $Enums.EventStatus
   totalSeats?: Prisma.IntFilter<"Event"> | number
   soldSeats?: Prisma.IntFilter<"Event"> | number
+  bankName?: Prisma.StringNullableFilter<"Event"> | string | null
+  bankAccountName?: Prisma.StringNullableFilter<"Event"> | string | null
+  bankAccountNumber?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   organizer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -395,6 +425,9 @@ export type EventOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   soldSeats?: Prisma.SortOrder
+  bankName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EventCountOrderByAggregateInput
@@ -423,6 +456,9 @@ export type EventScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumEventStatusWithAggregatesFilter<"Event"> | $Enums.EventStatus
   totalSeats?: Prisma.IntWithAggregatesFilter<"Event"> | number
   soldSeats?: Prisma.IntWithAggregatesFilter<"Event"> | number
+  bankName?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  bankAccountName?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  bankAccountNumber?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
 }
@@ -441,6 +477,9 @@ export type EventCreateInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
@@ -467,6 +506,9 @@ export type EventUncheckedCreateInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   ticketTypes?: Prisma.TicketTypeUncheckedCreateNestedManyWithoutEventInput
@@ -489,6 +531,9 @@ export type EventUpdateInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
@@ -515,6 +560,9 @@ export type EventUncheckedUpdateInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticketTypes?: Prisma.TicketTypeUncheckedUpdateManyWithoutEventNestedInput
@@ -539,6 +587,9 @@ export type EventCreateManyInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -557,6 +608,9 @@ export type EventUpdateManyMutationInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -577,6 +631,9 @@ export type EventUncheckedUpdateManyInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -607,6 +664,9 @@ export type EventCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   soldSeats?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -632,6 +692,9 @@ export type EventMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   soldSeats?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -652,6 +715,9 @@ export type EventMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   totalSeats?: Prisma.SortOrder
   soldSeats?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -828,6 +894,9 @@ export type EventCreateWithoutOrganizerInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.CategoryCreateNestedOneWithoutEventsInput
@@ -852,6 +921,9 @@ export type EventUncheckedCreateWithoutOrganizerInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   ticketTypes?: Prisma.TicketTypeUncheckedCreateNestedManyWithoutEventInput
@@ -905,6 +977,9 @@ export type EventScalarWhereInput = {
   status?: Prisma.EnumEventStatusFilter<"Event"> | $Enums.EventStatus
   totalSeats?: Prisma.IntFilter<"Event"> | number
   soldSeats?: Prisma.IntFilter<"Event"> | number
+  bankName?: Prisma.StringNullableFilter<"Event"> | string | null
+  bankAccountName?: Prisma.StringNullableFilter<"Event"> | string | null
+  bankAccountNumber?: Prisma.StringNullableFilter<"Event"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
 }
@@ -923,6 +998,9 @@ export type EventCreateWithoutCategoryInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
@@ -947,6 +1025,9 @@ export type EventUncheckedCreateWithoutCategoryInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   ticketTypes?: Prisma.TicketTypeUncheckedCreateNestedManyWithoutEventInput
@@ -995,6 +1076,9 @@ export type EventCreateWithoutTicketTypesInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
@@ -1020,6 +1104,9 @@ export type EventUncheckedCreateWithoutTicketTypesInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutEventInput
@@ -1057,6 +1144,9 @@ export type EventUpdateWithoutTicketTypesInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
@@ -1082,6 +1172,9 @@ export type EventUncheckedUpdateWithoutTicketTypesInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutEventNestedInput
@@ -1103,6 +1196,9 @@ export type EventCreateWithoutTransactionsInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
@@ -1128,6 +1224,9 @@ export type EventUncheckedCreateWithoutTransactionsInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   ticketTypes?: Prisma.TicketTypeUncheckedCreateNestedManyWithoutEventInput
@@ -1165,6 +1264,9 @@ export type EventUpdateWithoutTransactionsInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
@@ -1190,6 +1292,9 @@ export type EventUncheckedUpdateWithoutTransactionsInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticketTypes?: Prisma.TicketTypeUncheckedUpdateManyWithoutEventNestedInput
@@ -1211,6 +1316,9 @@ export type EventCreateWithoutPromotionsInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
@@ -1236,6 +1344,9 @@ export type EventUncheckedCreateWithoutPromotionsInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   ticketTypes?: Prisma.TicketTypeUncheckedCreateNestedManyWithoutEventInput
@@ -1273,6 +1384,9 @@ export type EventUpdateWithoutPromotionsInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
@@ -1298,6 +1412,9 @@ export type EventUncheckedUpdateWithoutPromotionsInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticketTypes?: Prisma.TicketTypeUncheckedUpdateManyWithoutEventNestedInput
@@ -1319,6 +1436,9 @@ export type EventCreateWithoutReviewsInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
@@ -1344,6 +1464,9 @@ export type EventUncheckedCreateWithoutReviewsInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   ticketTypes?: Prisma.TicketTypeUncheckedCreateNestedManyWithoutEventInput
@@ -1381,6 +1504,9 @@ export type EventUpdateWithoutReviewsInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
@@ -1406,6 +1532,9 @@ export type EventUncheckedUpdateWithoutReviewsInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticketTypes?: Prisma.TicketTypeUncheckedUpdateManyWithoutEventNestedInput
@@ -1428,6 +1557,9 @@ export type EventCreateManyOrganizerInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1446,6 +1578,9 @@ export type EventUpdateWithoutOrganizerInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.CategoryUpdateOneRequiredWithoutEventsNestedInput
@@ -1470,6 +1605,9 @@ export type EventUncheckedUpdateWithoutOrganizerInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticketTypes?: Prisma.TicketTypeUncheckedUpdateManyWithoutEventNestedInput
@@ -1493,6 +1631,9 @@ export type EventUncheckedUpdateManyWithoutOrganizerInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1512,6 +1653,9 @@ export type EventCreateManyCategoryInput = {
   status?: $Enums.EventStatus
   totalSeats: number
   soldSeats?: number
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1530,6 +1674,9 @@ export type EventUpdateWithoutCategoryInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
@@ -1554,6 +1701,9 @@ export type EventUncheckedUpdateWithoutCategoryInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ticketTypes?: Prisma.TicketTypeUncheckedUpdateManyWithoutEventNestedInput
@@ -1577,6 +1727,9 @@ export type EventUncheckedUpdateManyWithoutCategoryInput = {
   status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   totalSeats?: Prisma.IntFieldUpdateOperationsInput | number
   soldSeats?: Prisma.IntFieldUpdateOperationsInput | number
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1655,6 +1808,9 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   status?: boolean
   totalSeats?: boolean
   soldSeats?: boolean
+  bankName?: boolean
+  bankAccountName?: boolean
+  bankAccountNumber?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   organizer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1682,6 +1838,9 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   totalSeats?: boolean
   soldSeats?: boolean
+  bankName?: boolean
+  bankAccountName?: boolean
+  bankAccountNumber?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   organizer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1704,6 +1863,9 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   totalSeats?: boolean
   soldSeats?: boolean
+  bankName?: boolean
+  bankAccountName?: boolean
+  bankAccountNumber?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   organizer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1726,11 +1888,14 @@ export type EventSelectScalar = {
   status?: boolean
   totalSeats?: boolean
   soldSeats?: boolean
+  bankName?: boolean
+  bankAccountName?: boolean
+  bankAccountNumber?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizerId" | "categoryId" | "name" | "slug" | "description" | "location" | "city" | "imageUrl" | "startDate" | "endDate" | "isFree" | "status" | "totalSeats" | "soldSeats" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizerId" | "categoryId" | "name" | "slug" | "description" | "location" | "city" | "imageUrl" | "startDate" | "endDate" | "isFree" | "status" | "totalSeats" | "soldSeats" | "bankName" | "bankAccountName" | "bankAccountNumber" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organizer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
@@ -1775,6 +1940,9 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     status: $Enums.EventStatus
     totalSeats: number
     soldSeats: number
+    bankName: string | null
+    bankAccountName: string | null
+    bankAccountNumber: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["event"]>
@@ -2221,6 +2389,9 @@ export interface EventFieldRefs {
   readonly status: Prisma.FieldRef<"Event", 'EventStatus'>
   readonly totalSeats: Prisma.FieldRef<"Event", 'Int'>
   readonly soldSeats: Prisma.FieldRef<"Event", 'Int'>
+  readonly bankName: Prisma.FieldRef<"Event", 'String'>
+  readonly bankAccountName: Prisma.FieldRef<"Event", 'String'>
+  readonly bankAccountNumber: Prisma.FieldRef<"Event", 'String'>
   readonly createdAt: Prisma.FieldRef<"Event", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Event", 'DateTime'>
 }

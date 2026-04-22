@@ -3,6 +3,8 @@ import {
   createTransactionService,
   getMyTransactionsService,
   payTransactionService,
+  approveTransactionService,
+  rejectTransactionService,
   createTransactionSchema,
 } from "../services/transaction.service.js";
 import { getAvailablePoints } from "../services/point.service.js";
@@ -49,10 +51,50 @@ export const payTransaction = async (
       ? req.params["id"][0] ?? ""
       : req.params["id"] ?? "";
 
-    const transaction = await payTransactionService(id, req.user!.userId);
-    successResponse(res, transaction, "Pembayaran berhasil");
+    const { paymentProofUrl } = req.body as { paymentProofUrl?: string };
+    if (!paymentProofUrl) {
+      errorResponse(res, "URL bukti transfer wajib diisi", 400);
+      return;
+    }
+
+    const transaction = await payTransactionService(id, req.user!.userId, paymentProofUrl);
+    successResponse(res, transaction, "Bukti transfer berhasil dikirim, menunggu konfirmasi organizer");
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Gagal memproses pembayaran";
+    errorResponse(res, msg, 400);
+  }
+};
+
+export const approveTransaction = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const id = Array.isArray(req.params["id"])
+      ? req.params["id"][0] ?? ""
+      : req.params["id"] ?? "";
+
+    const result = await approveTransactionService(id, req.user!.userId);
+    successResponse(res, result, "Transaksi berhasil disetujui, pembayaran lunas");
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Gagal menyetujui transaksi";
+    errorResponse(res, msg, 400);
+  }
+};
+
+export const rejectTransaction = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const id = Array.isArray(req.params["id"])
+      ? req.params["id"][0] ?? ""
+      : req.params["id"] ?? "";
+
+    const result = await rejectTransactionService(id, req.user!.userId);
+    successResponse(res, result, "Transaksi berhasil ditolak");
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Gagal menolak transaksi";
     errorResponse(res, msg, 400);
   }
 };

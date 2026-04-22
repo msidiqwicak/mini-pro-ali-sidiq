@@ -31,6 +31,9 @@ export const createEventSchema = z.object({
   endDate: z.string().min(1, "Tanggal selesai wajib diisi").refine((v) => !isNaN(Date.parse(v)), "Format tanggal tidak valid"),
   isFree: z.boolean().default(false),
   totalSeats: z.number().int().positive("Jumlah kursi harus positif"),
+  bankName: z.string().optional(),
+  bankAccountName: z.string().optional(),
+  bankAccountNumber: z.string().optional(),
   status: z.enum(["DRAFT", "PUBLISHED"]).default("DRAFT"),
   ticketTypes: z
     .array(

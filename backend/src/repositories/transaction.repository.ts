@@ -32,7 +32,8 @@ export const findTransactionById = async (id: string) => {
 
 export const findTransactionsByEvent = async (eventId: string) => {
   return prisma.transaction.findMany({
-    where: { eventId, status: "PAID" },
+    where: { eventId },
+    orderBy: { createdAt: "desc" },
     include: {
       user: { select: { id: true, name: true, email: true } },
       tickets: { include: { ticketType: true } },

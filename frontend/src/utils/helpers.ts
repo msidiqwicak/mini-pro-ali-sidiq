@@ -51,6 +51,7 @@ export const getStatusColor = (status: string): string => {
     COMPLETED: "badge-gold",
     PAID: "badge-green",
     PENDING: "badge-gold",
+    WAITING_PAYMENT: "badge-blue",
     REFUNDED: "badge-gray",
   };
   return map[status] ?? "badge-gray";
@@ -64,6 +65,7 @@ export const getStatusLabel = (status: string): string => {
     COMPLETED: "Selesai",
     PAID: "Lunas",
     PENDING: "Menunggu Pembayaran",
+    WAITING_PAYMENT: "Menunggu Konfirmasi",
     REFUNDED: "Dikembalikan",
   };
   return map[status] ?? status;

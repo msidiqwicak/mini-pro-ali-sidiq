@@ -18,8 +18,18 @@ export const transactionService = {
     return res.data;
   },
 
-  payTransaction: async (id: string) => {
-    const res = await api.patch<ApiResponse<Transaction>>(`/transactions/${id}/pay`);
+  payTransaction: async (id: string, paymentProofUrl: string) => {
+    const res = await api.patch<ApiResponse<Transaction>>(`/transactions/${id}/pay`, { paymentProofUrl });
+    return res.data;
+  },
+
+  approveTransaction: async (id: string) => {
+    const res = await api.patch<ApiResponse<Transaction>>(`/transactions/${id}/approve`);
+    return res.data;
+  },
+
+  rejectTransaction: async (id: string) => {
+    const res = await api.patch<ApiResponse<{ message: string }>>(`/transactions/${id}/reject`);
     return res.data;
   },
 

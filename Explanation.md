@@ -1363,3 +1363,98 @@ Ini adalah perbedaan yang **sangat penting** dan sering membingungkan:
 
 > 📌 **Dokumen ini dibuat berdasarkan analisis lengkap source code project Soundwave Music Platform.**
 > Terakhir diperbarui: April 2026.
+
+---
+
+# 📡 API Endpoint Reference
+
+> **Base URL:** `http://localhost:5000/api`
+> **Auth:** JWT Bearer Token — dikirim via header `Authorization: Bearer <token>`
+> Frontend menggunakan Axios instance (`services/api.ts`) yang auto-attach token dari `localStorage`.
+
+---
+
+## 🔐 `/api/auth` — Autentikasi & Profil
+
+| Method  | Endpoint             | Auth | Role | Deskripsi                                                                |
+| ------- | -------------------- | ---- | ---- | ------------------------------------------------------------------------ |
+| `POST`  | `/api/auth/register` | ❌   | —    | Daftar akun baru. Body: `{ email, name, password, role, referralCode? }` |
+| `POST`  | `/api/auth/login`    | ❌   | —    | Login. Response: `{ token, user }`                                       |
+| `POST`  | `/api/auth/logout`   | ✅   | Any  | Logout user yang sedang login                                            |
+| `GET`   | `/api/auth/me`       | ✅   | Any  | Ambil data profil user yang sedang login                                 |
+| `PATCH` | `/api/auth/profile`  | ✅   | Any  | Update nama & avatar. Body: `{ name?, avatarUrl? }`                      |
+| `PATCH` | `/api/auth/password` | ✅   | Any  | Ganti password. Body: `{ currentPassword, newPassword }`                 |
+| `GET`   | `/api/auth/points`   | ✅   | Any  | Riwayat poin & total saldo. Response: `{ points[], total }`              |
+| `GET`   | `/api/auth/coupons`  | ✅   | Any  | Daftar kupon referral milik user. Response: `{ coupons[] }`              |
+
+---
+
+## 🎪 `/api/events` — Event
+
+### Publik (tidak perlu login)
+
+| Method | Endpoint                  | Query Params                                    | Deskripsi                                     |
+| ------ | ------------------------- | ----------------------------------------------- | --------------------------------------------- |
+| `GET`  | `/api/events`             | `search`, `city`, `categoryId`, `page`, `limit` | Daftar semua event dengan pagination & filter |
+| `GET`  | `/api/events/cities`      | —                                               | Daftar kota yang memiliki event               |
+| `GET`  | `/api/events/categories`  | —                                               | Daftar semua kategori event                   |
+| `GET`  | `/api/events/:slug`       | —                                               | Detail event berdasarkan slug URL             |
+| `GET`  | `/api/events/:id/reviews` | —                                               | Daftar review & rating sebuah event           |
+
+### Organizer Only (`role: ORGANIZER`)
+
+| Method   | Endpoint                     | Deskripsi                                    |
+| -------- | ---------------------------- | -------------------------------------------- |
+| `GET`    | `/api/events/organizer/mine` | List event milik organizer yang sedang login |
+| `POST`   | `/api/events`                | Buat event baru                              |
+| `PATCH`  | `/api/events/:id`            | Update data event                            |
+| `DELETE` | `/api/events/:id`            | Hapus event (hanya jika belum ada transaksi) |
+
+---
+
+## 💳 `/api/transactions` — Transaksi
+
+> Semua endpoint di bawah membutuhkan login (middleware `authMiddleware` di level router).
+
+| Method  | Endpoint                    | Deskripsi                                                                                            |
+| ------- | --------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `POST`  | `/api/transactions`         | Buat transaksi beli tiket. Body: `{ eventId, ticketTypeId, quantity, promotionCode?, pointsToUse? }` |
+| `GET`   | `/api/transactions/me`      | Lihat semua transaksi milik user yang login                                                          |
+| `GET`   | `/api/transactions/points`  | Lihat riwayat poin dari transaksi                                                                    |
+| `PATCH` | `/api/transactions/:id/pay` | Konfirmasi / simulasi pembayaran transaksi                                                           |
+
+---
+
+## ⭐ `/api/reviews` — Review
+
+| Method | Endpoint       | Auth | Role     | Deskripsi                                               |
+| ------ | -------------- | ---- | -------- | ------------------------------------------------------- |
+| `POST` | `/api/reviews` | ✅   | CUSTOMER | Buat review event. Body: `{ eventId, rating, comment }` |
+
+---
+
+## 📊 `/api/dashboard` — Dashboard Organizer
+
+> Semua endpoint membutuhkan login dengan role `ORGANIZER`.
+
+| Method | Endpoint                   | Query Params                       | Deskripsi                                                      |
+| ------ | -------------------------- | ---------------------------------- | -------------------------------------------------------------- |
+| `GET`  | `/api/dashboard/analytics` | —                                  | Overview: total event, revenue, attendees, recent transactions |
+| `GET`  | `/api/dashboard/analytics` | `type=daily&days=30`               | Revenue harian 30 hari terakhir                                |
+| `GET`  | `/api/dashboard/analytics` | `type=monthly&year=2025`           | Revenue bulanan per tahun                                      |
+| `GET`  | `/api/dashboard/analytics` | `type=yearly`                      | Revenue per tahun                                              |
+| `GET`  | `/api/dashboard/analytics` | `type=event-attendees&eventId=xxx` | Daftar peserta per event tertentu                              |
+
+---
+
+## 📋 Ringkasan Total Endpoint
+
+| Grup                  | File Route              | Jumlah |
+| --------------------- | ----------------------- | ------ |
+| 🔐 Auth & Profil      | `auth.routes.ts`        | 8      |
+| 🎪 Events (Publik)    | `event.routes.ts`       | 5      |
+| 🎪 Events (Organizer) | `event.routes.ts`       | 4      |
+| 💳 Transactions       | `transaction.routes.ts` | 4      |
+| ⭐ Reviews            | `review.routes.ts`      | 1      |
+| 📊 Dashboard          | `dashboard.routes.ts`   | 5      |
+| **Total**             | —                       | **27** |

@@ -51,6 +51,10 @@ export type TransactionMinAggregateOutputType = {
   finalAmount: number | null
   status: $Enums.TransactionStatus | null
   paymentMethod: string | null
+  paymentProofUrl: string | null
+  bankName: string | null
+  bankAccountName: string | null
+  bankAccountNumber: string | null
   paidAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -67,6 +71,10 @@ export type TransactionMaxAggregateOutputType = {
   finalAmount: number | null
   status: $Enums.TransactionStatus | null
   paymentMethod: string | null
+  paymentProofUrl: string | null
+  bankName: string | null
+  bankAccountName: string | null
+  bankAccountNumber: string | null
   paidAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -83,6 +91,10 @@ export type TransactionCountAggregateOutputType = {
   finalAmount: number
   status: number
   paymentMethod: number
+  paymentProofUrl: number
+  bankName: number
+  bankAccountName: number
+  bankAccountNumber: number
   paidAt: number
   createdAt: number
   updatedAt: number
@@ -115,6 +127,10 @@ export type TransactionMinAggregateInputType = {
   finalAmount?: true
   status?: true
   paymentMethod?: true
+  paymentProofUrl?: true
+  bankName?: true
+  bankAccountName?: true
+  bankAccountNumber?: true
   paidAt?: true
   createdAt?: true
   updatedAt?: true
@@ -131,6 +147,10 @@ export type TransactionMaxAggregateInputType = {
   finalAmount?: true
   status?: true
   paymentMethod?: true
+  paymentProofUrl?: true
+  bankName?: true
+  bankAccountName?: true
+  bankAccountNumber?: true
   paidAt?: true
   createdAt?: true
   updatedAt?: true
@@ -147,6 +167,10 @@ export type TransactionCountAggregateInputType = {
   finalAmount?: true
   status?: true
   paymentMethod?: true
+  paymentProofUrl?: true
+  bankName?: true
+  bankAccountName?: true
+  bankAccountNumber?: true
   paidAt?: true
   createdAt?: true
   updatedAt?: true
@@ -250,6 +274,10 @@ export type TransactionGroupByOutputType = {
   finalAmount: number
   status: $Enums.TransactionStatus
   paymentMethod: string | null
+  paymentProofUrl: string | null
+  bankName: string | null
+  bankAccountName: string | null
+  bankAccountNumber: string | null
   paidAt: Date | null
   createdAt: Date
   updatedAt: Date
@@ -289,6 +317,10 @@ export type TransactionWhereInput = {
   finalAmount?: Prisma.IntFilter<"Transaction"> | number
   status?: Prisma.EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
   paymentMethod?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  paymentProofUrl?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  bankName?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  bankAccountName?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  bankAccountNumber?: Prisma.StringNullableFilter<"Transaction"> | string | null
   paidAt?: Prisma.DateTimeNullableFilter<"Transaction"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
@@ -310,6 +342,10 @@ export type TransactionOrderByWithRelationInput = {
   finalAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   paidAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -334,6 +370,10 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   finalAmount?: Prisma.IntFilter<"Transaction"> | number
   status?: Prisma.EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
   paymentMethod?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  paymentProofUrl?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  bankName?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  bankAccountName?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  bankAccountNumber?: Prisma.StringNullableFilter<"Transaction"> | string | null
   paidAt?: Prisma.DateTimeNullableFilter<"Transaction"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
@@ -355,6 +395,10 @@ export type TransactionOrderByWithAggregationInput = {
   finalAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   paidAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -379,6 +423,10 @@ export type TransactionScalarWhereWithAggregatesInput = {
   finalAmount?: Prisma.IntWithAggregatesFilter<"Transaction"> | number
   status?: Prisma.EnumTransactionStatusWithAggregatesFilter<"Transaction"> | $Enums.TransactionStatus
   paymentMethod?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
+  paymentProofUrl?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
+  bankName?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
+  bankAccountName?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
+  bankAccountNumber?: Prisma.StringNullableWithAggregatesFilter<"Transaction"> | string | null
   paidAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Transaction"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Transaction"> | Date | string
@@ -392,6 +440,10 @@ export type TransactionCreateInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -413,6 +465,10 @@ export type TransactionUncheckedCreateInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -428,6 +484,10 @@ export type TransactionUpdateInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -449,6 +509,10 @@ export type TransactionUncheckedUpdateInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -467,6 +531,10 @@ export type TransactionCreateManyInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -480,6 +548,10 @@ export type TransactionUpdateManyMutationInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -496,6 +568,10 @@ export type TransactionUncheckedUpdateManyInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -527,6 +603,10 @@ export type TransactionCountOrderByAggregateInput = {
   finalAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
   paidAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -550,6 +630,10 @@ export type TransactionMaxOrderByAggregateInput = {
   finalAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
   paidAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -566,6 +650,10 @@ export type TransactionMinOrderByAggregateInput = {
   finalAmount?: Prisma.SortOrder
   status?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
   paidAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -748,6 +836,10 @@ export type TransactionCreateWithoutUserInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -767,6 +859,10 @@ export type TransactionUncheckedCreateWithoutUserInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -814,6 +910,10 @@ export type TransactionScalarWhereInput = {
   finalAmount?: Prisma.IntFilter<"Transaction"> | number
   status?: Prisma.EnumTransactionStatusFilter<"Transaction"> | $Enums.TransactionStatus
   paymentMethod?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  paymentProofUrl?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  bankName?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  bankAccountName?: Prisma.StringNullableFilter<"Transaction"> | string | null
+  bankAccountNumber?: Prisma.StringNullableFilter<"Transaction"> | string | null
   paidAt?: Prisma.DateTimeNullableFilter<"Transaction"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Transaction"> | Date | string
@@ -827,6 +927,10 @@ export type TransactionCreateWithoutRedemptionsInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -847,6 +951,10 @@ export type TransactionUncheckedCreateWithoutRedemptionsInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -877,6 +985,10 @@ export type TransactionUpdateWithoutRedemptionsInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -897,6 +1009,10 @@ export type TransactionUncheckedUpdateWithoutRedemptionsInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -911,6 +1027,10 @@ export type TransactionCreateWithoutEventInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -930,6 +1050,10 @@ export type TransactionUncheckedCreateWithoutEventInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -971,6 +1095,10 @@ export type TransactionCreateWithoutTicketsInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -991,6 +1119,10 @@ export type TransactionUncheckedCreateWithoutTicketsInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1021,6 +1153,10 @@ export type TransactionUpdateWithoutTicketsInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1041,6 +1177,10 @@ export type TransactionUncheckedUpdateWithoutTicketsInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1055,6 +1195,10 @@ export type TransactionCreateWithoutPromotionInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1074,6 +1218,10 @@ export type TransactionUncheckedCreateWithoutPromotionInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1117,6 +1265,10 @@ export type TransactionCreateManyUserInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1130,6 +1282,10 @@ export type TransactionUpdateWithoutUserInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1149,6 +1305,10 @@ export type TransactionUncheckedUpdateWithoutUserInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1166,6 +1326,10 @@ export type TransactionUncheckedUpdateManyWithoutUserInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1181,6 +1345,10 @@ export type TransactionCreateManyEventInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1194,6 +1362,10 @@ export type TransactionUpdateWithoutEventInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1213,6 +1385,10 @@ export type TransactionUncheckedUpdateWithoutEventInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1230,6 +1406,10 @@ export type TransactionUncheckedUpdateManyWithoutEventInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1245,6 +1425,10 @@ export type TransactionCreateManyPromotionInput = {
   finalAmount: number
   status?: $Enums.TransactionStatus
   paymentMethod?: string | null
+  paymentProofUrl?: string | null
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   paidAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1258,6 +1442,10 @@ export type TransactionUpdateWithoutPromotionInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1277,6 +1465,10 @@ export type TransactionUncheckedUpdateWithoutPromotionInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1294,6 +1486,10 @@ export type TransactionUncheckedUpdateManyWithoutPromotionInput = {
   finalAmount?: Prisma.IntFieldUpdateOperationsInput | number
   status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paidAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1350,6 +1546,10 @@ export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   finalAmount?: boolean
   status?: boolean
   paymentMethod?: boolean
+  paymentProofUrl?: boolean
+  bankName?: boolean
+  bankAccountName?: boolean
+  bankAccountNumber?: boolean
   paidAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1372,6 +1572,10 @@ export type TransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   finalAmount?: boolean
   status?: boolean
   paymentMethod?: boolean
+  paymentProofUrl?: boolean
+  bankName?: boolean
+  bankAccountName?: boolean
+  bankAccountNumber?: boolean
   paidAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1391,6 +1595,10 @@ export type TransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   finalAmount?: boolean
   status?: boolean
   paymentMethod?: boolean
+  paymentProofUrl?: boolean
+  bankName?: boolean
+  bankAccountName?: boolean
+  bankAccountNumber?: boolean
   paidAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1410,12 +1618,16 @@ export type TransactionSelectScalar = {
   finalAmount?: boolean
   status?: boolean
   paymentMethod?: boolean
+  paymentProofUrl?: boolean
+  bankName?: boolean
+  bankAccountName?: boolean
+  bankAccountNumber?: boolean
   paidAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "eventId" | "promotionId" | "baseAmount" | "discountAmount" | "pointsUsed" | "finalAmount" | "status" | "paymentMethod" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
+export type TransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "eventId" | "promotionId" | "baseAmount" | "discountAmount" | "pointsUsed" | "finalAmount" | "status" | "paymentMethod" | "paymentProofUrl" | "bankName" | "bankAccountName" | "bankAccountNumber" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
 export type TransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
@@ -1455,6 +1667,10 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     finalAmount: number
     status: $Enums.TransactionStatus
     paymentMethod: string | null
+    paymentProofUrl: string | null
+    bankName: string | null
+    bankAccountName: string | null
+    bankAccountNumber: string | null
     paidAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -1896,6 +2112,10 @@ export interface TransactionFieldRefs {
   readonly finalAmount: Prisma.FieldRef<"Transaction", 'Int'>
   readonly status: Prisma.FieldRef<"Transaction", 'TransactionStatus'>
   readonly paymentMethod: Prisma.FieldRef<"Transaction", 'String'>
+  readonly paymentProofUrl: Prisma.FieldRef<"Transaction", 'String'>
+  readonly bankName: Prisma.FieldRef<"Transaction", 'String'>
+  readonly bankAccountName: Prisma.FieldRef<"Transaction", 'String'>
+  readonly bankAccountNumber: Prisma.FieldRef<"Transaction", 'String'>
   readonly paidAt: Prisma.FieldRef<"Transaction", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Transaction", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Transaction", 'DateTime'>

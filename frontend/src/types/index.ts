@@ -58,6 +58,9 @@ export interface Event {
   startDate: string;
   endDate: string;
   isFree: boolean;
+  bankName?: string | null;
+  bankAccountName?: string | null;
+  bankAccountNumber?: string | null;
   status: "DRAFT" | "PUBLISHED" | "CANCELLED" | "COMPLETED";
   totalSeats: number;
   soldSeats: number;
@@ -85,8 +88,12 @@ export interface Transaction {
   discountAmount: number;
   pointsUsed: number;
   finalAmount: number;
-  status: "PENDING" | "PAID" | "CANCELLED" | "REFUNDED";
+  status: "PENDING" | "WAITING_PAYMENT" | "PAID" | "CANCELLED" | "REFUNDED";
   paymentMethod?: string | null;
+  paymentProofUrl?: string | null;
+  bankName?: string | null;
+  bankAccountName?: string | null;
+  bankAccountNumber?: string | null;
   paidAt?: string | null;
   createdAt: string;
   event: Event;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -16,9 +16,12 @@ import {
   Ticket,
   AlertCircle,
   CheckCircle2,
+  Camera,
+  Loader2,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import { authService } from "../services/auth.service";
+import { uploadImage } from "../services/upload.service";
 import { useAuth } from "../context/AuthContext";
 import { getAxiosError } from "../utils/helpers";
 import type { Point, Coupon } from "../types";
@@ -80,6 +83,10 @@ const ProfilePage = () => {
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+
+  // Avatar upload state
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
 
   // ─── Load data ───────────────────────────────────────────────────────────
   useEffect(() => {
@@ -157,6 +164,26 @@ const ProfilePage = () => {
     }
   };
 
+  // ─── Avatar Upload ────────────────────────────────────────────────────────
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAvatarUploading(true);
+    setProfileMsg(null);
+    try {
+      const url = await uploadImage(file, "avatars");
+      profileForm.setValue("avatarUrl", url);
+      const res = await authService.updateProfile({ avatarUrl: url });
+      updateUser(res.data);
+      setProfileMsg({ type: "success", text: "Foto profil berhasil diperbarui!" });
+    } catch (err) {
+      setProfileMsg({ type: "error", text: getAxiosError(err) });
+    } finally {
+      setAvatarUploading(false);
+      if (avatarInputRef.current) avatarInputRef.current.value = "";
+    }
+  };
+
   // ─── Tabs config ──────────────────────────────────────────────────────────
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: "profile", label: "Profil", icon: <User size={16} /> },
@@ -172,19 +199,41 @@ const ProfilePage = () => {
       <div className="max-w-3xl mx-auto px-4 pt-28 pb-20">
         {/* ── Header ── */}
         <div className="flex items-center gap-4 mb-8">
-          <div className="relative w-16 h-16 rounded-full overflow-hidden bg-[var(--bg-elevated)] border-2 border-[var(--border)] flex items-center justify-center flex-shrink-0">
+          {/* Clickable avatar with upload overlay */}
+          <div
+            className="relative w-16 h-16 rounded-full overflow-hidden bg-[var(--bg-elevated)] border-2 border-[var(--border)] flex items-center justify-center flex-shrink-0 cursor-pointer group"
+            onClick={() => !avatarUploading && avatarInputRef.current?.click()}
+            title="Klik untuk ganti foto profil"
+          >
             {user?.avatarUrl ? (
               <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
             ) : (
               <User size={28} className="text-[var(--text-muted)]" />
             )}
+            {/* Hover / loading overlay */}
+            <div className={`absolute inset-0 bg-black/50 flex items-center justify-center transition-opacity ${
+              avatarUploading ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+            }`}>
+              {avatarUploading
+                ? <Loader2 size={18} className="text-white animate-spin" />
+                : <Camera size={18} className="text-white" />}
+            </div>
           </div>
+          {/* Hidden file input */}
+          <input
+            ref={avatarInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            className="hidden"
+            onChange={handleAvatarUpload}
+          />
           <div>
             <h1 className="text-2xl font-bold text-white">{user?.name}</h1>
             <p className="text-sm text-[var(--text-muted)]">{user?.email}</p>
             <span className="inline-block mt-1 text-xs font-medium px-2 py-0.5 rounded-full bg-[var(--accent-red)]/20 text-[var(--accent-red)]">
               {user?.role === "ORGANIZER" ? "Organizer" : "Customer"}
             </span>
+            <p className="text-xs text-[var(--text-muted)] mt-1">Klik foto untuk mengganti</p>
           </div>
         </div>
 
@@ -273,21 +322,8 @@ const ProfilePage = () => {
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">
-                    URL Foto Profil{" "}
-                    <span className="text-[var(--text-muted)] font-normal">(opsional)</span>
-                  </label>
-                  <input
-                    id="profile-avatar-input"
-                    {...profileForm.register("avatarUrl")}
-                    className="input-field"
-                    placeholder="https://example.com/foto.jpg"
-                  />
-                  {profileForm.formState.errors.avatarUrl && (
-                    <p className="mt-1 text-xs text-red-400">{profileForm.formState.errors.avatarUrl.message}</p>
-                  )}
-                </div>
+                {/* avatarUrl hidden — diisi otomatis saat upload gambar */}
+                <input type="hidden" {...profileForm.register("avatarUrl")} />
 
                 <button
                   id="save-profile-btn"

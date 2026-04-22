@@ -21,4 +21,9 @@ export const config = {
     url: process.env["UPSTASH_REDIS_REST_URL"] ?? "",
     token: process.env["UPSTASH_REDIS_REST_TOKEN"] ?? "",
   },
+
+  // Cloudinary (media uploads)
+  cloudinaryCloudName: process.env["CLOUDINARY_CLOUD_NAME"] ?? "",
+  cloudinaryApiKey: process.env["CLOUDINARY_API_KEY"] ?? "",
+  cloudinaryApiSecret: process.env["CLOUDINARY_API_SECRET"] ?? "",
 } as const;

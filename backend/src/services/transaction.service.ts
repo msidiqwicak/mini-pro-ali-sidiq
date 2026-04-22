@@ -216,75 +216,151 @@ export const getMyTransactionsService = async (userId: string) => {
 };
 
 /**
- * Simulate payment (mark PENDING → PAID)
+ * Customer upload bukti transfer → status PENDING → WAITING_PAYMENT
  */
 export const payTransactionService = async (
   transactionId: string,
-  userId: string
+  userId: string,
+  paymentProofUrl: string
 ) => {
   const transaction = await prisma.transaction.findUnique({
     where: { id: transactionId },
     include: {
-      user: true,
-      event: true,
-      tickets: { include: { ticketType: true } },
+      event: {
+        select: {
+          bankName: true,
+          bankAccountName: true,
+          bankAccountNumber: true,
+        },
+      },
     },
   });
 
   if (!transaction) throw new Error("Transaksi tidak ditemukan");
   if (transaction.userId !== userId) throw new Error("Tidak memiliki akses");
   if (transaction.status !== "PENDING")
-    throw new Error("Status transaksi tidak valid");
+    throw new Error("Status transaksi tidak valid untuk upload bukti");
 
-  // Mark as paid
   const updatedTransaction = await prisma.transaction.update({
     where: { id: transactionId },
     data: {
-      status: "PAID",
-      paidAt: new Date(),
+      status: "WAITING_PAYMENT",
+      paymentProofUrl,
       paymentMethod: "BANK_TRANSFER",
+      // Salin info rekening dari event agar tersimpan di transaksi
+      bankName: transaction.event.bankName,
+      bankAccountName: transaction.event.bankAccountName,
+      bankAccountNumber: transaction.event.bankAccountNumber,
     },
   });
 
-  // 🆕 Send confirmation emails asynchronously (don't block response)
-  try {
-    // Generate QR code untuk ticket
-    const firstTicket = transaction.tickets[0];
+  return updatedTransaction;
+};
 
-    if (!firstTicket) {
-      console.warn(`⚠️ No tickets found for transaction ${transactionId}`);
-    } else {
-      const qrCodeDataUrl = `data:image/png;base64,${firstTicket.qrCode}`;
+/**
+ * Organizer menyetujui bukti transfer → WAITING_PAYMENT → PAID
+ */
+export const approveTransactionService = async (
+  transactionId: string,
+  organizerId: string
+) => {
+  const transaction = await prisma.transaction.findUnique({
+    where: { id: transactionId },
+    include: {
+      user: true,
+      event: { select: { organizerId: true, name: true } },
+      tickets: { include: { ticketType: true } },
+    },
+  });
 
-      // Send ticket email
-      await sendTicketEmail(
-        transaction.user.email,
-        transaction.user.name,
-        transaction.event.name,
-        firstTicket.qrCode,
-        qrCodeDataUrl,
-        transaction.tickets.length,
-        updatedTransaction.finalAmount
-      );
+  if (!transaction) throw new Error("Transaksi tidak ditemukan");
+  if (transaction.event.organizerId !== organizerId)
+    throw new Error("Tidak memiliki akses untuk menyetujui transaksi ini");
+  if (transaction.status !== "WAITING_PAYMENT")
+    throw new Error("Transaksi tidak dalam status menunggu konfirmasi");
 
-      // Send payment confirmation
-      await sendPaymentConfirmation(
-        transaction.user.email,
-        transaction.user.name,
-        updatedTransaction.finalAmount,
-        transactionId,
-        transaction.event.name
-      );
+  const updatedTransaction = await prisma.transaction.update({
+    where: { id: transactionId },
+    data: { status: "PAID", paidAt: new Date() },
+  });
 
-      console.log(`✅ Confirmation emails sent for transaction ${transactionId}`);
-    }
-  } catch (emailError) {
-    // Log email error tapi jangan throw (pembayaran sudah sukses di database)
-    console.warn(
-      `⚠️ Email gagal dikirim untuk transaksi ${transactionId}:`,
-      emailError
-    );
-  }
+  // Kirim email konfirmasi ke buyer (async, jangan block response)
+  Promise.all([
+    sendTicketEmail(
+      transaction.user.email,
+      transaction.user.name,
+      transaction.event.name,
+      transaction.tickets[0]?.qrCode ?? "",
+      "",
+      transaction.tickets.length,
+      updatedTransaction.finalAmount
+    ),
+    sendPaymentConfirmation(
+      transaction.user.email,
+      transaction.user.name,
+      updatedTransaction.finalAmount,
+      transactionId,
+      transaction.event.name
+    ),
+  ]).catch((err) =>
+    console.warn(`⚠️ Email gagal dikirim untuk transaksi ${transactionId}:`, err)
+  );
 
   return updatedTransaction;
 };
+
+/**
+ * Organizer menolak bukti transfer → WAITING_PAYMENT → CANCELLED
+ * Rollback: soldSeats & ticketType.sold dikembalikan
+ */
+export const rejectTransactionService = async (
+  transactionId: string,
+  organizerId: string
+) => {
+  const transaction = await prisma.transaction.findUnique({
+    where: { id: transactionId },
+    include: {
+      event: { select: { id: true, organizerId: true } },
+      tickets: { select: { ticketTypeId: true } },
+    },
+  });
+
+  if (!transaction) throw new Error("Transaksi tidak ditemukan");
+  if (transaction.event.organizerId !== organizerId)
+    throw new Error("Tidak memiliki akses untuk menolak transaksi ini");
+  if (transaction.status !== "WAITING_PAYMENT")
+    throw new Error("Transaksi tidak dalam status menunggu konfirmasi");
+
+  // Hitung jumlah tiket per tipe untuk rollback
+  const ticketCounts: Record<string, number> = {};
+  for (const ticket of transaction.tickets) {
+    ticketCounts[ticket.ticketTypeId] =
+      (ticketCounts[ticket.ticketTypeId] ?? 0) + 1;
+  }
+  const totalTickets = transaction.tickets.length;
+
+  await prisma.$transaction(async (tx) => {
+    // Update status transaksi
+    await tx.transaction.update({
+      where: { id: transactionId },
+      data: { status: "CANCELLED" },
+    });
+
+    // Rollback soldSeats di event
+    await tx.event.update({
+      where: { id: transaction.event.id },
+      data: { soldSeats: { decrement: totalTickets } },
+    });
+
+    // Rollback sold di tiap tipe tiket
+    for (const [ticketTypeId, count] of Object.entries(ticketCounts)) {
+      await tx.ticketType.update({
+        where: { id: ticketTypeId },
+        data: { sold: { decrement: count } },
+      });
+    }
+  });
+
+  return { message: "Transaksi berhasil ditolak" };
+};
+

@@ -2,7 +2,6 @@
 
 Platform fullstack untuk menemukan dan mengelola event musik di Indonesia. Dibangun sebagai project bootcamp dengan arsitektur clean dan production-ready MVP.
 
-
 ---
 
 ## 📁 Struktur Folder
@@ -177,6 +176,7 @@ npm run dev
 ## 🗄️ Database (Prisma + Supabase)
 
 ### Setup Supabase
+
 1. Buat project di [supabase.com](https://supabase.com)
 2. Pergi ke **Settings → Database → Connection string**
 3. Ambil **Transaction pooler** (port 6543) untuk `DATABASE_URL`
@@ -184,6 +184,7 @@ npm run dev
 5. Isi di `backend/.env`
 
 ### Isi `.env` Backend
+
 ```env
 DATABASE_URL="postgresql://postgres.[ref]:[pass]@aws-0-[region].pooler.supabase.com:6543/postgres?pgbouncer=true"
 DIRECT_URL="postgresql://postgres.[ref]:[pass]@aws-0-[region].pooler.supabase.com:5432/postgres"
@@ -206,63 +207,89 @@ SMTP_FROM="reply@soundwave.com"
 
 ### Perintah Prisma yang Sering Dipakai
 
-| Perintah | Fungsi |
-|----------|--------|
+| Perintah              | Fungsi                             |
+| --------------------- | ---------------------------------- |
 | `npm run db:generate` | Generate Prisma Client dari schema |
-| `npm run db:push` | Push schema ke DB tanpa migration |
-| `npm run db:migrate` | Buat migration baru |
-| `npm run db:seed` | Isi data awal |
-| `npm run db:studio` | Buka Prisma Studio (GUI database) |
+| `npm run db:push`     | Push schema ke DB tanpa migration  |
+| `npm run db:migrate`  | Buat migration baru                |
+| `npm run db:seed`     | Isi data awal                      |
+| `npm run db:studio`   | Buka Prisma Studio (GUI database)  |
 
 ---
 
 ## 📡 API Endpoints
 
-### Auth
-| Method | Endpoint | Deskripsi |
-|--------|----------|-----------|
-| POST | `/api/auth/register` | Daftar akun baru |
-| POST | `/api/auth/login` | Login, dapat token JWT |
-| GET | `/api/auth/me` | Ambil profil user (butuh token) |
+> **Base URL:** `http://localhost:5000/api`
+> **Auth:** JWT Bearer Token — dikirim via header `Authorization: Bearer <token>`
 
-### Events (Public)
-| Method | Endpoint | Deskripsi |
-|--------|----------|-----------|
-| GET | `/api/events` | Daftar event (pagination, search, filter) |
-| GET | `/api/events/cities` | Daftar kota tersedia |
-| GET | `/api/events/categories` | Daftar kategori |
-| GET | `/api/events/:slug` | Detail event |
-| GET | `/api/events/:id/reviews` | Review event |
+### 🔐 Auth & Profil
 
-### Events (Organizer)
-| Method | Endpoint | Deskripsi |
-|--------|----------|-----------|
-| GET | `/api/events/organizer/mine` | Event milikku |
-| POST | `/api/events` | Buat event baru |
-| PATCH | `/api/events/:id` | Update event |
-| DELETE | `/api/events/:id` | Hapus event |
+| Method  | Endpoint             | Auth | Role | Deskripsi                                                        |
+| ------- | -------------------- | ---- | ---- | ---------------------------------------------------------------- |
+| `POST`  | `/api/auth/register` | ❌   | —    | Daftar akun baru (CUSTOMER / ORGANIZER), opsional `referralCode` |
+| `POST`  | `/api/auth/login`    | ❌   | —    | Login, mendapat token JWT                                        |
+| `POST`  | `/api/auth/logout`   | ✅   | Any  | Logout                                                           |
+| `GET`   | `/api/auth/me`       | ✅   | Any  | Ambil data user yang sedang login                                |
+| `PATCH` | `/api/auth/profile`  | ✅   | Any  | Update nama & avatar URL                                         |
+| `PATCH` | `/api/auth/password` | ✅   | Any  | Ganti password                                                   |
+| `GET`   | `/api/auth/points`   | ✅   | Any  | Lihat riwayat & total poin                                       |
+| `GET`   | `/api/auth/coupons`  | ✅   | Any  | Lihat daftar kupon milik user                                    |
 
-### Transactions (Customer)
-| Method | Endpoint | Deskripsi |
-|--------|----------|-----------|
-| POST | `/api/transactions` | Buat transaksi (beli tiket) |
-| GET | `/api/transactions/me` | Riwayat transaksi |
-| GET | `/api/transactions/points` | Saldo poin tersedia |
-| PATCH | `/api/transactions/:id/pay` | Simulasi pembayaran |
+### 🎪 Events (Publik)
 
-### Reviews
-| Method | Endpoint | Deskripsi |
-|--------|----------|-----------|
-| POST | `/api/reviews` | Tulis review (harus sudah beli tiket) |
+| Method | Endpoint                  | Auth | Deskripsi                                                              |
+| ------ | ------------------------- | ---- | ---------------------------------------------------------------------- |
+| `GET`  | `/api/events`             | ❌   | Daftar event (filter: `search`, `city`, `categoryId`, `page`, `limit`) |
+| `GET`  | `/api/events/cities`      | ❌   | Daftar kota yang tersedia                                              |
+| `GET`  | `/api/events/categories`  | ❌   | Daftar kategori event                                                  |
+| `GET`  | `/api/events/:slug`       | ❌   | Detail event berdasarkan slug                                          |
+| `GET`  | `/api/events/:id/reviews` | ❌   | Daftar review sebuah event                                             |
 
-### Dashboard (Organizer)
-| Method | Endpoint | Deskripsi |
-|--------|----------|-----------|
-| GET | `/api/dashboard/analytics` | Overview stats |
-| GET | `/api/dashboard/analytics?type=daily` | Revenue per hari (30 hari) |
-| GET | `/api/dashboard/analytics?type=monthly` | Revenue per bulan |
-| GET | `/api/dashboard/analytics?type=yearly` | Revenue per tahun |
-| GET | `/api/dashboard/analytics?type=event-attendees&eventId=...` | Transaksi per event |
+### 🎪 Events (Organizer Only)
+
+| Method   | Endpoint                     | Auth         | Deskripsi                             |
+| -------- | ---------------------------- | ------------ | ------------------------------------- |
+| `GET`    | `/api/events/organizer/mine` | ✅ ORGANIZER | List event milik organizer yang login |
+| `POST`   | `/api/events`                | ✅ ORGANIZER | Buat event baru                       |
+| `PATCH`  | `/api/events/:id`            | ✅ ORGANIZER | Update event                          |
+| `DELETE` | `/api/events/:id`            | ✅ ORGANIZER | Hapus event                           |
+
+### 💳 Transactions (Login Required)
+
+| Method  | Endpoint                    | Auth | Deskripsi                                                                                           |
+| ------- | --------------------------- | ---- | --------------------------------------------------------------------------------------------------- |
+| `POST`  | `/api/transactions`         | ✅   | Buat transaksi beli tiket (`eventId`, `ticketTypeId`, `quantity`, `promotionCode?`, `pointsToUse?`) |
+| `GET`   | `/api/transactions/me`      | ✅   | Lihat semua transaksi milik user                                                                    |
+| `GET`   | `/api/transactions/points`  | ✅   | Lihat poin dari transaksi                                                                           |
+| `PATCH` | `/api/transactions/:id/pay` | ✅   | Konfirmasi pembayaran transaksi                                                                     |
+
+### ⭐ Reviews
+
+| Method | Endpoint       | Auth | Role     | Deskripsi                                          |
+| ------ | -------------- | ---- | -------- | -------------------------------------------------- |
+| `POST` | `/api/reviews` | ✅   | CUSTOMER | Buat review event (`eventId`, `rating`, `comment`) |
+
+### 📊 Dashboard (Organizer Only)
+
+| Method | Endpoint                                                    | Auth         | Deskripsi                                                      |
+| ------ | ----------------------------------------------------------- | ------------ | -------------------------------------------------------------- |
+| `GET`  | `/api/dashboard/analytics`                                  | ✅ ORGANIZER | Overview: total event, revenue, attendees, recent transactions |
+| `GET`  | `/api/dashboard/analytics?type=daily&days=30`               | ✅ ORGANIZER | Revenue harian (30 hari terakhir)                              |
+| `GET`  | `/api/dashboard/analytics?type=monthly&year=2025`           | ✅ ORGANIZER | Revenue bulanan (per tahun)                                    |
+| `GET`  | `/api/dashboard/analytics?type=yearly`                      | ✅ ORGANIZER | Revenue tahunan                                                |
+| `GET`  | `/api/dashboard/analytics?type=event-attendees&eventId=...` | ✅ ORGANIZER | Daftar peserta per event                                       |
+
+### 📋 Ringkasan
+
+| Grup               | Jumlah Endpoint |
+| ------------------ | --------------- |
+| Auth & Profil      | 8               |
+| Events (Publik)    | 5               |
+| Events (Organizer) | 4               |
+| Transactions       | 4               |
+| Reviews            | 1               |
+| Dashboard          | 5               |
+| **Total**          | **27**          |
 
 ---
 
@@ -322,6 +349,7 @@ return prisma.$transaction(async (tx) => {
 ## 🎁 Referral & Points System
 
 ### Cara Kerja Referral
+
 1. Setiap user yang daftar otomatis dapat `ReferralCode` unik (8 karakter)
 2. User bisa share kode ini ke teman
 3. Teman memasukkan kode saat registrasi
@@ -332,7 +360,7 @@ return prisma.$transaction(async (tx) => {
 if (referralCodeRecord) {
   await prisma.point.create({
     data: {
-      userId: referredById,  // pemilik kode dapat poin
+      userId: referredById, // pemilik kode dapat poin
       amount: 10000,
       source: `Referral dari ${input.email}`,
       expiredAt: threeMonthsLater,
@@ -342,13 +370,14 @@ if (referralCodeRecord) {
 ```
 
 ### FIFO Points Redemption
+
 Poin dikurangi dari yang **paling lama dibuat** (first in, first out):
 
 ```typescript
 // point.service.ts
 export const calculatePointsRedemption = (
-  points: Array<{ id: string; amount: number }>,  // sudah diurutkan oldest first
-  pointsToUse: number
+  points: Array<{ id: string; amount: number }>, // sudah diurutkan oldest first
+  pointsToUse: number,
 ) => {
   // Iterasi dari poin paling lama, kurangi sampai habis quota
 };
@@ -359,6 +388,7 @@ export const calculatePointsRedemption = (
 ## 🔐 Authentication Flow
 
 ### JWT-based Auth
+
 1. User login → backend buat JWT (payload: userId, email, role)
 2. Token disimpan di `localStorage` (frontend)
 3. Setiap request protected → `Authorization: Bearer <token>` header
@@ -366,6 +396,7 @@ export const calculatePointsRedemption = (
 5. `roleMiddleware` cek apakah role sesuai (CUSTOMER / ORGANIZER)
 
 ### Protected Routes (Frontend)
+
 ```tsx
 // AppRouter.tsx
 const ProtectedRoute = ({ children, role }) => {
@@ -381,16 +412,17 @@ const ProtectedRoute = ({ children, role }) => {
 ## 🎨 Design System
 
 ### Filosofi Desain
+
 Terinspirasi dari pk-ent.com: **gelap, berani, musik-sentris**.
 
-| Token | Nilai | Penggunaan |
-|-------|-------|------------|
-| `--bg-primary` | `#0a0a0b` | Background utama |
-| `--bg-card` | `#16161a` | Card, panel |
-| `--accent-red` | `#e5152b` | Primary action, highlight |
-| `--accent-gold` | `#f5a623` | Points, warning, premium |
-| Font Display | Bebas Neue | Heading besar |
-| Font Body | DM Sans | Teks umum |
+| Token           | Nilai      | Penggunaan                |
+| --------------- | ---------- | ------------------------- |
+| `--bg-primary`  | `#0a0a0b`  | Background utama          |
+| `--bg-card`     | `#16161a`  | Card, panel               |
+| `--accent-red`  | `#e5152b`  | Primary action, highlight |
+| `--accent-gold` | `#f5a623`  | Points, warning, premium  |
+| Font Display    | Bebas Neue | Heading besar             |
+| Font Body       | DM Sans    | Teks umum                 |
 
 ### Komponen Utama
 
@@ -410,14 +442,16 @@ Terinspirasi dari pk-ent.com: **gelap, berani, musik-sentris**.
 Setelah `npm run db:seed`, tersedia:
 
 ### Users
-| Email | Password | Role |
-|-------|----------|------|
+
+| Email                   | Password    | Role      |
+| ----------------------- | ----------- | --------- |
 | organizer@soundwave.com | password123 | ORGANIZER |
-| organizer2@beatbox.com | password123 | ORGANIZER |
-| customer@gmail.com | password123 | CUSTOMER |
-| customer2@gmail.com | password123 | CUSTOMER |
+| organizer2@beatbox.com  | password123 | ORGANIZER |
+| customer@gmail.com      | password123 | CUSTOMER  |
+| customer2@gmail.com     | password123 | CUSTOMER  |
 
 ### Events (6 event sudah PUBLISHED)
+
 - SoundWave Summer Concert 2025 — Jakarta (Concert)
 - Jakarta Jazz Festival 2025 — Jakarta (Jazz)
 - Bali Beat Festival 2025 — Bali (Electronic)
@@ -431,58 +465,63 @@ Setelah `npm run db:seed`, tersedia:
 
 ### Backend
 
-| Library | Kegunaan |
-|---------|----------|
-| `express v5` | Framework HTTP server Node.js |
-| `@prisma/client` | ORM untuk query PostgreSQL secara type-safe |
-| `prisma` | CLI untuk generate client, migrate, seed |
-| `bcryptjs` | Hash & verify password dengan salt rounds |
-| `jsonwebtoken` | Buat JWT saat login, verify saat request |
-| `cors` | Izinkan cross-origin request dari frontend |
-| `dotenv` | Load variabel dari file `.env` |
-| `zod` | Validasi & parsing input request (schema-first) |
-| `redis` | Klien cache data performa tinggi |
-| `nodemailer` | Pengirim transport email SMTP (E-Tickets, Welcome Email) |
-| `qrcode` | Pembuat barcode gambar QR untuk tiket digital |
-| `winston` | Advanced structured file/console logging |
-| `tsx` | Jalankan TypeScript langsung (dev mode) |
-| `typescript` | Tipe statis untuk catch bug lebih awal |
+| Library          | Kegunaan                                                 |
+| ---------------- | -------------------------------------------------------- |
+| `express v5`     | Framework HTTP server Node.js                            |
+| `@prisma/client` | ORM untuk query PostgreSQL secara type-safe              |
+| `prisma`         | CLI untuk generate client, migrate, seed                 |
+| `bcryptjs`       | Hash & verify password dengan salt rounds                |
+| `jsonwebtoken`   | Buat JWT saat login, verify saat request                 |
+| `cors`           | Izinkan cross-origin request dari frontend               |
+| `dotenv`         | Load variabel dari file `.env`                           |
+| `zod`            | Validasi & parsing input request (schema-first)          |
+| `redis`          | Klien cache data performa tinggi                         |
+| `nodemailer`     | Pengirim transport email SMTP (E-Tickets, Welcome Email) |
+| `qrcode`         | Pembuat barcode gambar QR untuk tiket digital            |
+| `winston`        | Advanced structured file/console logging                 |
+| `tsx`            | Jalankan TypeScript langsung (dev mode)                  |
+| `typescript`     | Tipe statis untuk catch bug lebih awal                   |
 
 ### Frontend
 
-| Library | Kegunaan |
-|---------|----------|
-| `react` + `react-dom` | Library UI component |
-| `react-router-dom v7` | Client-side routing & protected routes |
-| `axios` | HTTP client dengan interceptor untuk JWT auto-attach |
-| `react-hook-form` | Manajemen state form yang performant |
-| `@hookform/resolvers` | Integrasi Zod dengan react-hook-form |
-| `zod` | Validasi schema form di client |
-| `chart.js` + `react-chartjs-2` | Chart bar/line untuk analitik dashboard |
-| `lucide-react` | Icon library yang ringan dan konsisten |
-| `tailwindcss v4` | Utility-first CSS framework |
-| `clsx` | Helper conditional className |
-| `tailwind-merge` | Merge Tailwind class tanpa konflik |
-| `vite` | Build tool yang cepat untuk development |
-| `typescript` | Tipe statis di frontend |
+| Library                        | Kegunaan                                             |
+| ------------------------------ | ---------------------------------------------------- |
+| `react` + `react-dom`          | Library UI component                                 |
+| `react-router-dom v7`          | Client-side routing & protected routes               |
+| `axios`                        | HTTP client dengan interceptor untuk JWT auto-attach |
+| `react-hook-form`              | Manajemen state form yang performant                 |
+| `@hookform/resolvers`          | Integrasi Zod dengan react-hook-form                 |
+| `zod`                          | Validasi schema form di client                       |
+| `chart.js` + `react-chartjs-2` | Chart bar/line untuk analitik dashboard              |
+| `lucide-react`                 | Icon library yang ringan dan konsisten               |
+| `tailwindcss v4`               | Utility-first CSS framework                          |
+| `clsx`                         | Helper conditional className                         |
+| `tailwind-merge`               | Merge Tailwind class tanpa konflik                   |
+| `vite`                         | Build tool yang cepat untuk development              |
+| `typescript`                   | Tipe statis di frontend                              |
 
 ---
 
 ## 🔧 Troubleshooting
 
 ### Error: "Cannot find module '../generated/prisma'"
+
 ```bash
 cd backend && npm run db:generate
 ```
 
 ### Error: "Prisma Client is not initialized"
+
 Pastikan kamu sudah run `npm run db:push` dan `npm run db:generate`
 
 ### CORS Error di Frontend
+
 Pastikan `FRONTEND_URL` di `backend/.env` sesuai dengan URL frontend kamu (default: `http://localhost:5173`)
 
 ### Data event tidak muncul di `localhost:5173` (dev lokal)
+
 Pastikan `vite.config.ts` memiliki konfigurasi proxy:
+
 ```typescript
 server: {
   proxy: {
@@ -490,15 +529,20 @@ server: {
   }
 }
 ```
+
 Tanpa ini, request ke `/api` akan gagal karena tidak ada proxy dari Vite ke backend.
 
 ### Data event tidak muncul di `localhost:3000` (Docker)
+
 Pastikan `Dockerfile` tahap `frontend-build` memiliki:
+
 ```dockerfile
 ARG VITE_API_URL=/api
 ENV VITE_API_URL=$VITE_API_URL
 ```
+
 Tanpa ini, Vite build menggunakan fallback `http://localhost:5000` yang menyebabkan CORS error di browser.
 
 ### Chart tidak muncul di Analytics
+
 Pastikan ada data transaksi PAID terlebih dahulu. Coba jalankan beberapa transaksi via seed atau manual.
