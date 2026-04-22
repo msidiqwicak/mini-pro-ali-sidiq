@@ -8,6 +8,7 @@ import {
   getOrganizerEvents,
   getCities,
   getCategories,
+  getOrganizerPublicProfile,
 } from "../controllers/event.controller.js";
 import { getEventReviews } from "../controllers/review.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
@@ -19,16 +20,17 @@ const router = Router();
 router.get("/", getEvents);
 router.get("/cities", getCities);
 router.get("/categories", getCategories);
-router.get("/:slug", getEventBySlug);
-router.get("/:id/reviews", getEventReviews);
-
-// Organizer only
+// NOTE: /organizer/mine MUST be before /organizer/:id to avoid route conflict
 router.get(
   "/organizer/mine",
   authMiddleware,
   roleMiddleware("ORGANIZER"),
   getOrganizerEvents
 );
+router.get("/organizer/:id", getOrganizerPublicProfile);
+router.get("/:slug", getEventBySlug);
+router.get("/:id/reviews", getEventReviews);
+
 router.post(
   "/",
   authMiddleware,

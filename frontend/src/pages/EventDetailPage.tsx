@@ -126,7 +126,7 @@ const EventDetailPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[var(--bg-primary)]">
+      <div className="min-h-screen bg-(--bg-primary)">
         <Navbar />
         <div className="max-w-7xl mx-auto px-4 pt-28 pb-20">
           <div className="skeleton h-96 w-full rounded-2xl mb-8" />
@@ -145,12 +145,12 @@ const EventDetailPage = () => {
 
   if (error || !event) {
     return (
-      <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center">
+      <div className="min-h-screen bg-(--bg-primary) flex items-center justify-center">
         <Navbar />
         <div className="text-center">
           <p className="text-6xl mb-4">🎵</p>
           <h2 className="text-xl font-semibold text-white mb-2">Event Tidak Ditemukan</h2>
-          <p className="text-[var(--text-muted)] mb-6">{error}</p>
+          <p className="text-(--text-muted) mb-6">{error}</p>
           <button onClick={() => navigate("/")} className="btn-primary">
             Kembali ke Beranda
           </button>
@@ -163,7 +163,7 @@ const EventDetailPage = () => {
   const soldPct = getSeatPercentage(event.totalSeats, event.soldSeats);
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)]">
+    <div className="min-h-screen bg-(--bg-primary)">
       <Navbar />
 
       {/* Hero Image */}
@@ -171,11 +171,11 @@ const EventDetailPage = () => {
         {event.imageUrl ? (
           <img src={event.imageUrl} alt={event.name} className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-full bg-[var(--bg-elevated)] flex items-center justify-center">
-            <span className="font-display text-8xl text-[var(--text-muted)] opacity-20">♪</span>
+          <div className="w-full h-full bg-(--bg-elevated) flex items-center justify-center">
+            <span className="font-display text-8xl text-(--text-muted) opacity-20">♪</span>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-transparent to-black/20" />
+        <div className="absolute inset-0 bg-linear-to-t from-(--bg-primary) via-transparent to-black/20" />
 
         {/* Back button */}
         <button
@@ -214,30 +214,34 @@ const EventDetailPage = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
               {[
                 {
-                  icon: <Calendar size={16} className="text-[var(--accent-red)]" />,
+                  icon: <Calendar size={16} className="text-(--accent-red)" />,
                   label: "Tanggal & Waktu",
                   value: `${formatDate(event.startDate)}, ${formatTime(event.startDate)} – ${formatTime(event.endDate)}`,
                 },
                 {
-                  icon: <MapPin size={16} className="text-[var(--accent-red)]" />,
+                  icon: <MapPin size={16} className="text-(--accent-red)" />,
                   label: "Lokasi",
                   value: `${event.location}, ${event.city}`,
                 },
                 {
-                  icon: <Users size={16} className="text-[var(--accent-red)]" />,
+                  icon: <Users size={16} className="text-(--accent-red)" />,
                   label: "Kapasitas",
                   value: `${available.toLocaleString("id-ID")} dari ${event.totalSeats.toLocaleString("id-ID")} tersisa`,
                 },
                 {
-                  icon: <Tag size={16} className="text-[var(--accent-red)]" />,
+                  icon: <Tag size={16} className="text-(--accent-red)" />,
                   label: "Oleh",
-                  value: event.organizer.name,
+                  value: (
+                    <a href={`/organizer/${event.organizer.id}`} className="hover:text-(--accent-red) transition-colors">
+                      {event.organizer.name}
+                    </a>
+                  ),
                 },
               ].map((item) => (
-                <div key={item.label} className="flex items-start gap-3 p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border)]">
+                <div key={item.label} className="flex items-start gap-3 p-4 rounded-xl bg-(--bg-card) border border-(--border)">
                   <div className="mt-0.5">{item.icon}</div>
                   <div>
-                    <p className="text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-0.5">{item.label}</p>
+                    <p className="text-[10px] text-(--text-muted) uppercase tracking-wider mb-0.5">{item.label}</p>
                     <p className="text-sm text-white font-medium">{item.value}</p>
                   </div>
                 </div>
@@ -245,12 +249,12 @@ const EventDetailPage = () => {
             </div>
 
             {/* Seat progress */}
-            <div className="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border)] mb-8">
+            <div className="p-4 rounded-xl bg-(--bg-card) border border-(--border) mb-8">
               <div className="flex justify-between mb-2">
-                <span className="text-sm text-[var(--text-secondary)]">Ketersediaan Tiket</span>
+                <span className="text-sm text-(--text-secondary)">Ketersediaan Tiket</span>
                 <span className="text-sm font-medium text-white">{soldPct}% terjual</span>
               </div>
-              <div className="h-2 bg-[var(--bg-elevated)] rounded-full overflow-hidden">
+              <div className="h-2 bg-(--bg-elevated) rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all duration-1000"
                   style={{
@@ -267,7 +271,7 @@ const EventDetailPage = () => {
                 <div className="section-line" />
                 <h2 className="font-semibold text-white text-lg">Tentang Event</h2>
               </div>
-              <p className="text-[var(--text-secondary)] leading-relaxed whitespace-pre-line">
+              <p className="text-(--text-secondary) leading-relaxed whitespace-pre-line">
                 {event.description}
               </p>
             </div>
@@ -281,15 +285,15 @@ const EventDetailPage = () => {
                 </div>
                 <div className="space-y-3">
                   {event.promotions.map((promo) => (
-                    <div key={promo.id} className="flex items-center justify-between p-4 rounded-xl bg-[var(--accent-gold)]/10 border border-[var(--accent-gold)]/20">
+                    <div key={promo.id} className="flex items-center justify-between p-4 rounded-xl bg-(--accent-gold)/10 border border-(--accent-gold)/20">
                       <div>
-                        <p className="font-mono font-bold text-[var(--accent-gold)] text-sm">{promo.code}</p>
-                        <p className="text-xs text-[var(--text-secondary)]">
+                        <p className="font-mono font-bold text-(--accent-gold) text-sm">{promo.code}</p>
+                        <p className="text-xs text-(--text-secondary)">
                           {promo.discountPercent ? `Diskon ${promo.discountPercent}%` : `Diskon ${formatCurrency(promo.discountAmount ?? 0)}`}
                           {" · "}Sisa {promo.maxUsage - promo.usedCount}x penggunaan
                         </p>
                       </div>
-                      <Tag size={16} className="text-[var(--accent-gold)]" />
+                      <Tag size={16} className="text-(--accent-gold)" />
                     </div>
                   ))}
                 </div>
@@ -306,8 +310,8 @@ const EventDetailPage = () => {
                   </h2>
                   {avgRating > 0 && (
                     <div className="flex items-center gap-1">
-                      <Star size={14} className="text-[var(--accent-gold)] fill-[var(--accent-gold)]" />
-                      <span className="text-sm text-[var(--accent-gold)] font-medium">{avgRating.toFixed(1)}</span>
+                      <Star size={14} className="text-(--accent-gold) fill-(--accent-gold)" />
+                      <span className="text-sm text-(--accent-gold) font-medium">{avgRating.toFixed(1)}</span>
                     </div>
                   )}
                 </div>
@@ -323,7 +327,7 @@ const EventDetailPage = () => {
 
               {/* Review form */}
               {showReviewForm && (
-                <div className="p-5 rounded-xl bg-[var(--bg-card)] border border-[var(--border)] mb-6">
+                <div className="p-5 rounded-xl bg-(--bg-card) border border-(--border) mb-6">
                   <p className="text-sm font-medium text-white mb-3">Rating:</p>
                   <div className="flex gap-2 mb-4">
                     {[1, 2, 3, 4, 5].map((r) => (
@@ -332,8 +336,8 @@ const EventDetailPage = () => {
                         onClick={() => setReviewRating(r)}
                         className={`w-9 h-9 rounded-lg border text-sm font-bold transition-colors ${
                           r <= reviewRating
-                            ? "bg-[var(--accent-gold)] border-[var(--accent-gold)] text-white"
-                            : "border-[var(--border)] text-[var(--text-muted)] hover:border-[var(--accent-gold)]"
+                            ? "bg-(--accent-gold) border-(--accent-gold) text-white"
+                            : "border-(--border) text-(--text-muted) hover:border-(--accent-gold)"
                         }`}
                       >
                         {r}
@@ -364,11 +368,11 @@ const EventDetailPage = () => {
 
           {/* Right — buy tickets */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 rounded-xl bg-[var(--bg-card)] border border-[var(--border)] p-6">
+            <div className="sticky top-24 rounded-xl bg-(--bg-card) border border-(--border) p-6">
               <h3 className="font-semibold text-white text-lg mb-2">Pilih Tiket</h3>
-              <p className="text-xs text-[var(--text-muted)] mb-5">
+              <p className="text-xs text-(--text-muted) mb-5">
                 Mulai dari{" "}
-                <span className="text-[var(--accent-red)] font-bold">
+                <span className="text-(--accent-red) font-bold">
                   {event.isFree
                     ? "GRATIS"
                     : formatCurrency(Math.min(...event.ticketTypes.map((t) => t.price)))}

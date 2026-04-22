@@ -28,6 +28,8 @@ enum TransactionStatus {
     PAID
     CANCELLED
     REFUNDED
+    EXPIRED
+    REJECTED
 }
 
 enum PromotionType {

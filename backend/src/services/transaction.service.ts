@@ -4,6 +4,8 @@ import {
   findTransactionsByUser,
   findTicketTypeById,
   findActivePointsByUser,
+  findExpiredPendingTransactions,
+  findExpiredWaitingTransactions,
 } from "../repositories/transaction.repository.js";
 import { calculatePointsRedemption } from "./point.service.js";
 import { generateQRCode } from "../utils/slug.js";
@@ -211,7 +213,88 @@ export const createTransactionService = async (
   return result;
 };
 
+/**
+ * Lazy evaluation: auto-expire stale transactions before returning data.
+ * - PENDING > 2 hours → EXPIRED (rollback seats + points + voucher)
+ * - WAITING_PAYMENT > 3 days → CANCELLED (rollback seats + points + voucher)
+ */
+export const syncStaleTransactions = async (userId: string) => {
+  // ── 1. PENDING → EXPIRED (2 hours) ─────────────────────────────────
+  const pendingExpired = await findExpiredPendingTransactions(userId);
+  for (const tx of pendingExpired) {
+    const ticketCounts: Record<string, number> = {};
+    for (const t of tx.tickets) {
+      ticketCounts[t.ticketTypeId] = (ticketCounts[t.ticketTypeId] ?? 0) + 1;
+    }
+    const totalTickets = tx.tickets.length;
+
+    await prisma.$transaction(async (db) => {
+      await db.transaction.update({ where: { id: tx.id }, data: { status: "EXPIRED" } });
+
+      if (totalTickets > 0) {
+        await db.event.update({ where: { id: tx.eventId }, data: { soldSeats: { decrement: totalTickets } } });
+        for (const [ticketTypeId, count] of Object.entries(ticketCounts)) {
+          await db.ticketType.update({ where: { id: ticketTypeId }, data: { sold: { decrement: count } } });
+        }
+      }
+
+      for (const redemption of tx.redemptions) {
+        await db.point.update({
+          where: { id: redemption.pointId },
+          data: { amount: { increment: redemption.amountUsed }, status: "ACTIVE" },
+        });
+      }
+
+      // Rollback voucher quota
+      if (tx.promotion?.id) {
+        await db.promotion.update({
+          where: { id: tx.promotion.id },
+          data: { usedCount: { decrement: 1 } },
+        });
+      }
+    });
+  }
+
+  // ── 2. WAITING_PAYMENT → CANCELLED (3 days) ────────────────────────
+  const waitingExpired = await findExpiredWaitingTransactions(userId);
+  for (const tx of waitingExpired) {
+    const ticketCounts: Record<string, number> = {};
+    for (const t of tx.tickets) {
+      ticketCounts[t.ticketTypeId] = (ticketCounts[t.ticketTypeId] ?? 0) + 1;
+    }
+    const totalTickets = tx.tickets.length;
+
+    await prisma.$transaction(async (db) => {
+      await db.transaction.update({ where: { id: tx.id }, data: { status: "CANCELLED" } });
+
+      if (totalTickets > 0) {
+        await db.event.update({ where: { id: tx.eventId }, data: { soldSeats: { decrement: totalTickets } } });
+        for (const [ticketTypeId, count] of Object.entries(ticketCounts)) {
+          await db.ticketType.update({ where: { id: ticketTypeId }, data: { sold: { decrement: count } } });
+        }
+      }
+
+      for (const redemption of tx.redemptions) {
+        await db.point.update({
+          where: { id: redemption.pointId },
+          data: { amount: { increment: redemption.amountUsed }, status: "ACTIVE" },
+        });
+      }
+
+      // Rollback voucher quota
+      if (tx.promotion?.id) {
+        await db.promotion.update({
+          where: { id: tx.promotion.id },
+          data: { usedCount: { decrement: 1 } },
+        });
+      }
+    });
+  }
+};
+
 export const getMyTransactionsService = async (userId: string) => {
+  // Sync expired transactions lazily before fetching
+  await syncStaleTransactions(userId);
   return findTransactionsByUser(userId);
 };
 
@@ -314,8 +397,8 @@ export const approveTransactionService = async (
 };
 
 /**
- * Organizer menolak bukti transfer → WAITING_PAYMENT → CANCELLED
- * Rollback: soldSeats & ticketType.sold dikembalikan
+ * Organizer menolak bukti transfer → WAITING_PAYMENT → REJECTED
+ * Rollback: soldSeats & ticketType.sold & points & voucher dikembalikan
  */
 export const rejectTransactionService = async (
   transactionId: string,
@@ -326,6 +409,8 @@ export const rejectTransactionService = async (
     include: {
       event: { select: { id: true, organizerId: true } },
       tickets: { select: { ticketTypeId: true } },
+      redemptions: { select: { pointId: true, amountUsed: true } },
+      promotion: { select: { id: true } },
     },
   });
 
@@ -335,36 +420,49 @@ export const rejectTransactionService = async (
   if (transaction.status !== "WAITING_PAYMENT")
     throw new Error("Transaksi tidak dalam status menunggu konfirmasi");
 
-  // Hitung jumlah tiket per tipe untuk rollback
   const ticketCounts: Record<string, number> = {};
   for (const ticket of transaction.tickets) {
-    ticketCounts[ticket.ticketTypeId] =
-      (ticketCounts[ticket.ticketTypeId] ?? 0) + 1;
+    ticketCounts[ticket.ticketTypeId] = (ticketCounts[ticket.ticketTypeId] ?? 0) + 1;
   }
   const totalTickets = transaction.tickets.length;
 
   await prisma.$transaction(async (tx) => {
-    // Update status transaksi
+    // Mark as REJECTED (distinct from system CANCELLED)
     await tx.transaction.update({
       where: { id: transactionId },
-      data: { status: "CANCELLED" },
+      data: { status: "REJECTED" },
     });
 
-    // Rollback soldSeats di event
+    // Rollback soldSeats
     await tx.event.update({
       where: { id: transaction.event.id },
       data: { soldSeats: { decrement: totalTickets } },
     });
 
-    // Rollback sold di tiap tipe tiket
+    // Rollback each ticket type sold count
     for (const [ticketTypeId, count] of Object.entries(ticketCounts)) {
       await tx.ticketType.update({
         where: { id: ticketTypeId },
         data: { sold: { decrement: count } },
       });
     }
+
+    // Rollback points used
+    for (const redemption of transaction.redemptions) {
+      await tx.point.update({
+        where: { id: redemption.pointId },
+        data: { amount: { increment: redemption.amountUsed }, status: "ACTIVE" },
+      });
+    }
+
+    // Rollback voucher quota
+    if (transaction.promotion?.id) {
+      await tx.promotion.update({
+        where: { id: transaction.promotion.id },
+        data: { usedCount: { decrement: 1 } },
+      });
+    }
   });
 
   return { message: "Transaksi berhasil ditolak" };
 };
-

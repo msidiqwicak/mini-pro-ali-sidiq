@@ -19,6 +19,7 @@ import CreateEvent from "./pages/dashboard/CreateEvent";
 import EditEvent from "./pages/dashboard/EditEvent";
 import DashboardTransactions from "./pages/dashboard/DashboardTransactions";
 import DashboardAnalytics from "./pages/dashboard/DashboardAnalytics";
+import OrganizerProfilePage from "./pages/OrganizerProfilePage";
 
 // ─── Protected Route ──────────────────────────────────────────────
 const ProtectedRoute = ({
@@ -50,6 +51,7 @@ const App = () => {
         {/* ── Public ── */}
         <Route path="/" element={<HomePage />} />
         <Route path="/events/:slug" element={<EventDetailPage />} />
+        <Route path="/organizer/:id" element={<OrganizerProfilePage />} />
 
         {/* ── Guest only ── */}
         <Route path="/login" element={

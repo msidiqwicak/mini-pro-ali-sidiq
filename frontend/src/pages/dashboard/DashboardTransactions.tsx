@@ -31,24 +31,26 @@ const DashboardTransactions = () => {
       .then((r) => {
         const evs = r.data as Event[];
         setEvents(evs);
-        if (evs.length > 0) setSelectedEventId(evs[0]!.id);
+        // Default: show all events (no pre-selection)
       })
       .catch(() => {})
       .finally(() => setFetchingEvents(false));
   }, []);
 
   const loadTransactions = () => {
-    if (!selectedEventId) return;
     setIsLoading(true);
-    import("../../services/api").then(({ default: api }) =>
-      api.get(`/dashboard/analytics?type=event-attendees&eventId=${selectedEventId}`)
+    import("../../services/api").then(({ default: api }) => {
+      const url = selectedEventId
+        ? `/dashboard/analytics?type=event-attendees&eventId=${selectedEventId}`
+        : `/dashboard/analytics?type=event-attendees`;
+      api.get(url)
         .then((r) => {
           const data = r.data as { data: TxRow[] };
           setTransactions(data.data ?? []);
         })
         .catch(() => setTransactions([]))
         .finally(() => setIsLoading(false))
-    );
+    });
   };
 
   useEffect(() => {
@@ -92,12 +94,13 @@ const DashboardTransactions = () => {
           onChange={(e) => setSelectedEventId(e.target.value)}
           className="input-field max-w-sm"
         >
-          <option value="">Pilih Event</option>
+          <option value="">📋 Semua Event</option>
           {events.map((e) => (
             <option key={e.id} value={e.id}>{e.name}</option>
           ))}
         </select>
       )}
+
 
       {/* Table */}
       <div className="rounded-xl bg-(--bg-card) border border-(--border) overflow-hidden">

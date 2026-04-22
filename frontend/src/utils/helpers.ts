@@ -53,6 +53,8 @@ export const getStatusColor = (status: string): string => {
     PENDING: "badge-gold",
     WAITING_PAYMENT: "badge-blue",
     REFUNDED: "badge-gray",
+    EXPIRED: "badge-red",
+    REJECTED: "badge-red",
   };
   return map[status] ?? "badge-gray";
 };
@@ -67,6 +69,8 @@ export const getStatusLabel = (status: string): string => {
     PENDING: "Menunggu Pembayaran",
     WAITING_PAYMENT: "Menunggu Konfirmasi",
     REFUNDED: "Dikembalikan",
+    EXPIRED: "Kadaluarsa",
+    REJECTED: "Ditolak Organizer",
   };
   return map[status] ?? status;
 };

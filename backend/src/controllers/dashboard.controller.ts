@@ -7,7 +7,7 @@ import {
 } from "../repositories/dashboard.repository.js";
 import { successResponse, errorResponse } from "../utils/response.js";
 import type { AuthRequest } from "../middlewares/auth.middleware.js";
-import { findTransactionsByEvent } from "../repositories/transaction.repository.js";
+import { findTransactionsByEvent, findAllTransactionsByOrganizer } from "../repositories/transaction.repository.js";
 
 export const getDashboardAnalytics = async (
   req: AuthRequest,
@@ -35,8 +35,10 @@ export const getDashboardAnalytics = async (
       return;
     }
 
-    if (type === "event-attendees" && eventId) {
-      const transactions = await findTransactionsByEvent(eventId);
+    if (type === "event-attendees") {
+      const transactions = eventId
+        ? await findTransactionsByEvent(eventId)
+        : await findAllTransactionsByOrganizer(organizerId);
       successResponse(res, transactions);
       return;
     }

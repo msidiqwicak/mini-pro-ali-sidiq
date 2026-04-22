@@ -8,7 +8,6 @@ export interface User {
   bankAccountName?: string | null;
   bankAccountNumber?: string | null;
   referralCode?: string;
-  referralCode?: string;
 }
 
 export interface Category {
@@ -92,7 +91,7 @@ export interface Transaction {
   discountAmount: number;
   pointsUsed: number;
   finalAmount: number;
-  status: "PENDING" | "WAITING_PAYMENT" | "PAID" | "CANCELLED" | "REFUNDED";
+  status: "PENDING" | "WAITING_PAYMENT" | "PAID" | "CANCELLED" | "REFUNDED" | "EXPIRED" | "REJECTED";
   paymentMethod?: string | null;
   paymentProofUrl?: string | null;
   bankName?: string | null;

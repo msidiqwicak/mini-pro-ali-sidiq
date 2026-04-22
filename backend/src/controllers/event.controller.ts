@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { successResponse, errorResponse } from "../utils/response.js";
 import type { AuthRequest } from "../middlewares/auth.middleware.js";
+import prisma from "../lib/prisma.js";
 import {
   getEventsService,
   getEventBySlugService,
@@ -13,6 +14,7 @@ import {
   createEventSchema,
   updateEventSchema,
 } from "../services/event.service.js";
+
 // Helper — pastikan param selalu string
 
 const param = (val: string | string[] | undefined): string => {
@@ -142,3 +144,48 @@ export const getCategories = async (_req: Request, res: Response): Promise<void>
     errorResponse(res, msg);
   }
 };
+
+export const getOrganizerPublicProfile = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const organizerId = param(req.params["id"] as string);
+    const organizer = await prisma.user.findUnique({
+      where: { id: organizerId, role: "ORGANIZER" },
+      select: {
+        id: true, name: true, avatarUrl: true,
+        organizedEvents: {
+          where: { status: "PUBLISHED" },
+          orderBy: { startDate: "desc" },
+          take: 20,
+          select: {
+            id: true, name: true, slug: true, imageUrl: true,
+            location: true, city: true, startDate: true, endDate: true,
+            isFree: true, totalSeats: true, soldSeats: true,
+            category: { select: { name: true } },
+            ticketTypes: { select: { price: true } },
+            reviews: { select: { rating: true } },
+          },
+        },
+      },
+    });
+
+    if (!organizer) {
+      errorResponse(res, "Organizer tidak ditemukan", 404);
+      return;
+    }
+
+    const allRatings = organizer.organizedEvents.flatMap((e) => e.reviews.map((r) => r.rating));
+    const avgRating = allRatings.length > 0
+      ? Math.round((allRatings.reduce((a, b) => a + b, 0) / allRatings.length) * 10) / 10
+      : 0;
+    const totalReviews = allRatings.length;
+
+    successResponse(res, {
+      organizer: { id: organizer.id, name: organizer.name, avatarUrl: organizer.avatarUrl, organizedEvents: organizer.organizedEvents },
+      avgRating,
+      totalReviews,
+    });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Gagal mengambil profil organizer";
+    errorResponse(res, msg);
+  }
+};

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import prisma from "../lib/prisma.js";
 import {
   findReviewsByEvent,
   findReviewByUserAndEvent,
@@ -31,6 +32,15 @@ export const createReviewService = async (
   const purchased = await hasUserPurchasedEvent(userId, input.eventId);
   if (!purchased)
     throw new Error("Anda hanya bisa mereview event yang sudah dibeli");
+
+  // Check if event has already ended
+  const event = await prisma.event.findUnique({
+    where: { id: input.eventId },
+    select: { endDate: true },
+  });
+  if (!event) throw new Error("Event tidak ditemukan");
+  if (new Date(event.endDate) > new Date())
+    throw new Error("Anda hanya bisa mereview event yang sudah selesai");
 
   // Check duplicate review
   const existing = await findReviewByUserAndEvent(userId, input.eventId);
