@@ -4,6 +4,10 @@ export interface User {
   name: string;
   role: "CUSTOMER" | "ORGANIZER";
   avatarUrl?: string | null;
+  bankName?: string | null;
+  bankAccountName?: string | null;
+  bankAccountNumber?: string | null;
+  referralCode?: string;
   referralCode?: string;
 }
 
@@ -64,7 +68,7 @@ export interface Event {
   status: "DRAFT" | "PUBLISHED" | "CANCELLED" | "COMPLETED";
   totalSeats: number;
   soldSeats: number;
-  organizer: { id: string; name: string; avatarUrl?: string | null };
+  organizer: { id: string; name: string; avatarUrl?: string | null; bankName?: string | null; bankAccountName?: string | null; bankAccountNumber?: string | null };
   category: Category;
   ticketTypes: TicketType[];
   promotions?: Promotion[];

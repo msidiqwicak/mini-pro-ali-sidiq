@@ -17,9 +17,7 @@ const schema = z.object({
   startDate: z.string().min(1, "Tanggal mulai wajib diisi"),
   endDate: z.string().min(1, "Tanggal selesai wajib diisi"),
   isFree: z.boolean(),
-  bankName: z.string().optional(),
-  bankAccountName: z.string().optional(),
-  bankAccountNumber: z.string().optional(),
+
   totalSeats: z.coerce.number().int().positive("Harus positif"),
   status: z.enum(["DRAFT", "PUBLISHED"]),
   ticketTypes: z.array(z.object({
@@ -95,9 +93,7 @@ const EventForm = ({
     defaultValues: {
       status: "DRAFT",
       isFree: false,
-      bankName: "",
-      bankAccountName: "",
-      bankAccountNumber: "",
+
       ticketTypes: [{ name: "REGULER", description: "", price: 0, quota: 100 }],
       ...defaultValues,
     },
@@ -247,24 +243,7 @@ const EventForm = ({
         </div>
       </div>
 
-      {/* Info Rekening Bank */}
-      {!isFree && (
-        <div className="rounded-xl bg-[var(--bg-card)] border border-[var(--border)] p-6 space-y-5">
-          <h3 className="font-semibold text-white text-sm uppercase tracking-wider">Info Pembayaran Bank</h3>
-          <p className="text-xs text-[var(--text-muted)] mt-1 mb-2">Informasi rekening untuk transfer pembayaran pembeli tiket.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-            <Field label="Nama Bank *" error={errors.bankName?.message}>
-              <input {...register("bankName")} placeholder="Contoh: BCA, Mandiri" className="input-field" />
-            </Field>
-            <Field label="Atas Nama (Pemilik) *" error={errors.bankAccountName?.message}>
-              <input {...register("bankAccountName")} placeholder="Nama pemilik rekening" className="input-field" />
-            </Field>
-            <Field label="Nomor Rekening *" error={errors.bankAccountNumber?.message}>
-              <input {...register("bankAccountNumber")} placeholder="Contoh: 1234567890" className="input-field" />
-            </Field>
-          </div>
-        </div>
-      )}
+
 
       {/* Ticket Types */}
       {showTicketTypes && (

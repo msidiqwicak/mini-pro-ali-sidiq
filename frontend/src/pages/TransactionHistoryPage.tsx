@@ -130,7 +130,7 @@ const TransactionHistoryPage = () => {
                   </div>
 
                   {/* Payment Instruction (Only for PENDING) */}
-                  {tx.status === "PENDING" && tx.finalAmount > 0 && tx.event.bankName && (
+                  {tx.status === "PENDING" && tx.finalAmount > 0 && tx.event.organizer.bankName && (
                     <div className="mt-4 p-4 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border)]">
                       <h4 className="text-xs font-semibold text-white mb-2 uppercase tracking-wider">Instruksi Pembayaran</h4>
                       <p className="text-sm text-[var(--text-secondary)] mb-3 border-b border-[var(--border)] pb-3">
@@ -139,13 +139,13 @@ const TransactionHistoryPage = () => {
                       
                       <div className="grid grid-cols-2 gap-y-2 text-sm">
                         <p className="text-[var(--text-muted)]">Bank Tujuan</p>
-                        <p className="font-medium text-white">{tx.event.bankName}</p>
+                        <p className="font-medium text-white">{tx.event.organizer.bankName}</p>
                         
                         <p className="text-[var(--text-muted)]">Atas Nama</p>
-                        <p className="font-medium text-white">{tx.event.bankAccountName}</p>
+                        <p className="font-medium text-white">{tx.event.organizer.bankAccountName}</p>
                         
                         <p className="text-[var(--text-muted)]">Nomor Rekening</p>
-                        <p className="font-mono text-white text-lg tracking-wider">{tx.event.bankAccountNumber}</p>
+                        <p className="font-mono text-white text-lg tracking-wider">{tx.event.organizer.bankAccountNumber}</p>
                       </div>
                     </div>
                   )}

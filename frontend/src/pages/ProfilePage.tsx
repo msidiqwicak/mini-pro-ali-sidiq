@@ -30,6 +30,9 @@ import type { Point, Coupon } from "../types";
 const profileSchema = z.object({
   name: z.string().min(2, "Nama minimal 2 karakter"),
   avatarUrl: z.string().url("URL tidak valid").optional().or(z.literal("")),
+  bankName: z.string().optional(),
+  bankAccountName: z.string().optional(),
+  bankAccountNumber: z.string().optional(),
 });
 
 const passwordSchema = z
@@ -112,7 +115,13 @@ const ProfilePage = () => {
   // ─── Profile form ─────────────────────────────────────────────────────────
   const profileForm = useForm<ProfileForm>({
     resolver: zodResolver(profileSchema),
-    defaultValues: { name: user?.name ?? "", avatarUrl: user?.avatarUrl ?? "" },
+    defaultValues: { 
+      name: user?.name ?? "", 
+      avatarUrl: user?.avatarUrl ?? "",
+      bankName: user?.bankName ?? "",
+      bankAccountName: user?.bankAccountName ?? "",
+      bankAccountNumber: user?.bankAccountNumber ?? "",
+    },
   });
 
   const onProfileSubmit = async (data: ProfileForm) => {
@@ -122,6 +131,9 @@ const ProfilePage = () => {
       const res = await authService.updateProfile({
         name: data.name,
         avatarUrl: data.avatarUrl || undefined,
+        bankName: data.bankName,
+        bankAccountName: data.bankAccountName,
+        bankAccountNumber: data.bankAccountNumber,
       });
       updateUser(res.data);
       setProfileMsg({ type: "success", text: "Profil berhasil diperbarui!" });
@@ -322,8 +334,45 @@ const ProfilePage = () => {
                   )}
                 </div>
 
-                {/* avatarUrl hidden — diisi otomatis saat upload gambar */}
+                {/* AvatarUrl hidden */}
                 <input type="hidden" {...profileForm.register("avatarUrl")} />
+
+                {user?.role === "ORGANIZER" && (
+                  <div className="pt-4 mt-2 border-t border-[var(--border)] space-y-4">
+                    <h3 className="text-sm font-semibold text-white">Informasi Rekening Bank (Pembayaran)</h3>
+                    <p className="text-xs text-[var(--text-muted)]">Informasi rekening ini akan ditampilkan saat pelanggan melakukan pembayaran transfer bank.</p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Nama Bank</label>
+                        <input
+                          id="profile-bank-name"
+                          {...profileForm.register("bankName")}
+                          className="input-field"
+                          placeholder="BCA / Mandiri / BRI"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Nomor Rekening</label>
+                        <input
+                          id="profile-bank-account-number"
+                          {...profileForm.register("bankAccountNumber")}
+                          className="input-field"
+                          placeholder="Nomor rekening"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Nama Pemilik Rekening</label>
+                      <input
+                        id="profile-bank-account-name"
+                        {...profileForm.register("bankAccountName")}
+                        className="input-field"
+                        placeholder="Nama pemilik rekening valid"
+                      />
+                    </div>
+                  </div>
+                )}
 
                 <button
                   id="save-profile-btn"

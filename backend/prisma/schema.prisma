@@ -60,6 +60,10 @@ model User {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    bankName          String?
+    bankAccountName   String?
+    bankAccountNumber String?
+
     referralCode    ReferralCode?
     points          Point[]
     transactions    Transaction[]

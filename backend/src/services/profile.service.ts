@@ -13,6 +13,9 @@ import { hashPassword, comparePassword } from "../utils/hash.js";
 export const updateProfileSchema = z.object({
   name: z.string().min(2, "Nama minimal 2 karakter").optional(),
   avatarUrl: z.string().url("URL tidak valid").optional().or(z.literal("")),
+  bankName: z.string().optional(),
+  bankAccountName: z.string().optional(),
+  bankAccountNumber: z.string().optional(),
 });
 
 export const changePasswordSchema = z.object({
@@ -29,10 +32,13 @@ export const updateProfileService = async (
   userId: string,
   input: UpdateProfileInput
 ) => {
-  const data: { name?: string; avatarUrl?: string | null } = {};
+  const data: any = {};
   if (input.name !== undefined) data.name = input.name;
   if (input.avatarUrl !== undefined)
     data.avatarUrl = input.avatarUrl === "" ? null : input.avatarUrl;
+  if (input.bankName !== undefined) data.bankName = input.bankName;
+  if (input.bankAccountName !== undefined) data.bankAccountName = input.bankAccountName;
+  if (input.bankAccountNumber !== undefined) data.bankAccountNumber = input.bankAccountNumber;
 
   const user = await updateUserById(userId, data);
   return {
@@ -41,6 +47,9 @@ export const updateProfileService = async (
     name: user.name,
     role: user.role,
     avatarUrl: user.avatarUrl,
+    bankName: user.bankName,
+    bankAccountName: user.bankAccountName,
+    bankAccountNumber: user.bankAccountNumber,
   };
 };
 

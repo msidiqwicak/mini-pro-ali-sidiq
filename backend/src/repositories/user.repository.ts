@@ -26,7 +26,13 @@ export const createUser = async (data: {
 
 export const updateUserById = async (
   id: string,
-  data: { name?: string; avatarUrl?: string | null }
+  data: { 
+    name?: string; 
+    avatarUrl?: string | null; 
+    bankName?: string; 
+    bankAccountName?: string; 
+    bankAccountNumber?: string; 
+  }
 ) => {
   return prisma.user.update({ where: { id }, data });
 };

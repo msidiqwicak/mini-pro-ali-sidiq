@@ -227,10 +227,14 @@ export const payTransactionService = async (
     where: { id: transactionId },
     include: {
       event: {
-        select: {
-          bankName: true,
-          bankAccountName: true,
-          bankAccountNumber: true,
+        include: {
+          organizer: {
+            select: {
+              bankName: true,
+              bankAccountName: true,
+              bankAccountNumber: true,
+            },
+          },
         },
       },
     },
@@ -247,10 +251,10 @@ export const payTransactionService = async (
       status: "WAITING_PAYMENT",
       paymentProofUrl,
       paymentMethod: "BANK_TRANSFER",
-      // Salin info rekening dari event agar tersimpan di transaksi
-      bankName: transaction.event.bankName,
-      bankAccountName: transaction.event.bankAccountName,
-      bankAccountNumber: transaction.event.bankAccountNumber,
+      // Salin info rekening dari organizer agar tersimpan di transaksi
+      bankName: transaction.event.organizer.bankName,
+      bankAccountName: transaction.event.organizer.bankAccountName,
+      bankAccountNumber: transaction.event.organizer.bankAccountNumber,
     },
   });
 

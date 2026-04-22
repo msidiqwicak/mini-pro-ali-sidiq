@@ -34,6 +34,9 @@ export type UserMinAggregateOutputType = {
   referredById: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  bankName: string | null
+  bankAccountName: string | null
+  bankAccountNumber: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -46,6 +49,9 @@ export type UserMaxAggregateOutputType = {
   referredById: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  bankName: string | null
+  bankAccountName: string | null
+  bankAccountNumber: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -58,6 +64,9 @@ export type UserCountAggregateOutputType = {
   referredById: number
   createdAt: number
   updatedAt: number
+  bankName: number
+  bankAccountName: number
+  bankAccountNumber: number
   _all: number
 }
 
@@ -72,6 +81,9 @@ export type UserMinAggregateInputType = {
   referredById?: true
   createdAt?: true
   updatedAt?: true
+  bankName?: true
+  bankAccountName?: true
+  bankAccountNumber?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -84,6 +96,9 @@ export type UserMaxAggregateInputType = {
   referredById?: true
   createdAt?: true
   updatedAt?: true
+  bankName?: true
+  bankAccountName?: true
+  bankAccountNumber?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -96,6 +111,9 @@ export type UserCountAggregateInputType = {
   referredById?: true
   createdAt?: true
   updatedAt?: true
+  bankName?: true
+  bankAccountName?: true
+  bankAccountNumber?: true
   _all?: true
 }
 
@@ -181,6 +199,9 @@ export type UserGroupByOutputType = {
   referredById: string | null
   createdAt: Date
   updatedAt: Date
+  bankName: string | null
+  bankAccountName: string | null
+  bankAccountNumber: string | null
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -214,6 +235,9 @@ export type UserWhereInput = {
   referredById?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  bankName?: Prisma.StringNullableFilter<"User"> | string | null
+  bankAccountName?: Prisma.StringNullableFilter<"User"> | string | null
+  bankAccountNumber?: Prisma.StringNullableFilter<"User"> | string | null
   referredBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   referrals?: Prisma.UserListRelationFilter
   referralCode?: Prisma.XOR<Prisma.ReferralCodeNullableScalarRelationFilter, Prisma.ReferralCodeWhereInput> | null
@@ -235,6 +259,9 @@ export type UserOrderByWithRelationInput = {
   referredById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  bankName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   referredBy?: Prisma.UserOrderByWithRelationInput
   referrals?: Prisma.UserOrderByRelationAggregateInput
   referralCode?: Prisma.ReferralCodeOrderByWithRelationInput
@@ -259,6 +286,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   referredById?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  bankName?: Prisma.StringNullableFilter<"User"> | string | null
+  bankAccountName?: Prisma.StringNullableFilter<"User"> | string | null
+  bankAccountNumber?: Prisma.StringNullableFilter<"User"> | string | null
   referredBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   referrals?: Prisma.UserListRelationFilter
   referralCode?: Prisma.XOR<Prisma.ReferralCodeNullableScalarRelationFilter, Prisma.ReferralCodeWhereInput> | null
@@ -280,6 +310,9 @@ export type UserOrderByWithAggregationInput = {
   referredById?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  bankName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrderInput | Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -298,6 +331,9 @@ export type UserScalarWhereWithAggregatesInput = {
   referredById?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  bankName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  bankAccountName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  bankAccountNumber?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
 }
 
 export type UserCreateInput = {
@@ -309,6 +345,9 @@ export type UserCreateInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
   referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeCreateNestedOneWithoutOwnerInput
@@ -330,6 +369,9 @@ export type UserUncheckedCreateInput = {
   referredById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeUncheckedCreateNestedOneWithoutOwnerInput
   points?: Prisma.PointUncheckedCreateNestedManyWithoutUserInput
@@ -349,6 +391,9 @@ export type UserUpdateInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
   referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUpdateOneWithoutOwnerNestedInput
@@ -370,6 +415,9 @@ export type UserUncheckedUpdateInput = {
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUncheckedUpdateOneWithoutOwnerNestedInput
   points?: Prisma.PointUncheckedUpdateManyWithoutUserNestedInput
@@ -390,6 +438,9 @@ export type UserCreateManyInput = {
   referredById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -401,6 +452,9 @@ export type UserUpdateManyMutationInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -413,6 +467,9 @@ export type UserUncheckedUpdateManyInput = {
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserNullableScalarRelationFilter = {
@@ -440,6 +497,9 @@ export type UserCountOrderByAggregateInput = {
   referredById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -452,6 +512,9 @@ export type UserMaxOrderByAggregateInput = {
   referredById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -464,6 +527,9 @@ export type UserMinOrderByAggregateInput = {
   referredById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  bankName?: Prisma.SortOrder
+  bankAccountName?: Prisma.SortOrder
+  bankAccountNumber?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -652,6 +718,9 @@ export type UserCreateWithoutReferralsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
   referralCode?: Prisma.ReferralCodeCreateNestedOneWithoutOwnerInput
   points?: Prisma.PointCreateNestedManyWithoutUserInput
@@ -672,6 +741,9 @@ export type UserUncheckedCreateWithoutReferralsInput = {
   referredById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referralCode?: Prisma.ReferralCodeUncheckedCreateNestedOneWithoutOwnerInput
   points?: Prisma.PointUncheckedCreateNestedManyWithoutUserInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
@@ -695,6 +767,9 @@ export type UserCreateWithoutReferredByInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeCreateNestedOneWithoutOwnerInput
   points?: Prisma.PointCreateNestedManyWithoutUserInput
@@ -714,6 +789,9 @@ export type UserUncheckedCreateWithoutReferredByInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeUncheckedCreateNestedOneWithoutOwnerInput
   points?: Prisma.PointUncheckedCreateNestedManyWithoutUserInput
@@ -754,6 +832,9 @@ export type UserUpdateWithoutReferralsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
   referralCode?: Prisma.ReferralCodeUpdateOneWithoutOwnerNestedInput
   points?: Prisma.PointUpdateManyWithoutUserNestedInput
@@ -774,6 +855,9 @@ export type UserUncheckedUpdateWithoutReferralsInput = {
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralCode?: Prisma.ReferralCodeUncheckedUpdateOneWithoutOwnerNestedInput
   points?: Prisma.PointUncheckedUpdateManyWithoutUserNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
@@ -812,6 +896,9 @@ export type UserScalarWhereInput = {
   referredById?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  bankName?: Prisma.StringNullableFilter<"User"> | string | null
+  bankAccountName?: Prisma.StringNullableFilter<"User"> | string | null
+  bankAccountNumber?: Prisma.StringNullableFilter<"User"> | string | null
 }
 
 export type UserCreateWithoutReferralCodeInput = {
@@ -823,6 +910,9 @@ export type UserCreateWithoutReferralCodeInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
   referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   points?: Prisma.PointCreateNestedManyWithoutUserInput
@@ -843,6 +933,9 @@ export type UserUncheckedCreateWithoutReferralCodeInput = {
   referredById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   points?: Prisma.PointUncheckedCreateNestedManyWithoutUserInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
@@ -877,6 +970,9 @@ export type UserUpdateWithoutReferralCodeInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
   referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   points?: Prisma.PointUpdateManyWithoutUserNestedInput
@@ -897,6 +993,9 @@ export type UserUncheckedUpdateWithoutReferralCodeInput = {
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   points?: Prisma.PointUncheckedUpdateManyWithoutUserNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
@@ -915,6 +1014,9 @@ export type UserCreateWithoutPointsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
   referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeCreateNestedOneWithoutOwnerInput
@@ -935,6 +1037,9 @@ export type UserUncheckedCreateWithoutPointsInput = {
   referredById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeUncheckedCreateNestedOneWithoutOwnerInput
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutUserInput
@@ -969,6 +1074,9 @@ export type UserUpdateWithoutPointsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
   referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUpdateOneWithoutOwnerNestedInput
@@ -989,6 +1097,9 @@ export type UserUncheckedUpdateWithoutPointsInput = {
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUncheckedUpdateOneWithoutOwnerNestedInput
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutUserNestedInput
@@ -1007,6 +1118,9 @@ export type UserCreateWithoutRedemptionsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
   referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeCreateNestedOneWithoutOwnerInput
@@ -1027,6 +1141,9 @@ export type UserUncheckedCreateWithoutRedemptionsInput = {
   referredById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeUncheckedCreateNestedOneWithoutOwnerInput
   points?: Prisma.PointUncheckedCreateNestedManyWithoutUserInput
@@ -1061,6 +1178,9 @@ export type UserUpdateWithoutRedemptionsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
   referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUpdateOneWithoutOwnerNestedInput
@@ -1081,6 +1201,9 @@ export type UserUncheckedUpdateWithoutRedemptionsInput = {
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUncheckedUpdateOneWithoutOwnerNestedInput
   points?: Prisma.PointUncheckedUpdateManyWithoutUserNestedInput
@@ -1099,6 +1222,9 @@ export type UserCreateWithoutOrganizedEventsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
   referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeCreateNestedOneWithoutOwnerInput
@@ -1119,6 +1245,9 @@ export type UserUncheckedCreateWithoutOrganizedEventsInput = {
   referredById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeUncheckedCreateNestedOneWithoutOwnerInput
   points?: Prisma.PointUncheckedCreateNestedManyWithoutUserInput
@@ -1153,6 +1282,9 @@ export type UserUpdateWithoutOrganizedEventsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
   referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUpdateOneWithoutOwnerNestedInput
@@ -1173,6 +1305,9 @@ export type UserUncheckedUpdateWithoutOrganizedEventsInput = {
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUncheckedUpdateOneWithoutOwnerNestedInput
   points?: Prisma.PointUncheckedUpdateManyWithoutUserNestedInput
@@ -1191,6 +1326,9 @@ export type UserCreateWithoutTransactionsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
   referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeCreateNestedOneWithoutOwnerInput
@@ -1211,6 +1349,9 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   referredById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeUncheckedCreateNestedOneWithoutOwnerInput
   points?: Prisma.PointUncheckedCreateNestedManyWithoutUserInput
@@ -1245,6 +1386,9 @@ export type UserUpdateWithoutTransactionsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
   referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUpdateOneWithoutOwnerNestedInput
@@ -1265,6 +1409,9 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUncheckedUpdateOneWithoutOwnerNestedInput
   points?: Prisma.PointUncheckedUpdateManyWithoutUserNestedInput
@@ -1283,6 +1430,9 @@ export type UserCreateWithoutReviewsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
   referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeCreateNestedOneWithoutOwnerInput
@@ -1303,6 +1453,9 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   referredById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeUncheckedCreateNestedOneWithoutOwnerInput
   points?: Prisma.PointUncheckedCreateNestedManyWithoutUserInput
@@ -1337,6 +1490,9 @@ export type UserUpdateWithoutReviewsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
   referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUpdateOneWithoutOwnerNestedInput
@@ -1357,6 +1513,9 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUncheckedUpdateOneWithoutOwnerNestedInput
   points?: Prisma.PointUncheckedUpdateManyWithoutUserNestedInput
@@ -1375,6 +1534,9 @@ export type UserCreateWithoutCouponsInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
   referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeCreateNestedOneWithoutOwnerInput
@@ -1395,6 +1557,9 @@ export type UserUncheckedCreateWithoutCouponsInput = {
   referredById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
   referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
   referralCode?: Prisma.ReferralCodeUncheckedCreateNestedOneWithoutOwnerInput
   points?: Prisma.PointUncheckedCreateNestedManyWithoutUserInput
@@ -1429,6 +1594,9 @@ export type UserUpdateWithoutCouponsInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
   referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUpdateOneWithoutOwnerNestedInput
@@ -1449,6 +1617,9 @@ export type UserUncheckedUpdateWithoutCouponsInput = {
   referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUncheckedUpdateOneWithoutOwnerNestedInput
   points?: Prisma.PointUncheckedUpdateManyWithoutUserNestedInput
@@ -1467,6 +1638,9 @@ export type UserCreateManyReferredByInput = {
   avatarUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  bankName?: string | null
+  bankAccountName?: string | null
+  bankAccountNumber?: string | null
 }
 
 export type UserUpdateWithoutReferredByInput = {
@@ -1478,6 +1652,9 @@ export type UserUpdateWithoutReferredByInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUpdateOneWithoutOwnerNestedInput
   points?: Prisma.PointUpdateManyWithoutUserNestedInput
@@ -1497,6 +1674,9 @@ export type UserUncheckedUpdateWithoutReferredByInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
   referralCode?: Prisma.ReferralCodeUncheckedUpdateOneWithoutOwnerNestedInput
   points?: Prisma.PointUncheckedUpdateManyWithoutUserNestedInput
@@ -1516,6 +1696,9 @@ export type UserUncheckedUpdateManyWithoutReferredByInput = {
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bankName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bankAccountNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1613,6 +1796,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   referredById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  bankName?: boolean
+  bankAccountName?: boolean
+  bankAccountNumber?: boolean
   referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
   referrals?: boolean | Prisma.User$referralsArgs<ExtArgs>
   referralCode?: boolean | Prisma.User$referralCodeArgs<ExtArgs>
@@ -1635,6 +1821,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   referredById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  bankName?: boolean
+  bankAccountName?: boolean
+  bankAccountNumber?: boolean
   referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1648,6 +1837,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   referredById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  bankName?: boolean
+  bankAccountName?: boolean
+  bankAccountNumber?: boolean
   referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1661,9 +1853,12 @@ export type UserSelectScalar = {
   referredById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  bankName?: boolean
+  bankAccountName?: boolean
+  bankAccountNumber?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "passwordHash" | "role" | "avatarUrl" | "referredById" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "passwordHash" | "role" | "avatarUrl" | "referredById" | "createdAt" | "updatedAt" | "bankName" | "bankAccountName" | "bankAccountNumber", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   referredBy?: boolean | Prisma.User$referredByArgs<ExtArgs>
   referrals?: boolean | Prisma.User$referralsArgs<ExtArgs>
@@ -1706,6 +1901,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     referredById: string | null
     createdAt: Date
     updatedAt: Date
+    bankName: string | null
+    bankAccountName: string | null
+    bankAccountNumber: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -2147,6 +2345,9 @@ export interface UserFieldRefs {
   readonly referredById: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly bankName: Prisma.FieldRef<"User", 'String'>
+  readonly bankAccountName: Prisma.FieldRef<"User", 'String'>
+  readonly bankAccountNumber: Prisma.FieldRef<"User", 'String'>
 }
     
 

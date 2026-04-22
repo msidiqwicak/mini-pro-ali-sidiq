@@ -8,7 +8,7 @@ export const findTransactionsByUser = async (userId: string) => {
       event: {
         include: {
           category: true,
-          organizer: { select: { id: true, name: true } },
+          organizer: { select: { id: true, name: true, bankName: true, bankAccountName: true, bankAccountNumber: true } },
         },
       },
       promotion: true,
