@@ -28,13 +28,16 @@ const DashboardLayout = () => {
     >
       {/* Logo */}
       <div className="flex items-center gap-3 px-6 h-16 border-b border-[var(--border)]">
-        <div
-          className="w-8 h-8 bg-[var(--accent-red)] rounded flex items-center justify-center cursor-pointer"
+        <div 
+          className="flex items-center gap-3 cursor-pointer group flex-1"
           onClick={() => navigate("/")}
+          title="Back to Home"
         >
-          <Music2 size={18} className="text-white" />
+          <div className="w-8 h-8 bg-[var(--accent-red)] rounded flex items-center justify-center group-hover:bg-red-600 transition-colors">
+            <Music2 size={18} className="text-white" />
+          </div>
+          <span className="font-display text-lg tracking-widest text-white group-hover:text-gray-200 transition-colors">SOUNDWAVE</span>
         </div>
-        <span className="font-display text-lg tracking-widest text-white">SOUNDWAVE</span>
         {mobile && (
           <button onClick={() => setSidebarOpen(false)} className="ml-auto text-[var(--text-muted)] hover:text-white">
             <X size={18} />
@@ -111,13 +114,34 @@ const DashboardLayout = () => {
 
       {/* Main area */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Mobile topbar */}
-        <div className="lg:hidden flex items-center gap-3 px-4 h-14 border-b border-[var(--border)] bg-[var(--bg-secondary)] sticky top-0 z-30">
-          <button onClick={() => setSidebarOpen(true)} className="text-[var(--text-muted)] hover:text-white">
-            <Menu size={20} />
-          </button>
-          <span className="font-display text-lg tracking-widest text-white">SOUNDWAVE</span>
-        </div>
+        {/* Top Header */}
+        <header className="flex items-center justify-between px-4 lg:px-6 h-14 border-b border-[var(--border)] bg-[var(--bg-secondary)] sticky top-0 z-30">
+          <div className="flex items-center gap-3">
+            <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-[var(--text-muted)] hover:text-white">
+              <Menu size={20} />
+            </button>
+            {/* Mobile Logo Link */}
+            <span 
+              className="lg:hidden font-display text-lg tracking-widest text-white cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => navigate("/")}
+              title="Back to Home"
+            >
+              SOUNDWAVE
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3 ml-auto">
+            {/* Back to Events Button */}
+            <button
+              onClick={() => navigate("/dashboard/events")}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[var(--border)] text-[var(--text-secondary)] hover:text-white hover:bg-[var(--bg-elevated)] transition-all text-sm"
+              title="Kembali ke Daftar Event"
+            >
+              <CalendarDays size={16} />
+              <span className="hidden sm:inline">Back to Events</span>
+            </button>
+          </div>
+        </header>
 
         {/* Page content */}
         <main className="flex-1 p-6 overflow-y-auto">

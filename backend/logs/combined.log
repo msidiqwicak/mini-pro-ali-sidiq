@@ -204,3 +204,21 @@
 {"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-22 17:08:53"}
 {"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-22 17:08:53"}
 {"level":"info","message":"🔴 Upstash Redis: https://elegant-marmot-69459.upstash.io","service":"event-platform-api","timestamp":"2026-04-22 17:08:53"}
+{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-22 17:26:02"}
+{"level":"info","message":"✅ Upstash Redis client initialized","service":"event-platform-api","timestamp":"2026-04-22 17:26:02"}
+{"level":"info","message":"✅ Upstash Redis ping successful","service":"event-platform-api","timestamp":"2026-04-22 17:26:02"}
+{"level":"info","message":"🎵 SoundWave API running on http://localhost:5000","service":"event-platform-api","timestamp":"2026-04-22 17:26:04"}
+{"level":"info","message":"🌍 Environment: development","service":"event-platform-api","timestamp":"2026-04-22 17:26:04"}
+{"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-22 17:26:04"}
+{"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-22 17:26:04"}
+{"level":"info","message":"🔴 Upstash Redis: https://elegant-marmot-69459.upstash.io","service":"event-platform-api","timestamp":"2026-04-22 17:26:04"}
+{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-22 17:34:43"}
+{"level":"info","message":"✅ Upstash Redis client initialized","service":"event-platform-api","timestamp":"2026-04-22 17:34:43"}
+{"level":"info","message":"✅ Database terhubung","service":"event-platform-api","timestamp":"2026-04-22 17:34:44"}
+{"level":"info","message":"✅ Upstash Redis client initialized","service":"event-platform-api","timestamp":"2026-04-22 17:34:44"}
+{"level":"info","message":"✅ Upstash Redis ping successful","service":"event-platform-api","timestamp":"2026-04-22 17:34:44"}
+{"level":"info","message":"🎵 SoundWave API running on http://localhost:5000","service":"event-platform-api","timestamp":"2026-04-22 17:34:46"}
+{"level":"info","message":"🌍 Environment: development","service":"event-platform-api","timestamp":"2026-04-22 17:34:46"}
+{"level":"info","message":"📡 Frontend allowed: http://localhost:5173","service":"event-platform-api","timestamp":"2026-04-22 17:34:46"}
+{"level":"info","message":"📧 Email from: noreply-aliputrasati@gmail.com","service":"event-platform-api","timestamp":"2026-04-22 17:34:46"}
+{"level":"info","message":"🔴 Upstash Redis: https://elegant-marmot-69459.upstash.io","service":"event-platform-api","timestamp":"2026-04-22 17:34:46"}
