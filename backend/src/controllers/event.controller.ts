@@ -148,25 +148,39 @@ export const getCategories = async (_req: Request, res: Response): Promise<void>
 export const getOrganizerPublicProfile = async (req: Request, res: Response): Promise<void> => {
   try {
     const organizerId = param(req.params["id"] as string);
-    const organizer = await prisma.user.findUnique({
-      where: { id: organizerId, role: "ORGANIZER" },
-      select: {
-        id: true, name: true, avatarUrl: true,
-        organizedEvents: {
-          where: { status: "PUBLISHED" },
-          orderBy: { startDate: "desc" },
-          take: 20,
-          select: {
-            id: true, name: true, slug: true, imageUrl: true,
-            location: true, city: true, startDate: true, endDate: true,
-            isFree: true, totalSeats: true, soldSeats: true,
-            category: { select: { name: true } },
-            ticketTypes: { select: { price: true } },
-            reviews: { select: { rating: true } },
+
+    const [organizer, recentReviews] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: organizerId, role: "ORGANIZER" },
+        select: {
+          id: true, name: true, avatarUrl: true,
+          organizedEvents: {
+            where: { status: "PUBLISHED" },
+            orderBy: { startDate: "desc" },
+            take: 20,
+            select: {
+              id: true, name: true, slug: true, imageUrl: true,
+              location: true, city: true, startDate: true, endDate: true,
+              isFree: true, totalSeats: true, soldSeats: true,
+              category: { select: { name: true } },
+              ticketTypes: { select: { price: true } },
+              reviews: { select: { rating: true } },
+            },
           },
         },
-      },
-    });
+      }),
+      // Fetch 10 latest reviews across all organizer events
+      prisma.review.findMany({
+        where: { event: { organizerId } },
+        orderBy: { createdAt: "desc" },
+        take: 10,
+        select: {
+          id: true, rating: true, comment: true, createdAt: true,
+          user: { select: { name: true, avatarUrl: true } },
+          event: { select: { name: true, slug: true } },
+        },
+      }),
+    ]);
 
     if (!organizer) {
       errorResponse(res, "Organizer tidak ditemukan", 404);
@@ -177,12 +191,17 @@ export const getOrganizerPublicProfile = async (req: Request, res: Response): Pr
     const avgRating = allRatings.length > 0
       ? Math.round((allRatings.reduce((a, b) => a + b, 0) / allRatings.length) * 10) / 10
       : 0;
-    const totalReviews = allRatings.length;
 
     successResponse(res, {
-      organizer: { id: organizer.id, name: organizer.name, avatarUrl: organizer.avatarUrl, organizedEvents: organizer.organizedEvents },
+      organizer: {
+        id: organizer.id,
+        name: organizer.name,
+        avatarUrl: organizer.avatarUrl,
+        organizedEvents: organizer.organizedEvents,
+      },
       avgRating,
-      totalReviews,
+      totalReviews: allRatings.length,
+      recentReviews,
     });
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Gagal mengambil profil organizer";

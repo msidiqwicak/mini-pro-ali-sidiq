@@ -4,8 +4,10 @@ import {
   findReviewsByEvent,
   findReviewByUserAndEvent,
   hasUserPurchasedEvent,
+  canReviewEvent,
   createReview,
 } from "../repositories/review.repository.js";
+
 
 export const createReviewSchema = z.object({
   eventId: z.string().min(1, "Event ID wajib diisi"),
@@ -23,6 +25,11 @@ export const getReviewsService = async (eventId: string) => {
       : 0;
   return { reviews, averageRating: Math.round(avg * 10) / 10, total: reviews.length };
 };
+
+export const canReviewService = async (userId: string, eventId: string) => {
+  return canReviewEvent(userId, eventId);
+};
+
 
 export const createReviewService = async (
   userId: string,

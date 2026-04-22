@@ -3,6 +3,7 @@ import {
   getReviewsService,
   createReviewService,
   createReviewSchema,
+  canReviewService,
 } from "../services/review.service.js";
 import { successResponse, errorResponse } from "../utils/response.js";
 import type { AuthRequest } from "../middlewares/auth.middleware.js";
@@ -31,3 +32,14 @@ export const createReview = async (req: AuthRequest, res: Response): Promise<voi
     errorResponse(res, msg, 400);
   }
 };
+
+export const canReviewController = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const result = await canReviewService(req.user!.userId, req.params.eventId as string);
+    successResponse(res, result);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Gagal memeriksa status review";
+    errorResponse(res, msg);
+  }
+};
+
