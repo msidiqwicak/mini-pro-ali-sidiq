@@ -40,6 +40,7 @@ const EventDetailPage = () => {
   const [showConfirm, setShowConfirm] = useState(false);
 
   // Review form
+  const [canReview, setCanReview] = useState<{ canReview: boolean; reason: string } | null>(null);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState("");
@@ -61,6 +62,12 @@ const EventDetailPage = () => {
         setReviews(rvRes.data.reviews);
         setAvgRating(rvRes.data.averageRating);
         setTotalReviews(rvRes.data.total);
+        // Check review eligibility if authenticated customer
+        if (isAuthenticated && isCustomer) {
+          reviewService.canReview(evRes.data.id)
+            .then(setCanReview)
+            .catch(() => setCanReview({ canReview: false, reason: "" }));
+        }
       } catch {
         setError("Event tidak ditemukan");
       } finally {
@@ -316,12 +323,16 @@ const EventDetailPage = () => {
                   )}
                 </div>
                 {isAuthenticated && isCustomer && (
-                  <button
-                    onClick={() => setShowReviewForm(!showReviewForm)}
-                    className="btn-outline text-sm py-1.5 px-3"
-                  >
-                    {showReviewForm ? "Batal" : "+ Tulis Review"}
-                  </button>
+                  canReview?.canReview ? (
+                    <button
+                      onClick={() => setShowReviewForm(!showReviewForm)}
+                      className="btn-outline text-sm py-1.5 px-3"
+                    >
+                      {showReviewForm ? "Batal" : "+ Tulis Review"}
+                    </button>
+                  ) : canReview !== null && canReview.reason ? (
+                    <span className="text-xs text-(--text-muted) italic max-w-[180px] text-right">{canReview.reason}</span>
+                  ) : null
                 )}
               </div>
 

@@ -15,6 +15,13 @@ export const reviewService = {
     return res.data;
   },
 
+  canReview: async (eventId: string): Promise<{ canReview: boolean; reason: string }> => {
+    const res = await api.get<ApiResponse<{ canReview: boolean; reason: string }>>(
+      `/reviews/can-review/${eventId}`
+    );
+    return res.data.data;
+  },
+
   createReview: async (data: {
     eventId: string;
     rating: number;

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Star, Calendar, MapPin, Users, ArrowLeft } from "lucide-react";
+import { Star, Calendar, MapPin, Users, ArrowLeft, MessageSquare } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import api from "../services/api";
-import { formatDate, formatCurrency } from "../utils/helpers";
+import { formatDate, formatCurrency, formatDateTime } from "../utils/helpers";
 
 interface OrganizerEvent {
   id: string;
@@ -23,6 +23,15 @@ interface OrganizerEvent {
   reviews: { rating: number }[];
 }
 
+interface RecentReview {
+  id: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  user: { name: string; avatarUrl?: string | null };
+  event: { name: string; slug: string };
+}
+
 interface OrganizerProfile {
   id: string;
   name: string;
@@ -34,15 +43,19 @@ const StarRating = ({ rating, total }: { rating: number; total: number }) => (
   <div className="flex items-center gap-2">
     <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map((s) => (
-        <Star
-          key={s}
-          size={14}
-          className={s <= Math.round(rating) ? "text-amber-400 fill-amber-400" : "text-gray-600"}
-        />
+        <Star key={s} size={14} className={s <= Math.round(rating) ? "text-amber-400 fill-amber-400" : "text-gray-600"} />
       ))}
     </div>
     <span className="text-sm font-semibold text-amber-400">{rating > 0 ? rating.toFixed(1) : "–"}</span>
     <span className="text-xs text-(--text-muted)">({total} ulasan)</span>
+  </div>
+);
+
+const StarDisplay = ({ rating }: { rating: number }) => (
+  <div className="flex items-center gap-0.5">
+    {[1, 2, 3, 4, 5].map((s) => (
+      <Star key={s} size={12} className={s <= rating ? "text-amber-400 fill-amber-400" : "text-gray-700"} />
+    ))}
   </div>
 );
 
@@ -51,6 +64,7 @@ const OrganizerProfilePage = () => {
   const [organizer, setOrganizer] = useState<OrganizerProfile | null>(null);
   const [avgRating, setAvgRating] = useState(0);
   const [totalReviews, setTotalReviews] = useState(0);
+  const [recentReviews, setRecentReviews] = useState<RecentReview[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -58,13 +72,20 @@ const OrganizerProfilePage = () => {
     if (!id) return;
     setIsLoading(true);
     api
-      .get<{ success: boolean; data: { organizer: OrganizerProfile; avgRating: number; totalReviews: number } }>(
-        `/events/organizer/${id}`
-      )
+      .get<{
+        success: boolean;
+        data: {
+          organizer: OrganizerProfile;
+          avgRating: number;
+          totalReviews: number;
+          recentReviews: RecentReview[];
+        };
+      }>(`/events/organizer/${id}`)
       .then((res) => {
         setOrganizer(res.data.data.organizer);
         setAvgRating(res.data.data.avgRating);
         setTotalReviews(res.data.data.totalReviews);
+        setRecentReviews(res.data.data.recentReviews ?? []);
       })
       .catch(() => setError("Profil organizer tidak ditemukan."))
       .finally(() => setIsLoading(false));
@@ -107,12 +128,11 @@ const OrganizerProfilePage = () => {
       <Navbar />
       <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-28 pb-20">
 
-        {/* Back button */}
         <Link to="/" className="inline-flex items-center gap-2 text-sm text-(--text-muted) hover:text-white mb-6 transition-colors">
           <ArrowLeft size={14} /> Kembali ke Beranda
         </Link>
 
-        {/* Organizer Header Card */}
+        {/* Organizer Header */}
         <div className="rounded-2xl bg-(--bg-card) border border-(--border) p-6 mb-8 flex flex-col sm:flex-row items-start sm:items-center gap-5">
           {organizer.avatarUrl ? (
             <img src={organizer.avatarUrl} alt={organizer.name} className="w-20 h-20 rounded-full object-cover shrink-0 border-2 border-(--border)" />
@@ -149,25 +169,21 @@ const OrganizerProfilePage = () => {
         </div>
 
         {events.length === 0 ? (
-          <div className="text-center py-16 text-(--text-muted)">
+          <div className="text-center py-12 text-(--text-muted)">
             <p className="text-4xl mb-3 opacity-20">📅</p>
             <p>Belum ada event yang dipublikasikan</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
             {events.map((event) => {
               const minPrice = event.ticketTypes.length > 0 ? Math.min(...event.ticketTypes.map((t) => t.price)) : 0;
               const eventAvgRating =
                 event.reviews.length > 0
                   ? Math.round((event.reviews.reduce((a, r) => a + r.rating, 0) / event.reviews.length) * 10) / 10
                   : 0;
-
               return (
-                <Link
-                  key={event.id}
-                  to={`/events/${event.slug}`}
-                  className="group rounded-xl bg-(--bg-card) border border-(--border) overflow-hidden hover:border-(--accent-red)/50 transition-all"
-                >
+                <Link key={event.id} to={`/events/${event.slug}`}
+                  className="group rounded-xl bg-(--bg-card) border border-(--border) overflow-hidden hover:border-(--accent-red)/50 transition-all">
                   <div className="relative h-40 overflow-hidden bg-(--bg-elevated)">
                     {event.imageUrl ? (
                       <img src={event.imageUrl} alt={event.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
@@ -181,29 +197,21 @@ const OrganizerProfilePage = () => {
                       {event.isFree && <span className="badge badge-green text-[10px]">GRATIS</span>}
                     </div>
                   </div>
-
                   <div className="p-4">
                     <h3 className="font-semibold text-white text-sm mb-2 line-clamp-2 group-hover:text-(--accent-red) transition-colors">{event.name}</h3>
-
                     <div className="space-y-1 mb-3">
                       <div className="flex items-center gap-1.5 text-xs text-(--text-muted)">
-                        <Calendar size={10} className="text-(--accent-red)" />
-                        {formatDate(event.startDate)}
+                        <Calendar size={10} className="text-(--accent-red)" />{formatDate(event.startDate)}
                       </div>
                       <div className="flex items-center gap-1.5 text-xs text-(--text-muted)">
-                        <MapPin size={10} className="text-(--accent-red)" />
-                        {event.city}
+                        <MapPin size={10} className="text-(--accent-red)" />{event.city}
                       </div>
                       <div className="flex items-center gap-1.5 text-xs text-(--text-muted)">
-                        <Users size={10} className="text-(--accent-red)" />
-                        {event.totalSeats - event.soldSeats} kursi tersisa
+                        <Users size={10} className="text-(--accent-red)" />{event.totalSeats - event.soldSeats} kursi tersisa
                       </div>
                     </div>
-
                     <div className="flex items-center justify-between">
-                      <p className="text-sm font-bold text-(--accent-red)">
-                        {event.isFree ? "GRATIS" : formatCurrency(minPrice)}
-                      </p>
+                      <p className="text-sm font-bold text-(--accent-red)">{event.isFree ? "GRATIS" : formatCurrency(minPrice)}</p>
                       {eventAvgRating > 0 && (
                         <div className="flex items-center gap-1">
                           <Star size={11} className="text-amber-400 fill-amber-400" />
@@ -217,6 +225,48 @@ const OrganizerProfilePage = () => {
             })}
           </div>
         )}
+
+        {/* Recent Reviews Section */}
+        <div className="flex items-center gap-3 mb-5">
+          <div className="section-line" />
+          <h2 className="font-semibold text-white text-lg flex items-center gap-2">
+            <MessageSquare size={18} className="text-amber-400" />
+            Ulasan Terbaru
+          </h2>
+        </div>
+
+        {recentReviews.length === 0 ? (
+          <div className="text-center py-10 text-(--text-muted)">
+            <p className="text-3xl mb-2 opacity-20">💬</p>
+            <p className="text-sm">Belum ada ulasan untuk organizer ini</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {recentReviews.map((review) => (
+              <div key={review.id} className="rounded-xl bg-(--bg-card) border border-(--border) p-5">
+                <div className="flex items-center gap-3 mb-3">
+                  {review.user.avatarUrl ? (
+                    <img src={review.user.avatarUrl} alt={review.user.name} className="w-9 h-9 rounded-full object-cover border border-(--border)" />
+                  ) : (
+                    <div className="w-9 h-9 rounded-full bg-(--bg-elevated) border border-(--border) flex items-center justify-center text-sm font-bold text-(--text-muted)">
+                      {review.user.name.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-white truncate">{review.user.name}</p>
+                    <StarDisplay rating={review.rating} />
+                  </div>
+                  <p className="text-[10px] text-(--text-muted) whitespace-nowrap shrink-0">{formatDateTime(review.createdAt)}</p>
+                </div>
+                <Link to={`/events/${review.event.slug}`} className="text-[11px] text-(--accent-red) hover:underline font-medium mb-2 block truncate">
+                  🎵 {review.event.name}
+                </Link>
+                <p className="text-sm text-(--text-secondary) leading-relaxed line-clamp-3">"{review.comment}"</p>
+              </div>
+            ))}
+          </div>
+        )}
+
       </main>
       <Footer />
     </div>
