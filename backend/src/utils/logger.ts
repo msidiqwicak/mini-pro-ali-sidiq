@@ -22,21 +22,22 @@ const logger = winston.createLogger({
         })
       ),
     }),
-
-    // Error logs
-    new winston.transports.File({
-      filename: path.join(logDirectory, "error.log"),
-      level: "error",
-      maxsize: 10485760, // 10MB
-      maxFiles: 5,
-    }),
-
-    // All logs
-    new winston.transports.File({
-      filename: path.join(logDirectory, "combined.log"),
-      maxsize: 10485760, // 10MB
-      maxFiles: 5,
-    }),
+    
+    // Serverless (Vercel) Environment is Read-Only.
+    // File logs will only be active on Local or typical VPS Server.
+    ...(process.env.VERCEL ? [] : [
+      new winston.transports.File({
+        filename: path.join(logDirectory, "error.log"),
+        level: "error",
+        maxsize: 10485760, // 10MB
+        maxFiles: 5,
+      }),
+      new winston.transports.File({
+        filename: path.join(logDirectory, "combined.log"),
+        maxsize: 10485760, // 10MB
+        maxFiles: 5,
+      })
+    ]),
   ],
 });
 
